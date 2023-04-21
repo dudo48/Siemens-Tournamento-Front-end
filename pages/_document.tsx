@@ -1,13 +1,15 @@
 import { Html, Head, Main, NextScript } from 'next/document'
 
-export default function Document() {
+const Document = () => {
   return (
     <Html lang="en">
       <Head />
-      <body>
+      <body className='text-tournamento-800'>
         <Main />
         <NextScript />
       </body>
     </Html>
   )
 }
+
+export default Document;
