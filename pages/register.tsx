@@ -1,4 +1,4 @@
-import Button from "@/components/button";
+import GradientButton1 from "@/components/gradient-button-1";
 import Form from "@/components/form";
 import Input from "@/components/input";
 import SecondaryLayout from "@/layouts/secondary-layout";
@@ -32,7 +32,7 @@ const Page = () => {
           <Input attributes={{type:'email', name: 'email', placeholder: 'Email address', value: form.email || '', onChange: handleChange}}/>
           <Input attributes={{type:'password', name: 'password', placeholder: 'Password', value: form.password || '', onChange: handleChange}}/>
           <Input attributes={{type:'password', name: 'confirmPassword', placeholder: 'Confirm password', value: form.confirmPassword || '', onChange: handleChange}}/>
-          <Button attributes={{type: 'submit'}}>Register</Button>
+          <GradientButton1 attributes={{type: 'submit'}}>Register</GradientButton1>
         </Form>
       </div>
       <div>

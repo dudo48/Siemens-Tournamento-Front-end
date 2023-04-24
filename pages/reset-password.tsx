@@ -1,4 +1,4 @@
-import Button from "@/components/button";
+import GradientButton1 from "@/components/gradient-button-1";
 import Form from "@/components/form";
 import Input from "@/components/input";
 import SecondaryLayout from "@/layouts/secondary-layout";
@@ -27,7 +27,7 @@ const Page = () => {
       <p className='text-center'>Enter your email address.</p>
         <Form attributes={{onSubmit: handleSubmit}}>
           <Input attributes={{type:'email', name: 'email', placeholder: 'Email address', value: email || '', onChange: handleChange}}/>
-          <Button attributes={{type: 'submit'}}>Continue</Button>
+          <GradientButton1 attributes={{type: 'submit'}}>Continue</GradientButton1>
         </Form>
       </div>
       <div></div>

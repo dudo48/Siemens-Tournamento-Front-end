@@ -2,7 +2,7 @@ import Logo from "@/components/logo";
 import SideNav from "@/components/side-nav";
 import { PropsWithChildren, ReactNode } from "react";
 
-const MainLayout = ({children} : PropsWithChildren) => {
+const PrimaryLayout = ({children} : PropsWithChildren) => {
   return (
     <main className='min-h-screen flex'>
       <SideNav />
@@ -18,4 +18,4 @@ const MainLayout = ({children} : PropsWithChildren) => {
   );
 }
  
-export default MainLayout;
+export default PrimaryLayout;
