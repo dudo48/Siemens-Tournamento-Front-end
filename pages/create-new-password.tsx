@@ -1,16 +1,19 @@
 import Button from "@/components/button";
 import Form from "@/components/form";
 import Input from "@/components/input";
-import SecondaryLayout from "@/layouts/SecondaryLayout";
+import SecondaryLayout from "@/layouts/secondary-layout";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
 
 const Page = () => {
   const [form, setForm] = useState<{[key: string]: string}>({});
+  const router = useRouter();
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     console.log(form);
+    router.push('/home');
   }
 
   const handleChange = (event: ChangeEvent) => {

@@ -1,17 +1,20 @@
 import Button from "@/components/button";
 import Form from "@/components/form";
 import Input from "@/components/input";
-import SecondaryLayout from "@/layouts/SecondaryLayout";
+import SecondaryLayout from "@/layouts/secondary-layout";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
 
 const Page = () => {
   const [form, setForm] = useState<{[key: string]: string}>({});
+  const router = useRouter();
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     console.log(form);
     // confirm password must equal password
+    router.push('/home');
   }
 
   const handleChange = (event: ChangeEvent) => {
@@ -33,7 +36,7 @@ const Page = () => {
         </Form>
       </div>
       <div>
-        <p>Do you have an account? <Link className='font-semibold hover:underline' href='/login'>Sign in</Link>.</p>
+        <p>Do you have an account? <Link className='hover:underline font-semibold' href='/login'>Sign in</Link>.</p>
       </div>
     </>
   );

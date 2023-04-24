@@ -1,7 +1,7 @@
 import Button from "@/components/button";
 import Form from "@/components/form";
 import Input from "@/components/input";
-import SecondaryLayout from "@/layouts/SecondaryLayout";
+import SecondaryLayout from "@/layouts/secondary-layout";
 import { redirect } from "next/navigation";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
 import { useRouter } from "next/router";
