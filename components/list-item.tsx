@@ -12,7 +12,7 @@ interface Props {
 
 const ListItem = ({ icon: Icon, title, subtitle, children }: PropsWithChildren<Props>) => {
   return (
-    <li className='flex justify-between group'>
+    <li className='flex justify-between items-center group'>
       <div className='flex items-center'>
         {Icon && 
         <div className='border-2 p-0.5 border-tournamento-400 rounded-full'>

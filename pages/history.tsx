@@ -1,7 +1,7 @@
 import Title from "@/components/title";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { ReactNode } from "react";
-import TournamentListItem from "@/components/tournament-list-item";
+import TournamentListItem from "@/components/tournament-li";
 
 const Page = () => {
   return (

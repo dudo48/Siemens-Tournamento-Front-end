@@ -4,8 +4,9 @@ import Title from "@/components/title";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { ReactNode } from "react";
 import { BsArrowRight, BsPlusLg } from "react-icons/bs";
-import TournamentListItem from "@/components/tournament-list-item";
+import TournamentListItem from "@/components/tournament-li";
 import GradientButton from "@/components/gradient-button";
+import Link from "next/link";
 
 const Page = () => {
   return (
@@ -27,7 +28,9 @@ const Page = () => {
           <GradientButton type='light'>Connect</GradientButton>
         </div>
         <div className='flex flex-col gap-1 w-48'>
-          <IconButton icon={BsArrowRight}>Connections List</IconButton>
+          <Link className='rounded-full' href={'/connections'}>
+            <IconButton icon={BsArrowRight}>Connections List</IconButton>
+          </Link>
         </div>
       </section>
       <section>
