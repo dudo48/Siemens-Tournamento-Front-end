@@ -2,21 +2,26 @@ import { Sport } from "@/utils/types";
 import ListItem from "./list-item";
 import { sportsIcons, sportsNames } from "@/utils/mappings";
 import getOrdinalSuffix from "@/utils/functions";
-import GradientButton from "./gradient-button";
 
 interface Props {
   name: string,
-  sport: string
+  sport: string,
+  position: number
 }
 
-const TournamentLi = ({name, sport}: Props) => {
+const FinishedTournamentLi = ({name, sport, position}: Props) => {
   const sportEnum: Sport = Sport[sport as keyof typeof Sport];
 
   return (
     <ListItem icon={sportsIcons.get(sportEnum)} title={name} subtitle={sportsNames.get(sportEnum)}>
-      <GradientButton type='light'>Join</GradientButton>
+      <p>
+        <span className='text-tournamento-400 text-4xl'>
+          {position}
+        </span>
+        {getOrdinalSuffix(position)}
+      </p>
     </ListItem>
   );
 }
  
-export default TournamentLi;
+export default FinishedTournamentLi;

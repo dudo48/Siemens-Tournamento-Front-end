@@ -4,7 +4,7 @@ import Title from "@/components/title";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { ReactNode } from "react";
 import { BsArrowRight, BsPlusLg } from "react-icons/bs";
-import TournamentListItem from "@/components/tournament-li";
+import FinishedTournamentLi from "@/components/finished-tournament-li";
 import GradientButton from "@/components/gradient-button";
 import Link from "next/link";
 import ConnectionLi from "@/components/connection-li";

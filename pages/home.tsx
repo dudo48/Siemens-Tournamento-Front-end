@@ -4,7 +4,7 @@ import Title from "@/components/title";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { ReactNode } from "react";
 import { BsArrowRight, BsPlusLg } from "react-icons/bs";
-import TournamentListItem from "@/components/tournament-li";
+import FinishedTournamentLi from "@/components/finished-tournament-li";
 import GradientButton from "@/components/gradient-button";
 import Link from "next/link";
 
@@ -18,8 +18,12 @@ const Page = () => {
           <GradientButton type='light'>Go now</GradientButton>
         </div>
         <div className='flex flex-col gap-1 w-48'>
+        <Link className='rounded-full' href={'/tournament/join'}>
           <IconButton icon={BsArrowRight}>Join Tournament</IconButton>
+        </Link>
+        <Link className='rounded-full' href={'/create-tournament'}>
           <IconButton icon={BsPlusLg}>Create Tournament</IconButton>
+        </Link>
         </div>
       </section>
       <section>
@@ -36,8 +40,8 @@ const Page = () => {
       <section>
         <Subtitle>LAST TOURNAMENTS</Subtitle>
         <ul className='flex flex-col gap-1'>
-          <TournamentListItem key={1} name='Champions League' sport='Football' position={1} />
-          <TournamentListItem key={2} name='Champions League' sport='TableTennis' position={5} />
+          <FinishedTournamentLi key={1} name='Champions League' sport='Football' position={1} />
+          <FinishedTournamentLi key={2} name='Champions League' sport='TableTennis' position={5} />
         </ul>
       </section>
     </>

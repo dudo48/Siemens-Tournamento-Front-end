@@ -4,11 +4,11 @@ import { GiCancel, GiCheckMark } from "react-icons/gi";
 import { FaBan, FaCheck, FaPencilAlt, FaPencilRuler } from "react-icons/fa";
 
 interface Props {
-  attributes: {[key: string]: any},
+  attributes: {name: string, [key: string]: any},
   label: string
 }
 
-const EditInput = ({attributes, label}: Props) => {
+const SquareInput = ({attributes, label}: Props) => {
   return (
     <div className='w-full flex flex-col border-b-tournamento-400 border-b-2'>
       <label htmlFor={attributes.name}>{label}</label>
@@ -20,4 +20,4 @@ const EditInput = ({attributes, label}: Props) => {
   );
 }
  
-export default EditInput;
+export default SquareInput;

@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 
 interface Props {
-  attributes: {[key: string]: any}
+  attributes?: {[key: string]: any}
 }
 
 const Form = ({attributes, children}: PropsWithChildren<Props>) => {

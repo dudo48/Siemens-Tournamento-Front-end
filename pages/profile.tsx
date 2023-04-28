@@ -1,7 +1,7 @@
 import Form from "@/components/form";
 import GradientButton from "@/components/gradient-button";
 import ProfilePhoto from "@/components/profile-photo";
-import EditInput from "@/components/square-input";
+import SquareInput from "@/components/square-input";
 import Title from "@/components/title";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
@@ -32,11 +32,11 @@ const Page = () => {
           </div>
         </div>
         <Form attributes={{onSubmit: handleSubmit}}>
-          <EditInput label='First name' attributes={{type:'text', name: 'firstName', placeholder: 'First name', value: form.firstName || '', onChange: handleChange}}/>
-          <EditInput label='Last name' attributes={{type:'text', name: 'lastName', placeholder: 'Last name', value: form.lastName || '', onChange: handleChange}}/>
-          <EditInput label='Email address' attributes={{type:'email', name: 'email', placeholder: 'Email address', value: form.email || '', onChange: handleChange}}/>
-          <EditInput label='Password' attributes={{type:'password', name: 'password', placeholder: 'Password', value: form.password || '', onChange: handleChange}}/>
-          <EditInput label='Phone number' attributes={{type:'text', name: 'phone', placeholder: 'Phone number', value: form.phone || '', onChange: handleChange}}/>
+          <SquareInput label='First name' attributes={{type:'text', name: 'firstName', placeholder: 'First name', value: form.firstName || '', onChange: handleChange}}/>
+          <SquareInput label='Last name' attributes={{type:'text', name: 'lastName', placeholder: 'Last name', value: form.lastName || '', onChange: handleChange}}/>
+          <SquareInput label='Email address' attributes={{type:'email', name: 'email', placeholder: 'Email address', value: form.email || '', onChange: handleChange}}/>
+          <SquareInput label='Password' attributes={{type:'password', name: 'password', placeholder: 'Password', value: form.password || '', onChange: handleChange}}/>
+          <SquareInput label='Phone number' attributes={{type:'text', name: 'phone', placeholder: 'Phone number', value: form.phone || '', onChange: handleChange}}/>
           <div>
             <GradientButton type='light'>Save</GradientButton>
           </div>
