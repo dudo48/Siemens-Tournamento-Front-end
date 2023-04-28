@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PropsWithChildren, ReactNode } from "react";
 import { IconType } from "react-icons";
 import { BsBoxArrowLeft, BsClockHistory, BsGraphUpArrow, BsHouseDoor, BsInfoSquare, BsPeople, BsPerson } from "react-icons/bs"
+import ProfilePhoto from "./profile-photo";
 
 interface ElementProps {
   href: string,
@@ -11,7 +12,9 @@ interface ElementProps {
 const SideNavUser = () => {
   return (
     <div className='flex items-center p-2'>
-        <div className='bg-tournamento-700 w-16 h-16 rounded-full'></div>
+        <div className='w-16'>
+          <ProfilePhoto />
+        </div>
         <div className='pl-2'>
           <Link href='/profile' className='hover:underline text-xl font-semibold'>
             Fady Emad
@@ -37,7 +40,7 @@ const ElementSeparator = () => <div className='my-1 ml-2 border-b border-tournam
 
 const SideNav = () => {
   return (
-    <section className='w-1/3 flex flex-col gap-8 bg-gradient-to-br from-tournamento-400 to-tournamento-600 break-all'>
+    <section className='w-1/4 flex flex-col gap-8 bg-gradient-to-br from-tournamento-400 to-tournamento-600 break-all'>
       <SideNavUser />
       <nav>
         <SideNavElement href='/home' icon={BsHouseDoor}>Home</SideNavElement>

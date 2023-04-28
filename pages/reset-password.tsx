@@ -1,6 +1,6 @@
-import GradientButton1 from "@/components/gradient-button-1";
+import GradientButton from "@/components/gradient-button";
 import Form from "@/components/form";
-import Input from "@/components/input";
+import RoundedInput from "@/components/rounded-input";
 import SecondaryLayout from "@/layouts/secondary-layout";
 import { redirect } from "next/navigation";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
@@ -26,8 +26,8 @@ const Page = () => {
       <div className='w-1/2'>
       <p className='text-center'>Enter your email address.</p>
         <Form attributes={{onSubmit: handleSubmit}}>
-          <Input attributes={{type:'email', name: 'email', placeholder: 'Email address', value: email || '', onChange: handleChange}}/>
-          <GradientButton1 attributes={{type: 'submit'}}>Continue</GradientButton1>
+          <RoundedInput attributes={{type:'email', name: 'email', placeholder: 'Email address', value: email || '', onChange: handleChange}}/>
+          <GradientButton type='dark' attributes={{type: 'submit'}}>Continue</GradientButton>
         </Form>
       </div>
       <div></div>

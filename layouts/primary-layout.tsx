@@ -6,11 +6,11 @@ const PrimaryLayout = ({children} : PropsWithChildren) => {
   return (
     <main className='min-h-screen flex'>
       <SideNav />
-      <section>
+      <section className='flex-1'>
         <section className='px-4 py-2'>
           <div className='w-1/2'><Logo /></div>
         </section>
-        <section className='p-4'>
+        <section className='px-4 py-1'>
           {children}
         </section>
       </section>

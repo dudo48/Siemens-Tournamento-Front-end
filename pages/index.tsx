@@ -1,7 +1,11 @@
+import ProfilePhoto from "@/components/profile-photo";
+
 export default function Home() {
   return (
     <main>
-      <h1>🙂</h1>
+      <div className='w-64 relative'>
+        😂
+      </div>
     </main>
   )
 }

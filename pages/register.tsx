@@ -1,6 +1,6 @@
-import GradientButton1 from "@/components/gradient-button-1";
+import GradientButton from "@/components/gradient-button";
 import Form from "@/components/form";
-import Input from "@/components/input";
+import RoundedInput from "@/components/rounded-input";
 import SecondaryLayout from "@/layouts/secondary-layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -27,12 +27,12 @@ const Page = () => {
     <>
       <div className='w-1/2'>
         <Form attributes={{onSubmit: handleSubmit}}>
-          <Input attributes={{type:'string', name: 'firstName', placeholder: 'First name', value: form.firstName || '', onChange: handleChange}}/>
-          <Input attributes={{type:'string', name: 'lastName', placeholder: 'Last name', value: form.lastName || '', onChange: handleChange}}/>
-          <Input attributes={{type:'email', name: 'email', placeholder: 'Email address', value: form.email || '', onChange: handleChange}}/>
-          <Input attributes={{type:'password', name: 'password', placeholder: 'Password', value: form.password || '', onChange: handleChange}}/>
-          <Input attributes={{type:'password', name: 'confirmPassword', placeholder: 'Confirm password', value: form.confirmPassword || '', onChange: handleChange}}/>
-          <GradientButton1 attributes={{type: 'submit'}}>Register</GradientButton1>
+          <RoundedInput attributes={{type:'text', name: 'firstName', placeholder: 'First name', value: form.firstName || '', onChange: handleChange}}/>
+          <RoundedInput attributes={{type:'text', name: 'lastName', placeholder: 'Last name', value: form.lastName || '', onChange: handleChange}}/>
+          <RoundedInput attributes={{type:'email', name: 'email', placeholder: 'Email address', value: form.email || '', onChange: handleChange}}/>
+          <RoundedInput attributes={{type:'password', name: 'password', placeholder: 'Password', value: form.password || '', onChange: handleChange}}/>
+          <RoundedInput attributes={{type:'password', name: 'confirmPassword', placeholder: 'Confirm password', value: form.confirmPassword || '', onChange: handleChange}}/>
+          <GradientButton type='dark' attributes={{type: 'submit'}}>Register</GradientButton>
         </Form>
       </div>
       <div>

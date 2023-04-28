@@ -1,6 +1,6 @@
-import sportsIcons from "@/utils/sports-icons";
 import { Sport } from "@/utils/types";
-import { IconType } from "react-icons";
+import ListItem from "./list-item";
+import { sportsIcons, sportsNames } from "@/utils/mappings";
 import getOrdinalSuffix from "@/utils/functions";
 
 interface Props {
@@ -9,28 +9,18 @@ interface Props {
   position: number
 }
 
-const TournamentListItem = ({ sport, name, position }: Props) => {
-  // convert string to Sport enum then get icon
-  const Icon = sportsIcons.get(Sport[sport as keyof typeof Sport]) as IconType;
+const TournamentListItem = ({name, sport, position}: Props) => {
+  const sportEnum: Sport = Sport[sport as keyof typeof Sport];
 
   return (
-    <li className='flex justify-between group'>
-      <div className='flex items-center'>
-        <div className='rounded-full border-4 p-1 border-tournamento-400 text-tournamento-400 duration-200'>
-          <Icon className='text-4xl' />
-        </div>
-        <div className='pl-2'>
-          <p className='text-xl'>{name}</p>
-          <p className='text-sm'>{sport}</p>
-        </div>
-      </div>
+    <ListItem icon={sportsIcons.get(sportEnum)} title={name} subtitle={sportsNames.get(sportEnum)}>
       <p>
-        <span className='text-tournamento-400 text-4xl duration-200'>
+        <span className='text-tournamento-400 text-4xl'>
           {position}
         </span>
         {getOrdinalSuffix(position)}
       </p>
-    </li>
+    </ListItem>
   );
 }
  

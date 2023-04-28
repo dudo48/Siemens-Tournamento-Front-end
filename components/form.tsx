@@ -6,7 +6,7 @@ interface Props {
 
 const Form = ({attributes, children}: PropsWithChildren<Props>) => {
   return (
-    <form {...attributes} className='w-full flex flex-col items-center gap-4 py-4'>
+    <form {...attributes} className='w-full flex flex-col items-center gap-4 py-2'>
       {children}
     </form>
   );
