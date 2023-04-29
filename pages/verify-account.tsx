@@ -1,6 +1,6 @@
-import GradientButton from "@/components/gradient-button";
-import Form from "@/components/form";
-import RoundedInput from "@/components/rounded-input";
+import GradientButton from "@/components/buttons/gradient-button";
+import Form from "@/components/forms/form";
+import RoundedInput from "@/components/forms/rounded-input";
 import SecondaryLayout from "@/layouts/secondary-layout";
 import { redirect } from "next/navigation";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
@@ -30,7 +30,7 @@ const Page = () => {
       <div className='w-1/2'>
         <p className='text-center'>We have sent a verification code to your email. Enter the code below. Did not receive the code? <button onClick={resendCode} className='font-semibold hover:underline'>Resend code</button>.</p>
         <Form attributes={{onSubmit: handleSubmit}}>
-          <RoundedInput attributes={{type:'text', name: 'code', placeholder: 'Code', value: code || '', onChange: handleChange}}/>
+          <RoundedInput attributes={{type:'text', name: 'code', placeholder: 'Code', value: code, onChange: handleChange}}/>
           <GradientButton type='dark' attributes={{type: 'submit'}}>Verify</GradientButton>
         </Form>
       </div>

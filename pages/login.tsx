@@ -1,6 +1,6 @@
-import GradientButton from "@/components/gradient-button";
-import Form from "@/components/form";
-import RoundedInput from "@/components/rounded-input";
+import GradientButton from "@/components/buttons/gradient-button";
+import Form from "@/components/forms/form";
+import RoundedInput from "@/components/forms/rounded-input";
 import SecondaryLayout from "@/layouts/secondary-layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -26,8 +26,8 @@ const Page = () => {
     <>
       <div className='w-1/2'>
         <Form attributes={{onSubmit: handleSubmit}}>
-          <RoundedInput attributes={{type:'email', name: 'email', placeholder: 'Email address', value: form.email || '', onChange: handleChange}}/>
-          <RoundedInput attributes={{type:'password', name: 'password', placeholder: 'Password', value: form.password || '', onChange: handleChange}}/>
+          <RoundedInput attributes={{type:'email', name: 'email', placeholder: 'Email address', value: form.email, onChange: handleChange}}/>
+          <RoundedInput attributes={{type:'password', name: 'password', placeholder: 'Password', value: form.password, onChange: handleChange}}/>
           <GradientButton type='dark' attributes={{type: 'submit'}}>Login</GradientButton>
         </Form>
         <p>Forgot password? <Link className='hover:underline font-semibold' href='/reset-password'>Reset password</Link>.</p>

@@ -1,6 +1,6 @@
 export enum Sport {
-  Football,
-  Tennis,
-  Basketball,
-  TableTennis
+  Football = 'Football',
+  Tennis = 'Tennis',
+  Basketball = 'Basketball',
+  TableTennis = 'Table Tennis'
 }

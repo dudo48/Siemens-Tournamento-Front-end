@@ -1,4 +1,4 @@
-import Logo from "@/components/logo";
+import Logo from "@/components/images/logo";
 import { PropsWithChildren, ReactNode } from "react";
 
 const SecondaryLayout = ({children} : PropsWithChildren) => {

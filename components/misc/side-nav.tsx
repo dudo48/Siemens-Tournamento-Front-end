@@ -2,7 +2,7 @@ import Link from "next/link";
 import { PropsWithChildren, ReactNode } from "react";
 import { IconType } from "react-icons";
 import { BsBoxArrowLeft, BsClockHistory, BsGraphUpArrow, BsHouseDoor, BsInfoSquare, BsPeople, BsPerson } from "react-icons/bs"
-import ProfilePhoto from "./profile-photo";
+import ProfilePhoto from "../images/profile-photo";
 
 interface ElementProps {
   href: string,

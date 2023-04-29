@@ -1,6 +1,6 @@
-import GradientButton from "@/components/gradient-button";
-import Form from "@/components/form";
-import RoundedInput from "@/components/rounded-input";
+import GradientButton from "@/components/buttons/gradient-button";
+import Form from "@/components/forms/form";
+import RoundedInput from "@/components/forms/rounded-input";
 import SecondaryLayout from "@/layouts/secondary-layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -27,8 +27,8 @@ const Page = () => {
       <div className='w-1/2'>
         <p className='text-center'>Enter your new password.</p>
         <Form attributes={{onSubmit: handleSubmit}}>
-          <RoundedInput attributes={{type:'password', name: 'password', placeholder: 'New password', value: form.password || '', onChange: handleChange}}/>
-          <RoundedInput attributes={{type:'password', name: 'confirmPassword', placeholder: 'Confirm new password', value: form.confirmPassword || '', onChange: handleChange}}/>
+          <RoundedInput attributes={{type:'password', name: 'password', placeholder: 'New password', value: form.password, onChange: handleChange}}/>
+          <RoundedInput attributes={{type:'password', name: 'confirmPassword', placeholder: 'Confirm new password', value: form.confirmPassword, onChange: handleChange}}/>
           <GradientButton type='dark' attributes={{type: 'submit'}}>Submit</GradientButton>
         </Form>
       </div>

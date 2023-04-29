@@ -1,15 +1,16 @@
-import IconButton from "@/components/icon-button";
-import Subtitle from "@/components/subtitle";
-import Title from "@/components/title";
+import IconButton from "@/components/buttons/icon-button";
+import Subtitle from "@/components/misc/subtitle";
+import Title from "@/components/misc/title";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
 import { BsArrowRight, BsPlusLg } from "react-icons/bs";
-import FinishedTournamentLi from "@/components/finished-tournament-li";
-import GradientButton from "@/components/gradient-button";
+import FinishedTournamentLi from "@/components/list items/finished-tournament-li";
+import GradientButton from "@/components/buttons/gradient-button";
 import Link from "next/link";
-import Form from "@/components/form";
-import SquareInput from "@/components/square-input";
-import TournamentLi from "@/components/tournament-li";
+import Form from "@/components/forms/form";
+import SquareInput from "@/components/forms/square-input";
+import TournamentLi from "@/components/list items/tournament-li";
+import { Sport } from "@/utils/types";
 
 const Page = () => {
   const [code, setCode] = useState('');
@@ -30,8 +31,8 @@ const Page = () => {
       <section>
         <Subtitle>JOIN BY CODE</Subtitle>
         <Form attributes={{onSubmit: handleSubmit}}>
-          <div className='w-full flex items-end'>
-            <SquareInput attributes={{name: 'tournamentCode', placeholder: 'Tournament code', onChange: handleChange}} label='Tournament code'  />
+          <div className='w-full flex items-end gap-2'>
+            <SquareInput attributes={{name: 'tournamentCode', type: 'text', placeholder: 'Tournament code', value: code, onChange: handleChange}} label='Tournament code'  />
             <GradientButton type='light'>Join</GradientButton>
           </div>
         </Form>
@@ -39,8 +40,8 @@ const Page = () => {
       <section>
         <Subtitle>AVAILABLE TOURNAMENTS</Subtitle>
         <ul>
-        <TournamentLi key={1} name='Champions League' sport='Football' />
-        <TournamentLi key={2} name='Champions League' sport='TableTennis' />
+          <TournamentLi key={1} name='Champions League' sport={Sport.Football} />
+          <TournamentLi key={2} name='Champions League' sport={Sport.TableTennis} />
         </ul>
       </section>
     </>

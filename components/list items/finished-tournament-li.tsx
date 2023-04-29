@@ -1,21 +1,19 @@
 import { Sport } from "@/utils/types";
 import ListItem from "./list-item";
-import { sportsIcons, sportsNames } from "@/utils/mappings";
+import { sportsIcons } from "@/utils/mappings";
 import getOrdinalSuffix from "@/utils/functions";
 
 interface Props {
   name: string,
-  sport: string,
+  sport: Sport,
   position: number
 }
 
 const FinishedTournamentLi = ({name, sport, position}: Props) => {
-  const sportEnum: Sport = Sport[sport as keyof typeof Sport];
-
   return (
-    <ListItem icon={sportsIcons.get(sportEnum)} title={name} subtitle={sportsNames.get(sportEnum)}>
+    <ListItem icon={sportsIcons.get(sport)} title={name} subtitle={sport}>
       <p>
-        <span className='text-tournamento-400 text-4xl'>
+        <span className='text-tournamento-400 text-3xl'>
           {position}
         </span>
         {getOrdinalSuffix(position)}

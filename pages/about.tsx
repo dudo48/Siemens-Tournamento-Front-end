@@ -1,13 +1,13 @@
-import IconButton from "@/components/icon-button";
-import Subtitle from "@/components/subtitle";
-import Title from "@/components/title";
+import IconButton from "@/components/buttons/icon-button";
+import Subtitle from "@/components/misc/subtitle";
+import Title from "@/components/misc/title";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { ReactNode } from "react";
 import { BsArrowRight, BsPlusLg } from "react-icons/bs";
-import FinishedTournamentLi from "@/components/finished-tournament-li";
-import GradientButton from "@/components/gradient-button";
+import FinishedTournamentLi from "@/components/list items/finished-tournament-li";
+import GradientButton from "@/components/buttons/gradient-button";
 import Link from "next/link";
-import ConnectionLi from "@/components/connection-li";
+import ConnectionLi from "@/components/list items/connection-li";
 
 const Page = () => {
   return (

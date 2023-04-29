@@ -2,6 +2,7 @@ import { MouseEventHandler, PropsWithChildren, useState } from "react";
 import { BsCheck, BsPen, BsX } from "react-icons/bs";
 import { GiCancel, GiCheckMark } from "react-icons/gi";
 import { FaBan, FaCheck, FaPencilAlt, FaPencilRuler } from "react-icons/fa";
+import LabelInput from "./label-input";
 
 interface Props {
   attributes: {name: string, [key: string]: any},
@@ -10,13 +11,11 @@ interface Props {
 
 const SquareInput = ({attributes, label}: Props) => {
   return (
-    <div className='w-full flex flex-col border-b-tournamento-400 border-b-2'>
-      <label htmlFor={attributes.name}>{label}</label>
-      <input className='w-full p-0.5 '
-        id={attributes.name}
+    <LabelInput label={label}>
+      <input className='p-1 border-b-tournamento-400 border-b-2'
         {...attributes}
       />
-    </div>
+    </LabelInput>
   );
 }
  

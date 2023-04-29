@@ -1,5 +1,5 @@
-import Logo from "@/components/logo";
-import SideNav from "@/components/side-nav";
+import Logo from "@/components/images/logo";
+import SideNav from "@/components/misc/side-nav";
 import { PropsWithChildren, ReactNode } from "react";
 
 const PrimaryLayout = ({children} : PropsWithChildren) => {

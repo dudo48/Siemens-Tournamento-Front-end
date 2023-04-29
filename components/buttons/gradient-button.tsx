@@ -6,7 +6,7 @@ interface Props {
 }
 
 const GradientButton = ({attributes, type, children}: PropsWithChildren<Props>) => {
-  const typesStyle: { [key: string]: string } = {
+  const buttonTypeStyle: { [key: string]: string } = {
     dark: 'bg-gradient-to-b from-tournamento-800 to-tournamento-700 before:bg-tournamento-600 before:border-tournamento-800 before:border-2',
     light: 'bg-gradient-to-b from-tournamento-600 to-tournamento-400 hover:before:bg-tournamento-800',
     danger: 'bg-gradient-to-b from-red-600 to-red-400 hover:before:bg-red-900',
@@ -16,7 +16,7 @@ const GradientButton = ({attributes, type, children}: PropsWithChildren<Props>) 
   const buttonStyle = 'font-semibold relative z-10 py-0.5 px-4 text-white rounded-full duration-200'
 
   return (
-    <button className={`${buttonStyle} ${beforeStyle} ${typesStyle[type]}`} {...attributes}>
+    <button className={`${buttonStyle} ${beforeStyle} ${buttonTypeStyle[type]}`} {...attributes}>
         {children}
     </button>
   );

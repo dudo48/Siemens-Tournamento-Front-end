@@ -1,7 +1,7 @@
 import { Sport } from "@/utils/types";
 import { IconType } from "react-icons";
 import getOrdinalSuffix from "@/utils/functions";
-import { sportsIcons, sportsNames } from "@/utils/mappings";
+import { sportsIcons } from "@/utils/mappings";
 import { PropsWithChildren } from "react";
 
 interface Props {
