@@ -11,11 +11,11 @@ interface ElementProps {
 
 const SideNavUser = () => {
   return (
-    <div className='flex items-center p-2'>
+    <div className='flex items-center pt-4 px-4 gap-2'>
         <div className='w-16'>
           <ProfilePhoto />
         </div>
-        <div className='pl-2'>
+        <div className=''>
           <Link href='/profile' className='hover:underline text-xl font-semibold'>
             Fady Emad
           </Link>
@@ -40,7 +40,7 @@ const ElementSeparator = () => <div className='my-1 ml-2 border-b border-tournam
 
 const SideNav = () => {
   return (
-    <section className='w-1/4 flex flex-col gap-8 bg-gradient-to-br from-tournamento-400 to-tournamento-600 break-all'>
+    <>
       <SideNavUser />
       <nav>
         <SideNavElement href='/home' icon={BsHouseDoor}>Home</SideNavElement>
@@ -56,7 +56,7 @@ const SideNav = () => {
         <SideNavElement href='/about' icon={BsInfoSquare}>About</SideNavElement>
       </nav>
       <SideNavElement href='/login' icon={BsBoxArrowLeft}>Logout</SideNavElement>
-    </section>
+    </>
   );
 }
  
