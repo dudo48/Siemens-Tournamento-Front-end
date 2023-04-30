@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { PropsWithChildren, ReactNode } from "react";
+import { PropsWithChildren } from "react";
 import { IconType } from "react-icons";
-import { BsBoxArrowLeft, BsClockHistory, BsGraphUpArrow, BsHouseDoor, BsInfoSquare, BsPeople, BsPerson } from "react-icons/bs"
+import { BsBoxArrowLeft, BsClockHistory, BsGraphUpArrow, BsHouseDoor, BsInfoSquare, BsPeople, BsPerson, BsX } from "react-icons/bs"
 import ProfilePhoto from "../images/profile-photo";
 
 interface ElementProps {
@@ -9,9 +9,13 @@ interface ElementProps {
   icon: IconType
 }
 
+interface Props {
+  hideSideNav: () => void
+}
+
 const SideNavUser = () => {
   return (
-    <div className='flex items-center pt-4 px-4 gap-2'>
+    <div className='flex items-center gap-2'>
         <div className='w-16'>
           <ProfilePhoto />
         </div>
@@ -38,10 +42,15 @@ const SideNavElement = ({href, icon: Icon, children}: PropsWithChildren<ElementP
 
 const ElementSeparator = () => <div className='my-1 ml-2 border-b border-tournamento-100 w-3/4'></div>
 
-const SideNav = () => {
+const SideNav = ({ hideSideNav }: Props) => {
   return (
     <>
-      <SideNavUser />
+      <div className='flex justify-between items-center pt-4 px-4'>
+        <SideNavUser />
+        <button className='md:hidden' onClick={hideSideNav}>
+          <BsX className='text-4xl' />
+        </button>
+      </div>
       <nav>
         <SideNavElement href='/home' icon={BsHouseDoor}>Home</SideNavElement>
         <ElementSeparator/>
