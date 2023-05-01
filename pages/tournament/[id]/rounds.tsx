@@ -11,24 +11,35 @@ import UserLi from "@/components/list items/user-li";
 import TeamLi from "@/components/list items/team-li";
 import StateLabel from "@/components/misc/state-label";
 import { Sport } from "@/utils/types";
+import MatchLi from "@/components/list items/match-li";
+import MatchUnassignedLi from "@/components/list items/match-unassigned-li";
 
 const Page = () => {
   return (
     <>
-      <div className='flex justify-between items-center'>
-        <Title>Teams</Title>
-        <GradientButton type='light'>Connect</GradientButton>
-      </div>
+      <Title>Rounds</Title>
       <section>
+        <Subtitle>Round 1</Subtitle>
         <ul className='flex flex-col gap-1'>
-          <TeamLi name='Zamalek' sport={Sport.Football}>
-            <StateLabel type='light'>Active</StateLabel>
-          </TeamLi>
-          <TeamLi name='Al Ahly' sport={Sport.Football}>
-            <StateLabel type='red'>Out</StateLabel>
-          </TeamLi>
+          <MatchLi homeTeam='Zamalek' awayTeam='Al Ahly'>1 - 0</MatchLi>
+          <MatchLi homeTeam='Pyramids' awayTeam='Al Ahly'>4 - 0</MatchLi>
         </ul>
       </section>
+      <section>
+        <Subtitle>Round 2</Subtitle>
+        <ul className='flex flex-col gap-1'>
+          <MatchLi homeTeam='Misr Lel Makassa' awayTeam='Al Ahly'>2 - 1</MatchLi>
+          <MatchLi homeTeam='Arab Contractors' awayTeam='Al Ahly'>2 - 0</MatchLi>
+        </ul>
+      </section>
+      <section>
+        <Subtitle>Round 3</Subtitle>
+        <ul className='flex flex-col gap-1'>
+          <MatchUnassignedLi />
+          <MatchUnassignedLi />
+        </ul>
+      </section>
+      
     </>
   );
 }
