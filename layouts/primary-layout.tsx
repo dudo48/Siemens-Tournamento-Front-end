@@ -18,7 +18,7 @@ const PrimaryLayout = ({children} : PropsWithChildren) => {
           </button>
           <div className='w-3/4 md:w-1/2 mx-auto'><Logo /></div>
         </div>
-        <section className='px-4 py-1'>
+        <section className='px-4 py-1 flex flex-col gap-4'>
           {children}
         </section>
       </section>

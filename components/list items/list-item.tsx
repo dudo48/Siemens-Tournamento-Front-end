@@ -3,6 +3,7 @@ import { IconType } from "react-icons";
 import getOrdinalSuffix from "@/utils/functions";
 import { sportsIcons } from "@/utils/mappings";
 import { PropsWithChildren } from "react";
+import CircledIcon from "../misc/circled-icon";
 
 interface Props {
   icon?: IconType,
@@ -10,15 +11,11 @@ interface Props {
   subtitle?: string
 }
 
-const ListItem = ({ icon: Icon, title, subtitle, children }: PropsWithChildren<Props>) => {
+const ListItem = ({ icon, title, subtitle, children }: PropsWithChildren<Props>) => {
   return (
     <li className='flex justify-between items-center group'>
       <div className='flex items-center'>
-        {Icon && 
-        <div className='border-2 p-0.5 border-tournamento-400 rounded-full'>
-          <Icon className='text-3xl text-tournamento-400' />
-        </div>
-        }
+        {icon && <CircledIcon icon={icon} />}
         <div className='pl-2'>
           <p className='text-lg'>{title}</p>
           {subtitle && <p className='text-sm'>{subtitle}</p>}

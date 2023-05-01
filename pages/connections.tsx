@@ -4,10 +4,10 @@ import Title from "@/components/misc/title";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { ReactNode } from "react";
 import { BsArrowRight, BsPlusLg } from "react-icons/bs";
-import FinishedTournamentLi from "@/components/list items/finished-tournament-li";
+import TournamentHistoryLi from "@/components/list items/tournament-history-li";
 import GradientButton from "@/components/buttons/gradient-button";
 import Link from "next/link";
-import ConnectionLi from "@/components/list items/connection-li";
+import UserLi from "@/components/list items/user-li";
 
 const Page = () => {
   return (
@@ -18,12 +18,24 @@ const Page = () => {
       </div>
       <section>
         <ul className='flex flex-col gap-1'>
-          <ConnectionLi key={1} name='Fady Emad' />
-          <ConnectionLi key={2} name='Muhammad Salah' />
-          <ConnectionLi key={3} name='Abdalla Fadl' />
-          <ConnectionLi key={4} name='Abdallah Amer' />
-          <ConnectionLi key={5} name='Ahmed Elgarf' />
-          <ConnectionLi key={6} name='Radwa Ahmed' />
+          <UserLi key={1} name='Fady Emad'>
+            <GradientButton type='red'>Delete</GradientButton>
+          </UserLi>
+          <UserLi key={2} name='Muhammad Salah'>
+            <GradientButton type='red'>Delete</GradientButton>
+          </UserLi>
+          <UserLi key={3} name='Abdalla Fadl'>
+            <GradientButton type='red'>Delete</GradientButton>
+          </UserLi>
+          <UserLi key={4} name='Abdallah Amer'>
+            <GradientButton type='red'>Delete</GradientButton>
+          </UserLi>
+          <UserLi key={5} name='Ahmed Elgarf'>
+            <GradientButton type='red'>Delete</GradientButton>
+          </UserLi>
+          <UserLi key={6} name='Radwa Ahmed'>
+            <GradientButton type='red'>Delete</GradientButton>
+          </UserLi>
         </ul>
       </section>
     </>

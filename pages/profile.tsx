@@ -20,8 +20,6 @@ const Page = () => {
     console.log(form);
   }
 
-  const resetValue = (name: string, value: string) => setForm({...form, [name]: value});
-
   return (
     <>
       <Title>Profile</Title>
@@ -37,12 +35,10 @@ const Page = () => {
           <SquareInput label='Email address' attributes={{type:'email', name: 'email', placeholder: 'Email address', value: form.email, onChange: handleChange}}/>
           <SquareInput label='Password' attributes={{type:'password', name: 'password', placeholder: 'Password', value: form.password, onChange: handleChange}}/>
           <SquareInput label='Phone number' attributes={{type:'text', name: 'phone', placeholder: 'Phone number', value: form.phone, onChange: handleChange}}/>
-          <div>
-            <GradientButton type='light'>Save</GradientButton>
-          </div>
+          <GradientButton type='light'>Save</GradientButton>
         </Form>
         <div>
-          <GradientButton type='danger'>DELETE ACCOUNT</GradientButton>
+          <GradientButton type='red'>DELETE ACCOUNT</GradientButton>
         </div>
       </section>
     </>

@@ -8,13 +8,23 @@ import TournamentHistoryLi from "@/components/list items/tournament-history-li";
 import GradientButton from "@/components/buttons/gradient-button";
 import Link from "next/link";
 import UserLi from "@/components/list items/user-li";
+import TeamLi from "@/components/list items/team-li";
+import StateLabel from "@/components/misc/state-label";
+import MatchLi from "@/components/list items/match-li";
 
 const Page = () => {
   return (
     <>
-      <Title>About</Title>
+      <div className='flex justify-between items-center'>
+        <Title>Available Matches</Title>
+        <GradientButton type='light'>Connect</GradientButton>
+      </div>
       <section>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed dolorum voluptates dolore hic molestias consequuntur est cum maxime doloremque facilis, aut inventore, neque distinctio quos voluptas. Est ipsum veritatis iusto fugit sit, ad accusantium reiciendis dolorem provident laudantium temporibus voluptatibus corrupti, repellat officia nobis? A quam saepe quia commodi magnam.</p>
+        <ul className='flex flex-col gap-1'>
+          <MatchLi homeTeam='Zamalek' awayTeam='Al Ahly'>
+            <GradientButton type='light'>Play</GradientButton>
+          </MatchLi>
+        </ul>
       </section>
     </>
   );

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PropsWithChildren } from "react";
 import { IconType } from "react-icons";
-import { BsBoxArrowLeft, BsClockHistory, BsGraphUpArrow, BsHouseDoor, BsInfoSquare, BsPeople, BsPerson, BsX } from "react-icons/bs"
+import { BsBell, BsBoxArrowLeft, BsClockHistory, BsGraphUpArrow, BsHouseDoor, BsInfoSquare, BsPeople, BsPerson, BsX } from "react-icons/bs"
 import ProfilePhoto from "../images/profile-photo";
 
 interface ElementProps {
@@ -53,6 +53,8 @@ const SideNav = ({ hideSideNav }: Props) => {
       </div>
       <nav>
         <SideNavElement href='/home' icon={BsHouseDoor}>Home</SideNavElement>
+        <ElementSeparator/>
+        <SideNavElement href='/notifications' icon={BsBell}>Notifications</SideNavElement>
         <ElementSeparator/>
         <SideNavElement href='/profile' icon={BsPerson}>Profile</SideNavElement>
         <ElementSeparator/>

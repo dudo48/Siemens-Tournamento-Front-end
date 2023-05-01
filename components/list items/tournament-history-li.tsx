@@ -2,6 +2,7 @@ import { Sport } from "@/utils/types";
 import ListItem from "./list-item";
 import { sportsIcons } from "@/utils/mappings";
 import getOrdinalSuffix from "@/utils/functions";
+import TournamentLi from "./tournament-li";
 
 interface Props {
   name: string,
@@ -9,17 +10,17 @@ interface Props {
   position: number
 }
 
-const FinishedTournamentLi = ({name, sport, position}: Props) => {
+const TournamentHistoryLi = ({name, sport, position}: Props) => {
   return (
-    <ListItem icon={sportsIcons.get(sport)} title={name} subtitle={sport}>
+    <TournamentLi name={name} sport={sport}>
       <p>
         <span className='text-tournamento-400 text-3xl'>
           {position}
         </span>
         {getOrdinalSuffix(position)}
       </p>
-    </ListItem>
+    </TournamentLi>
   );
 }
  
-export default FinishedTournamentLi;
+export default TournamentHistoryLi;
