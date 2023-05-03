@@ -1,3 +1,4 @@
+import UserContextProvider from '@/context/user-context'
 import '@/styles/globals.css'
 import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
@@ -13,7 +14,11 @@ type AppPropsWithLayout = AppProps & {
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page)
-  return getLayout(<Component {...pageProps} />)
+  return (
+    <UserContextProvider>
+      {getLayout(<Component {...pageProps} />)}
+    </UserContextProvider>
+  );
 }
 
 export default App;

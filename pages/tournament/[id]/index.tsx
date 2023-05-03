@@ -58,8 +58,8 @@ const Page = () => {
           <IconButton icon={BsPlusLg}>Create Team</IconButton>
         </div>
         <ul className='flex flex-col gap-1'>
-          <TeamLi name='Zamalek' />
-          <TeamLi name='Al Ahly' />
+          <TeamLi sport={Sport.Football} name='Zamalek' />
+          <TeamLi sport={Sport.Football} name='Al Ahly' />
         </ul>
       </section>
       <section>

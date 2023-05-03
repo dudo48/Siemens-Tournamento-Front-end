@@ -1,11 +1,10 @@
-import ProfilePhoto from "@/components/images/profile-photo";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-export default function Home() {
-  return (
-    <main>
-      <div className='w-64 relative'>
-        😂
-      </div>
-    </main>
-  )
+export default function Page() {
+  const router = useRouter();
+  
+  useEffect(() => {
+    router.push('/home');
+  }, [router])
 }

@@ -39,7 +39,6 @@ const Page = () => {
           <MatchUnassignedLi />
         </ul>
       </section>
-      
     </>
   );
 }
