@@ -3,6 +3,8 @@ import '@/styles/globals.css'
 import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { ReactNode } from 'react'
+import { Slide, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 export type PageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout: (page: ReactNode) => ReactNode
@@ -17,6 +19,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   return (
     <UserContextProvider>
       {getLayout(<Component {...pageProps} />)}
+      <ToastContainer position='bottom-center' transition={Slide} />
     </UserContextProvider>
   );
 }

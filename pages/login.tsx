@@ -1,19 +1,41 @@
 import GradientButton from "@/components/buttons/gradient-button";
 import Form from "@/components/forms/form";
 import RoundedInput from "@/components/forms/rounded-input";
+import { UserContext } from "@/context/user-context";
 import SecondaryLayout from "@/layouts/secondary-layout";
+import authenticationService from "@/services/authentication-service";
+import { User } from "@/utils/types";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
+import { ChangeEvent, FormEvent, ReactNode, useContext, useState } from "react";
+import { toast } from "react-toastify";
 
 const Page = () => {
-  const [form, setForm] = useState<{[key: string]: string}>({});
-  const router = useRouter();
+  const [form, setForm] = useState<User>({email: '', password: ''});
+  const { setUser } = useContext(UserContext);
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     console.log(form);
-    router.push('/home');
+
+    const result = await authenticationService.login(form);
+    console.log(result);
+
+    if (result) {
+      if (result.status) {
+        toast.error('Login failed: An error happened.');
+        return;
+      }
+      if (!result.verified) {
+        toast.error('Login failed: User is not verified yet!');
+        return;
+      }
+      
+      localStorage.setItem('user', JSON.stringify(result));
+      setUser(result);
+      toast.success('Logged in successfully!');
+    } else {
+      toast.error('Login failed: Wrong email or password.');
+    }
   }
 
   const handleChange = (event: ChangeEvent) => {

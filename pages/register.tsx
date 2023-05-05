@@ -2,19 +2,31 @@ import GradientButton from "@/components/buttons/gradient-button";
 import Form from "@/components/forms/form";
 import RoundedInput from "@/components/forms/rounded-input";
 import SecondaryLayout from "@/layouts/secondary-layout";
+import authenticationService from "@/services/authentication-service";
+import { User } from "@/utils/types";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
+import { toast } from "react-toastify";
 
 const Page = () => {
-  const [form, setForm] = useState<{[key: string]: string}>({});
+  const [form, setForm] = useState<User & {confirmPassword?: string}>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
   const router = useRouter();
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     console.log(form);
-    // confirm password must equal password
-    router.push('/home');
+
+    const result = await authenticationService.signup(form);
+    console.log(result);
+    
+    router.push(`/verify-account?id=${result.id}`);
   }
 
   const handleChange = (event: ChangeEvent) => {

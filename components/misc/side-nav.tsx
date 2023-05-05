@@ -1,12 +1,15 @@
 import Link from "next/link";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useContext } from "react";
 import { IconType } from "react-icons";
 import { BsBell, BsBoxArrowLeft, BsClockHistory, BsGraphUpArrow, BsHouseDoor, BsInfoSquare, BsPeople, BsPerson, BsX } from "react-icons/bs"
 import ProfilePhoto from "../images/profile-photo";
+import { UserContext } from "@/context/user-context";
+import { toast } from "react-toastify";
 
 interface ElementProps {
   href: string,
-  icon: IconType
+  icon: IconType,
+  onClick?: () => void
 }
 
 interface Props {
@@ -29,9 +32,9 @@ const SideNavUser = () => {
   );
 }
 
-const SideNavElement = ({href, icon: Icon, children}: PropsWithChildren<ElementProps>) => {
+const SideNavElement = ({href, onClick, icon: Icon, children}: PropsWithChildren<ElementProps>) => {
   return (
-    <Link href={href}>
+    <Link onClick={onClick} href={href}>
       <div className='py-2 px-4 flex items-center gap-4 hover:bg-tournamento-800 hover:font-semibold duration-100 hover:text-white'>
         <Icon className='text-2xl' />
         <p className='text-white'>{children}</p>
@@ -43,6 +46,14 @@ const SideNavElement = ({href, icon: Icon, children}: PropsWithChildren<ElementP
 const ElementSeparator = () => <div className='my-1 ml-2 border-b border-tournamento-100 w-3/4'></div>
 
 const SideNav = ({ hideSideNav }: Props) => {
+  const { setUser } = useContext(UserContext);
+
+  const logout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    toast.info('Logged out.');
+  }
+
   return (
     <>
       <div className='flex justify-between items-center pt-4 px-4'>
@@ -66,7 +77,7 @@ const SideNav = ({ hideSideNav }: Props) => {
         <ElementSeparator/>
         <SideNavElement href='/about' icon={BsInfoSquare}>About</SideNavElement>
       </nav>
-      <SideNavElement href='/login' icon={BsBoxArrowLeft}>Logout</SideNavElement>
+      <SideNavElement onClick={logout} href='/login' icon={BsBoxArrowLeft}>Logout</SideNavElement>
     </>
   );
 }

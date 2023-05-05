@@ -3,17 +3,26 @@ import Form from "@/components/forms/form";
 import RoundedInput from "@/components/forms/rounded-input";
 import SecondaryLayout from "@/layouts/secondary-layout";
 import { redirect } from "next/navigation";
-import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
+import { ChangeEvent, FormEvent, ReactNode, useContext, useState } from "react";
 import { useRouter } from "next/router";
+import authenticationService from "@/services/authentication-service";
+import { UserContext } from "@/context/user-context";
 
 const Page = () => {
   const [code, setCode] = useState<string>('');
   const router = useRouter();
+  const { id } = router.query;
+  const { setUser } = useContext(UserContext);
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     console.log(code);
-    router.push('/create-new-password');
+
+    const result = await authenticationService.verifyUser(id as string, code);
+    console.log(result);
+    
+    localStorage.setItem('user', JSON.stringify(result));
+    setUser(result);
   }
 
   const handleChange = (event: ChangeEvent) => {

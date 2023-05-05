@@ -1,8 +1,23 @@
 import Logo from "@/components/images/logo";
+import { UserContext } from "@/context/user-context";
 import Head from "next/head";
-import { PropsWithChildren, ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { PropsWithChildren, ReactNode, useContext, useEffect } from "react";
 
 const SecondaryLayout = ({children} : PropsWithChildren) => {
+  const { user } = useContext(UserContext);
+  const router = useRouter();
+
+  // this layout is for logged in users only, so redirect otherwise
+  useEffect(() => {
+    if (user) {
+      router.push('/home');
+    }
+  }, [user, router])
+
+  // don't render anything
+  if (user) return null;
+
   return (
     <>
     <Head>
