@@ -11,14 +11,14 @@ const PrimaryLayout = ({children} : PropsWithChildren) => {
   
   const [sideBarVisible, setSideBarVisible] = useState(false);
   const router = useRouter();
-  const { user } = useContext(UserContext);
+  const { authLoading, user } = useContext(UserContext);
 
   // this layout is for logged in users only, so redirect otherwise
   useEffect(() => {
-    if (!user) {
+    if (!authLoading && !user) {
       router.push('/login');
     }
-  }, [user, router])
+  }, [user, router, authLoading])
   
   // close sidebar on route change
   useEffect(() => {

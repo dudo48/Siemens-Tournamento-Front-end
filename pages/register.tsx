@@ -10,7 +10,7 @@ import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
 import { toast } from "react-toastify";
 
 const Page = () => {
-  const [form, setForm] = useState<User & {confirmPassword?: string}>({
+  const [form, setForm] = useState({
     firstName: '',
     lastName: '',
     email: '',

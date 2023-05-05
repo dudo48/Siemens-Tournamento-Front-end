@@ -6,8 +6,11 @@ export enum Sport {
 }
 
 export interface User {
-  firstName?: string,
-  lastName?: string,
+  id: number,
+  firstName: string,
+  lastName: string,
   email: string,
-  password: string
+  password: string,
+  verified: boolean,
+  playerDetails: null
 }

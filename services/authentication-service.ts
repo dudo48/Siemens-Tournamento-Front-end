@@ -2,7 +2,7 @@ import { User } from "@/utils/types";
 
 const baseUrl = 'http://localhost:5000/auth';
 
-const login = async (user: User) => {
+const login = async (user: {[key: string]: any}) => {
   const url = `${baseUrl}/login`;
   const JSONdata = JSON.stringify(user);
 
@@ -26,7 +26,7 @@ const login = async (user: User) => {
   return result;
 }
 
-const signup = async (user: User) => {
+const signup = async (user: {[key: string]: any}) => {
   const url = `${baseUrl}/signup`;
   const JSONdata = JSON.stringify(user);
 

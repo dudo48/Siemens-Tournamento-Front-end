@@ -5,15 +5,14 @@ import { useRouter } from "next/navigation";
 import { PropsWithChildren, ReactNode, useContext, useEffect } from "react";
 
 const SecondaryLayout = ({children} : PropsWithChildren) => {
-  const { user } = useContext(UserContext);
+  const { authLoading, user } = useContext(UserContext);
   const router = useRouter();
 
-  // this layout is for logged in users only, so redirect otherwise
   useEffect(() => {
-    if (user) {
+    if (!authLoading && user) {
       router.push('/home');
     }
-  }, [user, router])
+  }, [user, router, authLoading])
 
   // don't render anything
   if (user) return null;

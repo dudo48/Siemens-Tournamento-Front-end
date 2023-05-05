@@ -16,6 +16,7 @@ type AppPropsWithLayout = AppProps & {
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page)
+  
   return (
     <UserContextProvider>
       {getLayout(<Component {...pageProps} />)}

@@ -17,16 +17,18 @@ interface Props {
 }
 
 const SideNavUser = () => {
+  const { user } = useContext(UserContext);
+
   return (
     <div className='flex items-center gap-2'>
         <div className='w-16'>
           <ProfilePhoto />
         </div>
-        <div className=''>
+        <div>
           <Link href='/profile' className='hover:underline text-xl font-semibold'>
-            Fady Emad
+            {user.firstName} {user.lastName}
           </Link>
-          <p className='text-sm'>fadyemad@tournamento.com</p>
+          <p className='text-sm'>{user.email}</p>
         </div>
       </div>
   );

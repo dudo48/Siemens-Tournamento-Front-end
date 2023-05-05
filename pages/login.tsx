@@ -10,7 +10,7 @@ import { ChangeEvent, FormEvent, ReactNode, useContext, useState } from "react";
 import { toast } from "react-toastify";
 
 const Page = () => {
-  const [form, setForm] = useState<User>({email: '', password: ''});
+  const [form, setForm] = useState({email: '', password: ''});
   const { setUser } = useContext(UserContext);
 
   const handleSubmit = async (event: FormEvent) => {

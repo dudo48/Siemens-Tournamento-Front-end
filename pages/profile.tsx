@@ -4,10 +4,12 @@ import ProfilePhoto from "@/components/images/profile-photo";
 import SquareInput from "@/components/forms/square-input";
 import Title from "@/components/misc/title";
 import PrimaryLayout from "@/layouts/primary-layout";
-import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
+import { ChangeEvent, FormEvent, ReactNode, useContext, useState } from "react";
+import { UserContext } from "@/context/user-context";
 
 const Page = () => {
-  const [form, setForm] = useState<{[key: string]: string}>({});
+  const { user } = useContext(UserContext);
+  const [form, setForm] = useState<{[key: string]: string}>(user);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
