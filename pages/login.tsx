@@ -20,21 +20,12 @@ const Page = () => {
     const result = await authenticationService.login(form);
     console.log(result);
 
-    if (result) {
-      if (result.status) {
-        toast.error('Login failed: An error happened.');
-        return;
-      }
-      if (!result.verified) {
-        toast.error('Login failed: User is not verified yet!');
-        return;
-      }
-      
+    if (!result || result.status || !result.verified) {
+      toast.error('Login failed: Wrong email or password.');
+    } else {
       localStorage.setItem('user', JSON.stringify(result));
       setUser(result);
       toast.success('Logged in successfully!');
-    } else {
-      toast.error('Login failed: Wrong email or password.');
     }
   }
 
