@@ -8,17 +8,20 @@ import TournamentHistoryLi from "@/components/list items/tournament-history-li";
 import GradientButton from "@/components/buttons/gradient-button";
 import Link from "next/link";
 import UserLi from "@/components/list items/user-li";
-import connectionsService from "@/services/connections-service";
 import { UserContext } from "@/context/user-context";
 import { User } from "@/utils/types";
 import { toast } from "react-toastify";
 import Form from "@/components/forms/form";
 import LabelInput from "@/components/forms/label-input";
 import SquareInput from "@/components/forms/square-input";
+import { useConnections, useConnectionsModify } from "@/services/connections-service";
 
 const Page = () => {
   const { user } = useContext(UserContext);
-  const [connections, setConnections] = useState<User[]>([]);
+
+  const { connections, mutate } = useConnections(user.id);
+  const { addConnection, deleteConnection } = useConnectionsModify(user.id);
+
   const [addConnectionsVisible, setAddConnectionsVisible] = useState(false);
   const [email, setEmail] = useState('');
 
@@ -31,14 +34,14 @@ const Page = () => {
     event.preventDefault();
     console.log(email);
 
-    const result = await connectionsService.sendRequest(user.id, email);
+    const result = await addConnection(email);
     console.log(result);
 
-    if (result.status) {
+    if (result.status === true) {
       toast.success('Request sent successfully!');
       closeAddConnections();
     } else {
-      toast.error(`Request failed: ${result.info}`);
+      toast.error(`Request failed.`);
     }
   }
 
@@ -48,22 +51,11 @@ const Page = () => {
     console.log(email);
   }
 
-  useEffect(() => {
-    const getConnections = async () => {
-      const result = await connectionsService.getAll(user.id);
-      setConnections(result);
-      console.log(result);
-    }
+  const deleteConnectionHandler = async (connection: User) => {
+    const result = await deleteConnection(connection.id);
+    console.log(result);
     
-    getConnections();
-  }, [user]);
-
-  const deleteConnection = async (connection: User) => {
-    await connectionsService.deleteConnection(user.id, connection.id);
-
-    const newConnections = connections.filter(c => c.id !== connection.id);
-    setConnections(newConnections);
-    
+    mutate();
     toast.success(`Deleted connection: ${connection.firstName} ${connection.lastName}`)
   }
 
@@ -85,9 +77,9 @@ const Page = () => {
       <section>
         <Subtitle>Connections List</Subtitle>
         <ul className='flex flex-col gap-1'>
-          {connections.map((connection, i) => (
+          {connections?.map((connection, i) => (
             <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
-              <GradientButton attributes={{onClick: () => deleteConnection(connection)}} type='red'>Delete</GradientButton>
+              <GradientButton attributes={{onClick: () => deleteConnectionHandler(connection)}} type='red'>Delete</GradientButton>
             </UserLi>
           ))}
         </ul>

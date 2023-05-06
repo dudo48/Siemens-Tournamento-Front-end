@@ -5,21 +5,22 @@ import SecondaryLayout from "@/layouts/secondary-layout";
 import { redirect } from "next/navigation";
 import { ChangeEvent, FormEvent, ReactNode, useContext, useState } from "react";
 import { useRouter } from "next/router";
-import authenticationService from "@/services/authentication-service";
 import { UserContext } from "@/context/user-context";
 import { toast } from "react-toastify";
+import { useAuthentication } from "@/services/authentication-service";
 
 const Page = () => {
   const [code, setCode] = useState<string>('');
   const router = useRouter();
   const { id } = router.query;
   const { setUser } = useContext(UserContext);
+  const { verifyUser } = useAuthentication();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     console.log(code);
 
-    const result = await authenticationService.verifyUser(id as string, code);
+    const result = await verifyUser(id as string, code);
     console.log(result);
     
     if (!result || result.status) {

@@ -3,7 +3,7 @@ import Form from "@/components/forms/form";
 import RoundedInput from "@/components/forms/rounded-input";
 import { UserContext } from "@/context/user-context";
 import SecondaryLayout from "@/layouts/secondary-layout";
-import authenticationService from "@/services/authentication-service";
+import { useAuthentication } from "@/services/authentication-service";
 import { User } from "@/utils/types";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, ReactNode, useContext, useState } from "react";
@@ -12,12 +12,13 @@ import { toast } from "react-toastify";
 const Page = () => {
   const [form, setForm] = useState({email: '', password: ''});
   const { setUser } = useContext(UserContext);
+  const { login } = useAuthentication();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     console.log(form);
 
-    const result = await authenticationService.login(form);
+    const result = await login(form);
     console.log(result);
 
     if (!result || result.status || !result.verified) {

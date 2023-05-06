@@ -9,36 +9,23 @@ import GradientButton from "@/components/buttons/gradient-button";
 import { Sport, User } from "@/utils/types";
 import UserLi from "@/components/list items/user-li";
 import { UserContext } from "@/context/user-context";
-import connectionsService from "@/services/connections-service";
+import { useIncomingRequests, useRequestsResponse } from "@/services/connections-service";
 
 const Page = () => {
   const { user } = useContext(UserContext);
-  const [connectionRequests, setConnectionRequests] = useState<User[]>([]);
+  const { incomingRequests, mutate } = useIncomingRequests(user.id);
+  const { acceptRequest, declineRequest } = useRequestsResponse(user.id);
 
-  useEffect(() => {
-    const getConnectionRequests = async () => {
-      const result = await connectionsService.getAllIncoming(user.id);
-      setConnectionRequests(result);
-      console.log(result);
-    }
-
-    getConnectionRequests();
-  }, [user]);
-
-  const acceptRequest = async (id: number) => {
-    const result = await connectionsService.acceptRequest(id, user.id);
+  const accept = async (id: number) => {
+    const result = await acceptRequest(id);
     console.log(result);
-
-    const newConnectionRequests = connectionRequests.filter(r => r.id !== id);
-    setConnectionRequests(newConnectionRequests);
+    mutate();
   }
 
-  const declineRequest = async (id: number) => {
-    const result = await connectionsService.declineRequest(id, user.id);
+  const decline = async (id: number) => {
+    const result = await declineRequest(id);
     console.log(result);
-
-    const newConnectionRequests = connectionRequests.filter(r => r.id !== id);
-    setConnectionRequests(newConnectionRequests);
+    mutate();
   }
 
   return (
@@ -58,11 +45,11 @@ const Page = () => {
       <section>
         <Subtitle>Connection Requests</Subtitle>
         <ul>
-          {connectionRequests.map((connection, i) => (
+          {incomingRequests?.map((connection, i) => (
             <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
               <div className='flex gap-1'>
-                <GradientButton attributes={{onClick: () => acceptRequest(connection.id)}} type='light'>Accept</GradientButton>
-                <GradientButton attributes={{onClick: () => declineRequest(connection.id)}} type='red'>Decline</GradientButton>
+                <GradientButton attributes={{onClick: () => accept(connection.id)}} type='light'>Accept</GradientButton>
+                <GradientButton attributes={{onClick: () => decline(connection.id)}} type='red'>Decline</GradientButton>
               </div>
             </UserLi>))}
         </ul>

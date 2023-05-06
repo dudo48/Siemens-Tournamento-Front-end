@@ -2,7 +2,7 @@ import GradientButton from "@/components/buttons/gradient-button";
 import Form from "@/components/forms/form";
 import RoundedInput from "@/components/forms/rounded-input";
 import SecondaryLayout from "@/layouts/secondary-layout";
-import authenticationService from "@/services/authentication-service";
+import { useAuthentication } from "@/services/authentication-service";
 import { User } from "@/utils/types";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -18,6 +18,7 @@ const Page = () => {
     confirmPassword: ''
   });
   const router = useRouter();
+  const { signup } = useAuthentication();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -29,7 +30,7 @@ const Page = () => {
       return;
     }
 
-    const result = await authenticationService.signup(form);
+    const result = await signup(form);
     console.log(result);
     
     if (result.id === -1) {

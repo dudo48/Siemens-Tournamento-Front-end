@@ -1,89 +1,48 @@
+import useSWR from "swr";
+import { deleteService, getService, postService } from "./services";
+import { User } from "@/utils/types";
+
 const baseUrl = 'http://localhost:5000/connections';
 
-const sendRequest = async (fromId: number, toEmail: string) => {
-  const url = `${baseUrl}/postRequest/${fromId}/${toEmail}`;
+export const useConnectionsModify = (fromId: number) => ({
+  addConnection: (email: string) => postService(`${baseUrl}/postRequest/${fromId}/${email}`),
+  deleteConnection: (id: number) => deleteService(`${baseUrl}/deleteConnection/${fromId}/${id}`)
+});
 
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+export const useRequestsResponse = (toId: number) => ({
+    acceptRequest: (id: number) => postService(`${baseUrl}/acceptRequest/${id}/${toId}`),
+    declineRequest: (id: number) => deleteService(`${baseUrl}/deleteRequest/${id}/${toId}`)
+});
 
-  const response = await fetch(url, options);
-  const result = await response.json();
-
-  return result
-}
-
-const deleteConnection = async (fromId: number, toId: number) => {
-  const url = `${baseUrl}/deleteConnection/${fromId}/${toId}`;
-
-  const options = {
-    method: 'DELETE'
-  };
-
-  const response = await fetch(url, options);
-  const result = await response.json();
-
-  return result
-}
-
-const acceptRequest = async (fromId: number, toId: number) => {
-  const url = `${baseUrl}/acceptRequest/${fromId}/${toId}`;
-
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-
-  const response = await fetch(url, options);
-  const result = await response.json();
-
-  return result
-}
-
-const declineRequest = async (fromId: number, toId: number) => {
-  const url = `${baseUrl}/deleteRequest/${fromId}/${toId}`;
-
-  const options = {
-    method: 'DELETE'
-  };
-
-  const response = await fetch(url, options);
-  const result = await response.json();
-
-  return result
-}
-
-const getAllSent = async (id: number) => {
+export const useSentRequests = (id: number) => {
   const url = `${baseUrl}/getAllSent/${id}`;
-
-  const response = await fetch(url);
-  const result = await response.json();
-
-  return result
+  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getService);
+  return {
+    sentRequests: data,
+    mutate,
+    isLoading,
+    error
+  };
 }
 
-const getAllIncoming = async (id: number) => {
+export const useIncomingRequests = (id: number) => {
   const url = `${baseUrl}/getAllIncoming/${id}`;
-
-  const response = await fetch(url);
-  const result = await response.json();
-
-  return result
+  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getService);
+  return {
+    incomingRequests: data,
+    mutate,
+    isLoading,
+    error
+  };
 }
 
-const getAll = async (id: number) => {
+export const useConnections = (id: number) => {
   const url = `${baseUrl}/getAllConnections/${id}`;
-
-  const response = await fetch(url);
-  const result = await response.json();
-
-  return result
+  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getService);
+  return {
+    connections: data,
+    mutate,
+    isLoading,
+    error
+  };
 }
-
-const connectionsService = {sendRequest, deleteConnection, acceptRequest, declineRequest, getAll, getAllSent, getAllIncoming}
-export default connectionsService
