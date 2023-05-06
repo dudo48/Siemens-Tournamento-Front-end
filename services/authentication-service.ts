@@ -55,9 +55,14 @@ const verifyUser = async (id: string, code: string) => {
   };
 
   const response = await fetch(url, options);
-  const result = await response.json();
-
-  return result
+  let result;
+  try {
+    result = await response.json();
+  } catch (e) {
+    result = null;
+  }
+  
+  return result;
 }
 
 const authenticationService = { login, signup, verifyUser }

@@ -23,10 +23,20 @@ const Page = () => {
     event.preventDefault();
     console.log(form);
 
+    if (form.password !== form.confirmPassword) {
+      toast.error('Please re-enter your password in the confirm password field!');
+      setForm({...form, confirmPassword: ''});
+      return;
+    }
+
     const result = await authenticationService.signup(form);
     console.log(result);
     
-    router.push(`/verify-account?id=${result.id}`);
+    if (result.id === -1) {
+      toast.error('Email is already registered!');
+    } else {
+      router.push(`/verify-account?id=${result.id}`);
+    }
   }
 
   const handleChange = (event: ChangeEvent) => {

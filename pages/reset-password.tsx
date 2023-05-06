@@ -13,7 +13,6 @@ const Page = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     console.log(email);
-    router.push('/verify-account');
   }
 
   const handleChange = (event: ChangeEvent) => {

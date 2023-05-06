@@ -7,6 +7,7 @@ import { ChangeEvent, FormEvent, ReactNode, useContext, useState } from "react";
 import { useRouter } from "next/router";
 import authenticationService from "@/services/authentication-service";
 import { UserContext } from "@/context/user-context";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const [code, setCode] = useState<string>('');
@@ -21,8 +22,14 @@ const Page = () => {
     const result = await authenticationService.verifyUser(id as string, code);
     console.log(result);
     
-    localStorage.setItem('user', JSON.stringify(result));
-    setUser(result);
+    if (!result || result.status) {
+      toast.error('The code you entered is not the code we sent you!');
+      setCode('');
+    } else {
+      localStorage.setItem('user', JSON.stringify(result));
+      setUser(result);
+      toast.success('Logged in successfully!');
+    }
   }
 
   const handleChange = (event: ChangeEvent) => {
