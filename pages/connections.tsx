@@ -14,17 +14,32 @@ import { toast } from "react-toastify";
 import Form from "@/components/forms/form";
 import LabelInput from "@/components/forms/label-input";
 import SquareInput from "@/components/forms/square-input";
-import { useConnections, useConnectionsModify } from "@/services/connections-service";
+import { useConnections, useConnectionsModify, useIncomingRequests, useRequestsResponse } from "@/services/connections-service";
 import Modal from "@/components/misc/modal";
 
 const Page = () => {
   const { user } = useContext(UserContext);
 
-  const { connections, mutate } = useConnections(user.id);
+  const { connections, mutate: mutateConnections } = useConnections(user.id);
+  const { incomingRequests, mutate: mutateIncoming } = useIncomingRequests(user.id);
   const { addConnection, deleteConnection } = useConnectionsModify(user.id);
 
   const [addConnectionsVisible, setAddConnectionsVisible] = useState(false);
   const [email, setEmail] = useState('');
+  const { acceptRequest, declineRequest } = useRequestsResponse(user.id);
+
+  const accept = async (connection: User) => {
+    const result = await acceptRequest(connection.id);
+    console.log(result);
+    mutateIncoming(incomingRequests?.filter(r => r.id !== connection.id));
+    mutateConnections(connections?.concat(connection));
+  }
+
+  const decline = async (id: number) => {
+    const result = await declineRequest(id);
+    console.log(result);
+    mutateIncoming(incomingRequests?.filter(r => r.id !== id));
+  }
 
   const closeAddConnections = () => {
     setAddConnectionsVisible(false);
@@ -56,7 +71,7 @@ const Page = () => {
     const result = await deleteConnection(connection.id);
     console.log(result);
     
-    mutate(connections?.filter(c => c.id !== connection.id));
+    mutateConnections(connections?.filter(c => c.id !== connection.id));
     toast.success(`Deleted connection: ${connection.firstName} ${connection.lastName}`)
   }
 
@@ -66,6 +81,18 @@ const Page = () => {
         <Title>Connections</Title>
         <GradientButton type='light' attributes={{onClick: () => setAddConnectionsVisible(true)}}>Add connections</GradientButton>
       </div>
+      <section>
+        <Subtitle>Connection Requests</Subtitle>
+        <ul className='flex flex-col gap-1'>
+          {incomingRequests?.map((connection, i) => (
+            <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
+              <div className='flex gap-1'>
+                <GradientButton attributes={{onClick: () => accept(connection)}} type='light'>Accept</GradientButton>
+                <GradientButton attributes={{onClick: () => decline(connection.id)}} type='red'>Decline</GradientButton>
+              </div>
+            </UserLi>))}
+        </ul>
+      </section>
       <section>
         <Subtitle>Connections List</Subtitle>
         <ul className='flex flex-col gap-1'>

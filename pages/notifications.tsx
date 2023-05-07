@@ -17,22 +17,8 @@ import { useNotificationsModify, useNotificationsRead } from "@/services/notific
 const Page = () => {
   const { user } = useContext(UserContext);
   const { notifications, mutate } = useContext(NotificationsContext);
-  // const { incomingRequests, mutate } = useIncomingRequests(user.id);
-  // const { acceptRequest, declineRequest } = useRequestsResponse(user.id);
   const { markAsRead, markAllAsRead } = useNotificationsRead();
   const { deleteNotification, deleteAllNotifications } = useNotificationsModify();
-
-  // const accept = async (id: number) => {
-  //   const result = await acceptRequest(id);
-  //   console.log(result);
-  //   mutate();
-  // }
-
-  // const decline = async (id: number) => {
-  //   const result = await declineRequest(id);
-  //   console.log(result);
-  //   mutate();
-  // }
 
   const markAsReadHandler = async (id: number) => {
     const result = await markAsRead(id);
@@ -80,18 +66,6 @@ const Page = () => {
             </NotificationLi>))}
         </ul>
       </section>
-      {/* <section>
-        <Subtitle>Connection Requests</Subtitle>
-        <ul>
-          {incomingRequests?.map((connection, i) => (
-            <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
-              <div className='flex gap-1'>
-                <GradientButton attributes={{onClick: () => accept(connection.id)}} type='light'>Accept</GradientButton>
-                <GradientButton attributes={{onClick: () => decline(connection.id)}} type='red'>Decline</GradientButton>
-              </div>
-            </UserLi>))}
-        </ul>
-      </section> */}
     </>
   );
 }

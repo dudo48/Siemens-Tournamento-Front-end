@@ -13,8 +13,8 @@ const Modal = ({ title, isOpen, close, children }: PropsWithChildren<Props>) => 
   return (
     <Transition
       show={isOpen}
-      as={Fragment}
       appear
+      as={Fragment}
       enter='ease-out duration-100'
       enterFrom='opacity-0'
       enterTo='opacity-100'
@@ -30,9 +30,8 @@ const Modal = ({ title, isOpen, close, children }: PropsWithChildren<Props>) => 
         <div className='fixed inset-0 flex items-center justify-center p-2'>
           <Transition.Child
             as={Fragment}
-            appear
-            enter='ease-out duration-200'
-            enterFrom='opacity-0 scale-75'
+            enter='ease-out duration-100'
+            enterFrom='opacity-0 scale-90'
             enterTo='opacity-100 scale-100'
             leave='ease-in duration-100'
             leaveFrom='opacity-100'
@@ -41,7 +40,7 @@ const Modal = ({ title, isOpen, close, children }: PropsWithChildren<Props>) => 
             <Dialog.Panel className='w-full rounded max-w-lg bg-white px-4 py-1'>
               
               <div className='flex items-center justify-between'>
-                <Dialog.Title className=''>
+                <Dialog.Title as='div'>
                   <Subtitle>{title}</Subtitle>
                 </Dialog.Title>
                 <button onClick={close} className='text-2xl hover:text-red-500 duration-100'>
