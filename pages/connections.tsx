@@ -40,8 +40,8 @@ const Page = () => {
     if (result.status === true) {
       toast.success('Request sent successfully!');
       closeAddConnections();
-    } else {
-      toast.error(`Request failed.`);
+    } else if (result.status === false) {
+      toast.error(`Request failed: ${result.info}`);
     }
   }
 
