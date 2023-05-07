@@ -18,10 +18,12 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page)
   
   return (
-    <UserContextProvider>
-      {getLayout(<Component {...pageProps} />)}
+    <>
+      <UserContextProvider>
+        {getLayout(<Component {...pageProps} />)}
+      </UserContextProvider>
       <ToastContainer position='bottom-center' transition={Slide} />
-    </UserContextProvider>
+    </>
   );
 }
 

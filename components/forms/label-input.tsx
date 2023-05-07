@@ -9,7 +9,7 @@ interface Props {
 }
 
 const LabelInput = ({label, children}: PropsWithChildren<Props>) => {
-  const labelBeforeStyle = 'before:absolute before:bottom-1 before:-left-2 before:w-1 before:h-3 before:bg-gradient-to-t before:from-tournamento-400 before:to-tournamento-700';
+  const labelBeforeStyle = 'before:absolute before:top-2 before:-left-2 before:w-1 before:h-3 before:bg-gradient-to-t before:from-tournamento-400 before:to-tournamento-700';
 
   return (
     <label className='w-full flex flex-col gap-1'>

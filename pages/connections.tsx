@@ -15,6 +15,7 @@ import Form from "@/components/forms/form";
 import LabelInput from "@/components/forms/label-input";
 import SquareInput from "@/components/forms/square-input";
 import { useConnections, useConnectionsModify } from "@/services/connections-service";
+import Modal from "@/components/misc/modal";
 
 const Page = () => {
   const { user } = useContext(UserContext);
@@ -63,17 +64,8 @@ const Page = () => {
     <>
       <div className='flex justify-between items-center'>
         <Title>Connections</Title>
-        <GradientButton type='light' attributes={{onClick: () => setAddConnectionsVisible(true)}}>Connect</GradientButton>
+        <GradientButton type='light' attributes={{onClick: () => setAddConnectionsVisible(true)}}>Add connections</GradientButton>
       </div>
-      <section className={`${addConnectionsVisible ? 'block' : 'hidden'}`}>
-        <Form attributes={{onSubmit: handleSubmit}}>
-          <SquareInput label='Add connection using email address' attributes={{name: 'email', placeholder: 'Email address', value: email, onChange: handleChange}} />
-          <div className='flex gap-2'>
-            <GradientButton type='light'>Add</GradientButton>
-            <GradientButton type='red' attributes={{onClick: closeAddConnections, type: 'button'}}>Cancel</GradientButton>
-          </div>
-        </Form>
-      </section>
       <section>
         <Subtitle>Connections List</Subtitle>
         <ul className='flex flex-col gap-1'>
@@ -84,6 +76,14 @@ const Page = () => {
           ))}
         </ul>
       </section>
+      <Modal title='Add Connections' isOpen={addConnectionsVisible} close={closeAddConnections}>
+        <Form attributes={{onSubmit: handleSubmit}}>
+          <SquareInput label='Enter below the email address of the connection' attributes={{name: 'email', placeholder: 'Email address', value: email, onChange: handleChange}} />
+          <div className='flex gap-1'>
+            <GradientButton type='light'>Connect</GradientButton>
+          </div>
+        </Form>
+      </Modal>
     </>
   );
 }

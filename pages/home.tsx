@@ -18,13 +18,13 @@ const Page = () => {
           <Subtitle>YOU ARE IN!</Subtitle>
           <GradientButton type='light'>Go now</GradientButton>
         </div>
-        <div className='flex flex-col gap-1'>
-        <Link className='rounded-full' href={'/tournament/join'}>
-          <OutlinedButton icon={BsArrowRight}>Join Tournament</OutlinedButton>
-        </Link>
-        <Link className='rounded-full' href={'/tournament/create'}>
-          <OutlinedButton icon={BsPlusLg}>Create Tournament</OutlinedButton>
-        </Link>
+        <div className='flex flex-col gap-1 items-start'>
+          <Link className='rounded-full' href={'/tournament/join'}>
+            <OutlinedButton icon={BsArrowRight}>Join Tournament</OutlinedButton>
+          </Link>
+          <Link className='rounded-full' href={'/tournament/create'}>
+            <OutlinedButton icon={BsPlusLg}>Create Tournament</OutlinedButton>
+          </Link>
         </div>
       </section>
       <section>
@@ -32,7 +32,7 @@ const Page = () => {
           <Subtitle>MAKE CONNECTIONS</Subtitle>
           <GradientButton type='light'>Connect</GradientButton>
         </div>
-        <div className='flex flex-col gap-1'>
+        <div className='flex flex-col gap-1 items-start'>
           <Link className='rounded-full' href={'/connections'}>
             <OutlinedButton icon={BsArrowRight}>Connections List</OutlinedButton>
           </Link>

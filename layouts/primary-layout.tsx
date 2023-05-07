@@ -5,6 +5,7 @@ import { UserContext } from "@/context/user-context";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { PropsWithChildren, useContext, useEffect, useState } from "react";
+import { BsList } from "react-icons/bs";
 import {FiMenu} from "react-icons/fi"
 
 const PrimaryLayout = ({children} : PropsWithChildren) => {
@@ -38,14 +39,14 @@ const PrimaryLayout = ({children} : PropsWithChildren) => {
             <SideNav hideSideNav={() => setSideBarVisible(false)} />
           </section>
           <section className='md:ml-80 flex-1 relative z-0'>
-            <div className='px-4 py-2 flex items-center'>
+            <div className='px-4 py-2 flex items-center gap-8'>
               <button className='md:hidden' onClick={() => setSideBarVisible(true)}>
-                <FiMenu className='text-3xl' />
+                <BsList className='text-4xl' />
               </button>
-              <div className='w-3/4 md:w-1/2 mx-auto'><Logo /></div>
+              <div className=''><Logo /></div>
             </div>
             <section className='px-4 py-1 flex flex-col gap-4'>
-                {children}
+              {children}
             </section>
           </section>
         </main>
