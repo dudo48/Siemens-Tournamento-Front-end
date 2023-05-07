@@ -8,12 +8,13 @@ import CircledIcon from "../misc/circled-icon";
 interface Props {
   icon?: IconType,
   title: string,
-  subtitle?: string
+  subtitle?: string,
+  className?: string
 }
 
-const ListItem = ({ icon, title, subtitle, children }: PropsWithChildren<Props>) => {
+const ListItem = ({ icon, title, subtitle, className, children }: PropsWithChildren<Props>) => {
   return (
-    <li className='flex justify-between items-center group'>
+    <li className={`flex justify-between items-center group relative ${className}`}>
       <div className='flex items-center'>
         {icon && <CircledIcon icon={icon} />}
         <div className='pl-2'>

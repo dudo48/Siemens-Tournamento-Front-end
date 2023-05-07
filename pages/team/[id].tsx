@@ -4,7 +4,7 @@ import SquareInput from "@/components/forms/square-input";
 import Title from "@/components/misc/title";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
-import IconButton from "@/components/buttons/icon-button";
+import OutlinedButton from "@/components/buttons/outlined-button";
 import { BsPlusLg } from "react-icons/bs";
 import TeamLi from "@/components/list items/team-li";
 import { Sport } from "@/utils/types";
@@ -22,7 +22,7 @@ const Page = () => {
       <section>
         <div className='flex justify-between items-center'>
           <Subtitle>Players</Subtitle>
-          <IconButton icon={BsPlusLg}>Add player</IconButton>
+          <OutlinedButton icon={BsPlusLg}>Add player</OutlinedButton>
         </div>
         <ul>
           <UserLi name='Radwa Ahmed' />

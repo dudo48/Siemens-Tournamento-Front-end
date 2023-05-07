@@ -14,3 +14,12 @@ export interface User {
   verified: boolean,
   playerDetails: null
 }
+
+export interface Notification
+{
+  id: number,
+  playerId: number,
+  body: string,
+  read: boolean,
+  createdAt: string
+}

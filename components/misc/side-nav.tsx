@@ -5,11 +5,15 @@ import { BsBell, BsBoxArrowLeft, BsClockHistory, BsGraphUpArrow, BsHouseDoor, Bs
 import ProfilePhoto from "../images/profile-photo";
 import { UserContext } from "@/context/user-context";
 import { toast } from "react-toastify";
+import { NotificationsContext } from "@/context/notifications-context";
+import { useRouter } from "next/router";
+import { Notification } from "@/utils/types";
 
 interface ElementProps {
   href: string,
   icon: IconType,
-  onClick?: () => void
+  onClick?: () => void,
+  alertCount?: number
 }
 
 interface Props {
@@ -34,12 +38,19 @@ const SideNavUser = () => {
   );
 }
 
-const SideNavElement = ({href, onClick, icon: Icon, children}: PropsWithChildren<ElementProps>) => {
+const SideNavElement = ({href, onClick, icon: Icon, alertCount, children}: PropsWithChildren<ElementProps>) => {
+  const router = useRouter();
+
   return (
     <Link onClick={onClick} href={href}>
-      <div className='py-2 px-4 flex items-center gap-4 hover:bg-tournamento-800 hover:font-semibold duration-100 hover:text-white'>
-        <Icon className='text-2xl' />
-        <p className='text-white'>{children}</p>
+      <div className={`${router.asPath.startsWith(href) ? 'bg-tournamento-800 text-white font-semibold' : 'hover:bg-tournamento-800 hover:font-semibold hover:text-white'} py-2 px-4 flex justify-between items-center duration-100`}>
+        <div className='flex items-center gap-4'>
+          <Icon className='text-2xl' />
+          <p className='text-white'>{children}</p>
+        </div>
+        {alertCount ? <div className='text-white bg-red-500 flex items-center justify-center rounded-full w-6 h-6'>
+          <p>{alertCount}</p>
+        </div> : null}
       </div>
     </Link>
   );
@@ -49,6 +60,7 @@ const ElementSeparator = () => <div className='my-1 ml-2 border-b border-tournam
 
 const SideNav = ({ hideSideNav }: Props) => {
   const { setUser } = useContext(UserContext);
+  const { notifications } = useContext(NotificationsContext);
 
   const logout = () => {
     localStorage.removeItem('user');
@@ -67,7 +79,7 @@ const SideNav = ({ hideSideNav }: Props) => {
       <nav>
         <SideNavElement href='/home' icon={BsHouseDoor}>Home</SideNavElement>
         <ElementSeparator/>
-        <SideNavElement href='/notifications' icon={BsBell}>Notifications</SideNavElement>
+        <SideNavElement href='/notifications' alertCount={notifications?.filter((n: Notification) => !n.read).length} icon={BsBell}>Notifications</SideNavElement>
         <ElementSeparator/>
         <SideNavElement href='/profile' icon={BsPerson}>Profile</SideNavElement>
         <ElementSeparator/>

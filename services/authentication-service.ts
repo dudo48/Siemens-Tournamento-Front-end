@@ -1,10 +1,10 @@
 import { User } from "@/utils/types";
-import { postService } from "./services";
+import { postRequest } from "./services";
 
 const baseUrl = 'http://localhost:5000/auth';
 
 export const useAuthentication = () => ({
-  login: (user: {[key: string]: any}) => postService(`${baseUrl}/login`, user),
-  signup: (user: {[key: string]: any}) => postService(`${baseUrl}/signup`, user),
-  verifyUser: (id: string, code: string) => postService(`${baseUrl}/verifyPlayer/${id}/${code}`)
+  login: (user: {[key: string]: any}) => postRequest(`${baseUrl}/login`, user),
+  signup: (user: {[key: string]: any}) => postRequest(`${baseUrl}/signup`, user),
+  verifyUser: (id: string, code: string) => postRequest(`${baseUrl}/verifyPlayer/${id}/${code}`)
 })

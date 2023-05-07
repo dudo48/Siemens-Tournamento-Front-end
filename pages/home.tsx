@@ -1,4 +1,4 @@
-import IconButton from "@/components/buttons/icon-button";
+import OutlinedButton from "@/components/buttons/outlined-button";
 import Subtitle from "@/components/misc/subtitle";
 import Title from "@/components/misc/title";
 import PrimaryLayout from "@/layouts/primary-layout";
@@ -20,10 +20,10 @@ const Page = () => {
         </div>
         <div className='flex flex-col gap-1'>
         <Link className='rounded-full' href={'/tournament/join'}>
-          <IconButton icon={BsArrowRight}>Join Tournament</IconButton>
+          <OutlinedButton icon={BsArrowRight}>Join Tournament</OutlinedButton>
         </Link>
         <Link className='rounded-full' href={'/tournament/create'}>
-          <IconButton icon={BsPlusLg}>Create Tournament</IconButton>
+          <OutlinedButton icon={BsPlusLg}>Create Tournament</OutlinedButton>
         </Link>
         </div>
       </section>
@@ -34,7 +34,7 @@ const Page = () => {
         </div>
         <div className='flex flex-col gap-1'>
           <Link className='rounded-full' href={'/connections'}>
-            <IconButton icon={BsArrowRight}>Connections List</IconButton>
+            <OutlinedButton icon={BsArrowRight}>Connections List</OutlinedButton>
           </Link>
         </div>
       </section>

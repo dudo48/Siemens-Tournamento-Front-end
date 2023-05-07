@@ -1,4 +1,4 @@
-import IconButton from "@/components/buttons/icon-button";
+import OutlinedButton from "@/components/buttons/outlined-button";
 import Subtitle from "@/components/misc/subtitle";
 import Title from "@/components/misc/title";
 import PrimaryLayout from "@/layouts/primary-layout";

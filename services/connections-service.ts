@@ -1,22 +1,22 @@
 import useSWR from "swr";
-import { deleteService, getService, postService } from "./services";
+import { deleteRequest, getRequest, postRequest } from "./services";
 import { User } from "@/utils/types";
 
 const baseUrl = 'http://localhost:5000/connections';
 
 export const useConnectionsModify = (fromId: number) => ({
-  addConnection: (email: string) => postService(`${baseUrl}/postRequest/${fromId}/${email}`),
-  deleteConnection: (id: number) => deleteService(`${baseUrl}/deleteConnection/${fromId}/${id}`)
+  addConnection: (email: string) => postRequest(`${baseUrl}/postRequest/${fromId}/${email}`),
+  deleteConnection: (id: number) => deleteRequest(`${baseUrl}/deleteConnection/${fromId}/${id}`)
 });
 
 export const useRequestsResponse = (toId: number) => ({
-    acceptRequest: (id: number) => postService(`${baseUrl}/acceptRequest/${id}/${toId}`),
-    declineRequest: (id: number) => deleteService(`${baseUrl}/deleteRequest/${id}/${toId}`)
+    acceptRequest: (id: number) => postRequest(`${baseUrl}/acceptRequest/${id}/${toId}`),
+    declineRequest: (id: number) => deleteRequest(`${baseUrl}/deleteRequest/${id}/${toId}`)
 });
 
 export const useSentRequests = (id: number) => {
   const url = `${baseUrl}/getAllSent/${id}`;
-  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getService);
+  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getRequest);
   return {
     sentRequests: data,
     mutate,
@@ -27,7 +27,7 @@ export const useSentRequests = (id: number) => {
 
 export const useIncomingRequests = (id: number) => {
   const url = `${baseUrl}/getAllIncoming/${id}`;
-  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getService);
+  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getRequest);
   return {
     incomingRequests: data,
     mutate,
@@ -38,7 +38,7 @@ export const useIncomingRequests = (id: number) => {
 
 export const useConnections = (id: number) => {
   const url = `${baseUrl}/getAllConnections/${id}`;
-  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getService);
+  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getRequest);
   return {
     connections: data,
     mutate,

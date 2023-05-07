@@ -1,4 +1,4 @@
-import IconButton from "@/components/buttons/icon-button";
+import OutlinedButton from "@/components/buttons/outlined-button";
 import Subtitle from "@/components/misc/subtitle";
 import Title from "@/components/misc/title";
 import PrimaryLayout from "@/layouts/primary-layout";
@@ -55,7 +55,7 @@ const Page = () => {
       <section>
         <div className='flex items-center justify-between'>
           <Subtitle>Teams</Subtitle>
-          <IconButton icon={BsPlusLg}>Create Team</IconButton>
+          <OutlinedButton icon={BsPlusLg}>Create Team</OutlinedButton>
         </div>
         <ul className='flex flex-col gap-1'>
           <TeamLi sport={Sport.Football} name='Zamalek' />
@@ -65,7 +65,7 @@ const Page = () => {
       <section>
         <div className='flex items-center justify-between'>
           <Subtitle>Pending Requests</Subtitle>
-          <IconButton icon={BsPlusLg}>Invite</IconButton>
+          <OutlinedButton icon={BsPlusLg}>Invite</OutlinedButton>
         </div>
         <ul className='flex flex-col gap-1'>
           <UserLi name='Ahmed Sabry'>
