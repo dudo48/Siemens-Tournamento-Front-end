@@ -37,25 +37,25 @@ const Page = () => {
   const markAsReadHandler = async (id: number) => {
     const result = await markAsRead(id);
     console.log(result);
-    mutate();
+    mutate(notifications.map((n: Notification) => n.id === id ? {...n, read: true} : n));
   }
 
   const markAllAsReadHandler = async () => {
     const result = await markAllAsRead(user.id);
     console.log(result);
-    mutate();
+    mutate(notifications.map((n: Notification) => ({...n, read: true})));
   }
 
   const deleteNotificationHandler = async (id: number) => {
     const result = await deleteNotification(id);
     console.log(result);
-    mutate();
+    mutate(notifications.filter((n: Notification) => n.id !== id));
   }
 
   const deleteAllNotificationsHandler = async () => {
     const result = await deleteAllNotifications(user.id);
     console.log(result);
-    mutate();
+    mutate([]);
   }
 
   return (
@@ -70,7 +70,7 @@ const Page = () => {
       <section>
         <ul className='flex flex-col gap-1'>
           {notifications?.map((notification: Notification) => (
-            <NotificationLi isRead={notification.read} key={notification.id} body={notification.body}>
+            <NotificationLi key={notification.id} isRead={notification.read} body={notification.body}>
               <div className='flex gap-1'>
                 {!notification.read && <GradientButton icon={BsEnvelopeOpen} attributes={{onClick: () => markAsReadHandler(notification.id)}} type='light'>
                   Mark as read
@@ -80,9 +80,9 @@ const Page = () => {
             </NotificationLi>))}
         </ul>
       </section>
-      <section>
+      {/* <section>
         <Subtitle>Connection Requests</Subtitle>
-        {/* <ul>
+        <ul>
           {incomingRequests?.map((connection, i) => (
             <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
               <div className='flex gap-1'>
@@ -90,8 +90,8 @@ const Page = () => {
                 <GradientButton attributes={{onClick: () => decline(connection.id)}} type='red'>Decline</GradientButton>
               </div>
             </UserLi>))}
-        </ul> */}
-      </section>
+        </ul>
+      </section> */}
     </>
   );
 }

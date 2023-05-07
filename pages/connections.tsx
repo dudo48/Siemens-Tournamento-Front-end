@@ -55,7 +55,7 @@ const Page = () => {
     const result = await deleteConnection(connection.id);
     console.log(result);
     
-    mutate();
+    mutate(connections?.filter(c => c.id !== connection.id));
     toast.success(`Deleted connection: ${connection.firstName} ${connection.lastName}`)
   }
 
