@@ -5,7 +5,7 @@ interface Props {
 const RoundedInput = ({attributes}: Props) => {
   return (
     <input
-      className='w-full px-4 py-2 rounded-full'
+      className='px-4 py-1.5 rounded-full self-stretch'
       {...attributes}
     />
   );

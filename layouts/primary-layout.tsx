@@ -27,21 +27,18 @@ const PrimaryLayout = ({children} : PropsWithChildren) => {
     setSideBarVisible(false);
   }, [router.asPath])
 
-  // don't render anything
-  if (!user) return <LoadingFullscreen />;
-
-  return (
+  return !user ? <LoadingFullscreen /> : (
     <>
       <Head>
         <title>Tournamento: Your favourite tournament manager!</title>
       </Head>
       <NotificationsContextProvider>
         <main className='min-h-screen'>
-          <section className={`${sideBarVisible ? 'w-full' : 'w-0'} md:w-80 flex fixed z-10 h-full gap-8 flex-col bg-gradient-to-br from-tournamento-400 to-tournamento-600 overflow-hidden duration-500`}>
+          <section className={`${sideBarVisible ? 'w-full' : 'w-0'} md:w-80 flex fixed z-40 h-full gap-8 flex-col bg-gradient-to-br from-tournamento-400 to-tournamento-600 overflow-hidden duration-500`}>
             <SideNav hideSideNav={() => setSideBarVisible(false)} />
           </section>
           <section className='md:ml-80 flex-1 relative z-0'>
-            <div className='px-4 py-2 flex items-center gap-8'>
+            <div className='p-1 flex items-center gap-1'>
               <button className='md:hidden' onClick={() => setSideBarVisible(true)}>
                 <BsList className='text-4xl' />
               </button>

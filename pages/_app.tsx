@@ -22,7 +22,10 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
       <UserContextProvider>
         {getLayout(<Component {...pageProps} />)}
       </UserContextProvider>
-      <ToastContainer position='bottom-center' transition={Slide} />
+      <ToastContainer position='bottom-center'
+        transition={Slide}
+        hideProgressBar
+        bodyClassName='text-tournamento-800' />
     </>
   );
 }

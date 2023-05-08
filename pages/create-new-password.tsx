@@ -24,7 +24,7 @@ const Page = () => {
 
   return (
     <>
-      <div className='w-1/2'>
+      <div className='w-full max-w-md'>
         <p className='text-center'>Enter your new password.</p>
         <Form attributes={{onSubmit: handleSubmit}}>
           <RoundedInput attributes={{type:'password', name: 'password', placeholder: 'New password', value: form.password, onChange: handleChange}}/>

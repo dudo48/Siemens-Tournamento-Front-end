@@ -52,7 +52,7 @@ const Page = () => {
 
   return (
     <>
-      <div className='w-1/2'>
+      <div className='w-full max-w-md'>
         <Form attributes={{onSubmit: handleSubmit}}>
           <RoundedInput attributes={{type:'text', name: 'firstName', placeholder: 'First name', value: form.firstName, onChange: handleChange}}/>
           <RoundedInput attributes={{type:'text', name: 'lastName', placeholder: 'Last name', value: form.lastName, onChange: handleChange}}/>

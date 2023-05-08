@@ -48,7 +48,7 @@ const Page = () => {
 
   return (
     <>
-      <div className='w-1/2'>
+      <div className='w-full max-w-md'>
         <p className='text-center'>We have sent a verification code to your email. Enter the code below. Did not receive the code? <button onClick={resendCode} className='font-semibold hover:underline'>Resend code</button>.</p>
         <Form attributes={{onSubmit: handleSubmit}}>
           <RoundedInput attributes={{type:'text', name: 'code', placeholder: 'Code', value: code, onChange: handleChange}}/>

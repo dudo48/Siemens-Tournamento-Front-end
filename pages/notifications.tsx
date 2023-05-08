@@ -58,9 +58,7 @@ const Page = () => {
           {notifications?.map((notification: Notification) => (
             <NotificationLi key={notification.id} isRead={notification.read} body={notification.body}>
               <div className='flex gap-1'>
-                {!notification.read && <GradientButton icon={BsEnvelopeOpen} attributes={{onClick: () => markAsReadHandler(notification.id)}} type='light'>
-                  Mark as read
-                </GradientButton>}
+                {!notification.read && <GradientButton icon={BsEnvelopeOpen} attributes={{onClick: () => markAsReadHandler(notification.id)}} type='light' />}
                 <GradientButton icon={BsTrash} attributes={{onClick: () => deleteNotificationHandler(notification.id)}} type='red' />
               </div>
             </NotificationLi>))}

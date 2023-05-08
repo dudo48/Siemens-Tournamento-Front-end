@@ -22,7 +22,7 @@ const Page = () => {
 
   return (
     <>
-      <div className='w-1/2'>
+      <div className='w-full max-w-md'>
       <p className='text-center'>Enter your email address.</p>
         <Form attributes={{onSubmit: handleSubmit}}>
           <RoundedInput attributes={{type:'email', name: 'email', placeholder: 'Email address', value: email, onChange: handleChange}}/>
