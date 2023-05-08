@@ -4,14 +4,12 @@ export const postRequest = (url: string, payload?: {[key: string]: any}) => (
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     ...(payload && { body: JSON.stringify(payload) })
-  }).then((res) => {
-    let result;
+  }).then(async (res) => {
     try {
-      result = res.json();
+      return await res.json();
     } catch (e) {
-      result = null;
+      return null;
     }
-    return result;
   })
 );
 export const putRequest = (url: string, payload?: {[key: string]: any}) => (
@@ -19,14 +17,12 @@ export const putRequest = (url: string, payload?: {[key: string]: any}) => (
     method: 'PUT',
     headers: {'Content-Type': 'application/json'},
     ...(payload && { body: JSON.stringify(payload) })
-  }).then((res) => {
-    let result;
+  }).then(async (res) => {
     try {
-      result = res.json();
+      return await res.json();
     } catch (e) {
-      result = null;
+      return null;
     }
-    return result;
   })
 );
 export const deleteRequest = (url: string) => fetch(url, {method: 'DELETE'}).then((res) => res.json());
