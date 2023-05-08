@@ -8,20 +8,29 @@ import { useAuthentication } from "@/services/authentication-service";
 import { User } from "@/utils/types";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, ReactNode, useContext, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { InferType, object, string } from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const schema = object({
+  email: string().email('Please enter a valid email address.').required('Please enter a valid email address.'),
+  password: string().min(8, 'Password must be at least 8 characters.').max(20, 'Password must be less than 20 characters.').required('Password field is required.')
+}).required();
+type FormData = InferType<typeof schema>
 
 const Page = () => {
-  const [form, setForm] = useState({email: '', password: ''});
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({resolver: yupResolver(schema) });
   const { setUser } = useContext(UserContext);
   const { login } = useAuthentication();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
+  const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    console.log(form);
+    console.log(data);
+    console.log(errors);
 
-    const result = await login(form);
+    const result = await login(data);
     console.log(result);
 
     if (!result || result.status || !result.verified) {
@@ -31,22 +40,17 @@ const Page = () => {
       setUser(result);
       toast.success('Logged in successfully!');
     }
-    setIsLoading(false);
-  }
 
-  const handleChange = (event: ChangeEvent) => {
-    const { name, value } = event.target as HTMLInputElement;
-    setForm({...form, [name]: value});
-    console.log(form);
+    setIsLoading(false);
   }
 
   return (
     <>
       <div className='w-full max-w-md'>
-        <Form attributes={{onSubmit: handleSubmit}}>
-          <RoundedInput attributes={{type:'email', name: 'email', placeholder: 'Email address', value: form.email, onChange: handleChange}}/>
-          <RoundedInput attributes={{type:'password', name: 'password', placeholder: 'Password', value: form.password, onChange: handleChange}}/>
-          {isLoading ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{type: 'submit'}}>Login</GradientButton>}
+        <Form attributes={{onSubmit: handleSubmit(onSubmit)}}>
+          <RoundedInput error={errors.email} attributes={{...register('email'), placeholder: 'Email address'}}/>
+          <RoundedInput error={errors.password} attributes={{...register('password'), type: 'password', placeholder: 'Password'}}/>
+          {isLoading ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{}}>Login</GradientButton>}
         </Form>
         <p>Forgot password? <Link className='hover:underline font-semibold' href='/reset-password'>Reset password</Link>.</p>
       </div>

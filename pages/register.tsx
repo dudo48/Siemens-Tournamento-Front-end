@@ -5,35 +5,34 @@ import LoadingSpinner from "@/components/misc/loading-spinner";
 import SecondaryLayout from "@/layouts/secondary-layout";
 import { useAuthentication } from "@/services/authentication-service";
 import { User } from "@/utils/types";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { InferType, object, ref, string } from "yup";
+
+const schema = object({
+  firstName: string().required('First name field is required.'),
+  lastName: string().required('Last name field is required.'),
+  email: string().email('Please enter a valid email address.').required('Please enter a valid email address.'),
+  password: string().min(8, 'Password must be at least 8 characters.').max(20, 'Password must be less than 20 characters.').required('Password field is required.'),
+  confirmPassword: string().oneOf([ref('password')], 'Your passwords do not match.').required('Please re-type your password.')
+}).required();
+type FormData = InferType<typeof schema>
 
 const Page = () => {
-  const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
   const router = useRouter();
   const { signup } = useAuthentication();
   const [isLoading, setIsLoading] = useState(false);
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({resolver: yupResolver(schema) });
 
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
+  const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    console.log(form);
+    console.log(data);
 
-    if (form.password !== form.confirmPassword) {
-      toast.error('Please re-enter your password in the confirm password field!');
-      setForm({...form, confirmPassword: ''});
-      return;
-    }
-
-    const result = await signup(form);
+    const result = await signup(data);
     console.log(result);
     
     if (result.id === -1) {
@@ -44,21 +43,15 @@ const Page = () => {
     setIsLoading(false);
   }
 
-  const handleChange = (event: ChangeEvent) => {
-    const { name, value } = event.target as HTMLInputElement;
-    setForm({...form, [name]: value});
-    console.log(form);
-  }
-
   return (
     <>
       <div className='w-full max-w-md'>
-        <Form attributes={{onSubmit: handleSubmit}}>
-          <RoundedInput attributes={{type:'text', name: 'firstName', placeholder: 'First name', value: form.firstName, onChange: handleChange}}/>
-          <RoundedInput attributes={{type:'text', name: 'lastName', placeholder: 'Last name', value: form.lastName, onChange: handleChange}}/>
-          <RoundedInput attributes={{type:'email', name: 'email', placeholder: 'Email address', value: form.email, onChange: handleChange}}/>
-          <RoundedInput attributes={{type:'password', name: 'password', placeholder: 'Password', value: form.password, onChange: handleChange}}/>
-          <RoundedInput attributes={{type:'password', name: 'confirmPassword', placeholder: 'Confirm password', value: form.confirmPassword, onChange: handleChange}}/>
+        <Form attributes={{onSubmit: handleSubmit(onSubmit)}}>
+          <RoundedInput error={errors.firstName} attributes={{...register('firstName'), placeholder: 'First name'}}/>
+          <RoundedInput error={errors.lastName} attributes={{...register('lastName'), placeholder: 'Last name'}}/>
+          <RoundedInput error={errors.email} attributes={{...register('email'), placeholder: 'Email address'}}/>
+          <RoundedInput error={errors.password} attributes={{...register('password'), type:'password', placeholder: 'Password'}}/>
+          <RoundedInput error={errors.confirmPassword} attributes={{...register('confirmPassword'), type:'password', placeholder: 'Confirm password'}}/>
           {isLoading ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{type: 'submit'}}>Register</GradientButton>}
         </Form>
       </div>
