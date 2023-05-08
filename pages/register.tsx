@@ -1,6 +1,7 @@
 import GradientButton from "@/components/buttons/gradient-button";
 import Form from "@/components/forms/form";
 import RoundedInput from "@/components/forms/rounded-input";
+import LoadingSpinner from "@/components/misc/loading-spinner";
 import SecondaryLayout from "@/layouts/secondary-layout";
 import { useAuthentication } from "@/services/authentication-service";
 import { User } from "@/utils/types";
@@ -19,9 +20,11 @@ const Page = () => {
   });
   const router = useRouter();
   const { signup } = useAuthentication();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    setIsLoading(true);
     console.log(form);
 
     if (form.password !== form.confirmPassword) {
@@ -38,6 +41,7 @@ const Page = () => {
     } else {
       router.push(`/verify-account?id=${result.id}`);
     }
+    setIsLoading(false);
   }
 
   const handleChange = (event: ChangeEvent) => {
@@ -55,7 +59,7 @@ const Page = () => {
           <RoundedInput attributes={{type:'email', name: 'email', placeholder: 'Email address', value: form.email, onChange: handleChange}}/>
           <RoundedInput attributes={{type:'password', name: 'password', placeholder: 'Password', value: form.password, onChange: handleChange}}/>
           <RoundedInput attributes={{type:'password', name: 'confirmPassword', placeholder: 'Confirm password', value: form.confirmPassword, onChange: handleChange}}/>
-          <GradientButton type='dark' attributes={{type: 'submit'}}>Register</GradientButton>
+          {isLoading ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{type: 'submit'}}>Register</GradientButton>}
         </Form>
       </div>
       <div>

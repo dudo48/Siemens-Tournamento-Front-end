@@ -1,6 +1,7 @@
 import GradientButton from "@/components/buttons/gradient-button";
 import Form from "@/components/forms/form";
 import RoundedInput from "@/components/forms/rounded-input";
+import LoadingSpinner from "@/components/misc/loading-spinner";
 import { UserContext } from "@/context/user-context";
 import SecondaryLayout from "@/layouts/secondary-layout";
 import { useAuthentication } from "@/services/authentication-service";
@@ -13,9 +14,11 @@ const Page = () => {
   const [form, setForm] = useState({email: '', password: ''});
   const { setUser } = useContext(UserContext);
   const { login } = useAuthentication();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    setIsLoading(true);
     console.log(form);
 
     const result = await login(form);
@@ -28,6 +31,7 @@ const Page = () => {
       setUser(result);
       toast.success('Logged in successfully!');
     }
+    setIsLoading(false);
   }
 
   const handleChange = (event: ChangeEvent) => {
@@ -42,7 +46,7 @@ const Page = () => {
         <Form attributes={{onSubmit: handleSubmit}}>
           <RoundedInput attributes={{type:'email', name: 'email', placeholder: 'Email address', value: form.email, onChange: handleChange}}/>
           <RoundedInput attributes={{type:'password', name: 'password', placeholder: 'Password', value: form.password, onChange: handleChange}}/>
-          <GradientButton type='dark' attributes={{type: 'submit'}}>Login</GradientButton>
+          {isLoading ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{type: 'submit'}}>Login</GradientButton>}
         </Form>
         <p>Forgot password? <Link className='hover:underline font-semibold' href='/reset-password'>Reset password</Link>.</p>
       </div>

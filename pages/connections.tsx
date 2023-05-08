@@ -16,12 +16,13 @@ import LabelInput from "@/components/forms/label-input";
 import SquareInput from "@/components/forms/square-input";
 import { useConnections, useConnectionsModify, useIncomingRequests, useRequestsResponse } from "@/services/connections-service";
 import Modal from "@/components/misc/modal";
+import LoadingSpinner from "@/components/misc/loading-spinner";
 
 const Page = () => {
   const { user } = useContext(UserContext);
 
-  const { connections, mutate: mutateConnections } = useConnections(user.id);
-  const { incomingRequests, mutate: mutateIncoming } = useIncomingRequests(user.id);
+  const { connections, mutate: mutateConnections, isLoading: connectionsLoading } = useConnections(user.id);
+  const { incomingRequests, mutate: mutateIncoming, isLoading: requestsLoading } = useIncomingRequests(user.id);
   const { addConnection, deleteConnection } = useConnectionsModify(user.id);
 
   const [addConnectionsVisible, setAddConnectionsVisible] = useState(false);
@@ -83,6 +84,7 @@ const Page = () => {
       </div>
       <section>
         <Subtitle>Connection Requests</Subtitle>
+        {requestsLoading ? <LoadingSpinner /> :
         <ul className='flex flex-col gap-1'>
           {incomingRequests?.map((connection, i) => (
             <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
@@ -91,17 +93,18 @@ const Page = () => {
                 <GradientButton attributes={{onClick: () => decline(connection.id)}} type='red'>Decline</GradientButton>
               </div>
             </UserLi>))}
-        </ul>
+        </ul>}
       </section>
       <section>
         <Subtitle>Connections List</Subtitle>
+        {connectionsLoading ? <LoadingSpinner /> :
         <ul className='flex flex-col gap-1'>
           {connections?.map((connection, i) => (
             <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
               <GradientButton attributes={{onClick: () => deleteConnectionHandler(connection)}} type='red'>Delete</GradientButton>
             </UserLi>
           ))}
-        </ul>
+        </ul>}
       </section>
       <Modal title='Add Connections' isOpen={addConnectionsVisible} close={closeAddConnections}>
         <Form attributes={{onSubmit: handleSubmit}}>

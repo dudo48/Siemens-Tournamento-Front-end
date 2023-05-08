@@ -1,4 +1,5 @@
 import Logo from "@/components/images/logo";
+import LoadingFullscreen from "@/components/misc/loading-full-screen";
 import { UserContext } from "@/context/user-context";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
@@ -15,7 +16,7 @@ const SecondaryLayout = ({children} : PropsWithChildren) => {
   }, [user, router, authLoading])
 
   // don't render anything
-  if (user) return null;
+  if (user) return <LoadingFullscreen />;
 
   return (
     <>

@@ -1,4 +1,6 @@
 import Logo from "@/components/images/logo";
+import LoadingFullscreen from "@/components/misc/loading-full-screen";
+import LoadingSpinner from "@/components/misc/loading-spinner";
 import SideNav from "@/components/misc/side-nav";
 import NotificationsContextProvider from "@/context/notifications-context";
 import { UserContext } from "@/context/user-context";
@@ -26,7 +28,7 @@ const PrimaryLayout = ({children} : PropsWithChildren) => {
   }, [router.asPath])
 
   // don't render anything
-  if (!user) return null;
+  if (!user) return <LoadingFullscreen />;
 
   return (
     <>
