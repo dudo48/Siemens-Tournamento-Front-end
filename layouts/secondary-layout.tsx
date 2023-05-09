@@ -15,7 +15,7 @@ const SecondaryLayout = ({children} : PropsWithChildren) => {
     }
   }, [user, router, authLoading])
 
-  return user ? <LoadingFullscreen /> : (
+  return (user || authLoading) ? <LoadingFullscreen /> : (
     <>
       <Head>
         <title>Tournamento: Join now and you won&apos;t regret it!</title>

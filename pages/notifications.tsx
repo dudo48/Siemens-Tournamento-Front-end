@@ -1,18 +1,13 @@
-import Title from "@/components/misc/title";
-import PrimaryLayout from "@/layouts/primary-layout";
-import { ReactNode, useContext, useEffect, useState } from "react";
-import ListItem from "@/components/list items/list-item";
-import { Bs1CircleFill, Bs2Circle, Bs2CircleFill, Bs3Circle, Bs3CircleFill, BsEnvelopeCheck, BsEnvelopeOpen, BsFillStarFill, BsHandThumbsDown, BsHeartbreak, BsRecycle, BsStar, BsTrash, BsTrophy } from "react-icons/bs";
-import Subtitle from "@/components/misc/subtitle";
-import TournamentLi from "@/components/list items/tournament-li";
 import GradientButton from "@/components/buttons/gradient-button";
-import { Notification, Sport, User } from "@/utils/types";
-import UserLi from "@/components/list items/user-li";
-import { UserContext } from "@/context/user-context";
-import { useIncomingRequests, useRequestsResponse } from "@/services/connections-service";
-import { NotificationsContext } from "@/context/notifications-context";
 import NotificationLi from "@/components/list items/notification-li";
+import Title from "@/components/misc/title";
+import { NotificationsContext } from "@/context/notifications-context";
+import { UserContext } from "@/context/user-context";
+import PrimaryLayout from "@/layouts/primary-layout";
 import { useNotificationsModify, useNotificationsRead } from "@/services/notifications-service";
+import { Notification } from "@/utils/types";
+import { ReactNode, useContext } from "react";
+import { BsEnvelopeOpen, BsTrash } from "react-icons/bs";
 
 const Page = () => {
   const { user } = useContext(UserContext);
@@ -54,15 +49,16 @@ const Page = () => {
         </div>
       </div>
       <section>
+        {!notifications.length ? <p>You don&apos;t have any notifications.</p> :
         <ul className='flex flex-col gap-1'>
-          {notifications?.map((notification: Notification) => (
+          {notifications.map((notification: Notification) => (
             <NotificationLi key={notification.id} isRead={notification.read} body={notification.body}>
               <div className='flex gap-1'>
                 {!notification.read && <GradientButton icon={BsEnvelopeOpen} attributes={{onClick: () => markAsReadHandler(notification.id)}} type='light' />}
                 <GradientButton icon={BsTrash} attributes={{onClick: () => deleteNotificationHandler(notification.id)}} type='red' />
               </div>
             </NotificationLi>))}
-        </ul>
+        </ul>}
       </section>
     </>
   );

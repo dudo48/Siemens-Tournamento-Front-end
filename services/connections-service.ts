@@ -18,7 +18,7 @@ export const useSentRequests = (id: number) => {
   const url = `${baseUrl}/getAllSent/${id}`;
   const { data, mutate, isLoading, error } = useSWR<User[]>(url, getRequest);
   return {
-    sentRequests: data,
+    sentRequests: data || [],
     mutate,
     isLoading,
     error
@@ -27,9 +27,9 @@ export const useSentRequests = (id: number) => {
 
 export const useIncomingRequests = (id: number) => {
   const url = `${baseUrl}/getAllIncoming/${id}`;
-  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getRequest);
+  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getRequest, {fallbackData: []});
   return {
-    incomingRequests: data,
+    incomingRequests: data || [],
     mutate,
     isLoading,
     error
@@ -40,7 +40,7 @@ export const useConnections = (id: number) => {
   const url = `${baseUrl}/getAllConnections/${id}`;
   const { data, mutate, isLoading, error } = useSWR<User[]>(url, getRequest);
   return {
-    connections: data,
+    connections: data || [],
     mutate,
     isLoading,
     error

@@ -1,6 +1,6 @@
 import useSWR from "swr";
-import { deleteRequest, getRequest, postRequest, putRequest } from "./services";
-import { Notification, User } from "@/utils/types";
+import { deleteRequest, getRequest, putRequest } from "./services";
+import { Notification } from "@/utils/types";
 
 const baseUrl = 'http://localhost:5000/notifications';
 
@@ -8,7 +8,7 @@ export const useNotifications = (id: number) => {
   const url = `${baseUrl}/getAll/${id}`;
   const { data, mutate, isLoading, error } = useSWR<Notification[]>(url, getRequest);
   return {
-    notifications: data,
+    notifications: data || [],
     mutate,
     isLoading,
     error

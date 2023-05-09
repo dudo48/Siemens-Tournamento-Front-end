@@ -1,57 +1,68 @@
-import OutlinedButton from "@/components/buttons/outlined-button";
+import GradientButton from "@/components/buttons/gradient-button";
+import Form from "@/components/forms/form";
+import SquareInput from "@/components/forms/square-input";
+import UserLi from "@/components/list items/user-li";
+import LoadingSpinner from "@/components/misc/loading-spinner";
+import Modal from "@/components/misc/modal";
 import Subtitle from "@/components/misc/subtitle";
 import Title from "@/components/misc/title";
-import PrimaryLayout from "@/layouts/primary-layout";
-import { ChangeEvent, FormEvent, ReactNode, useContext, useEffect, useState } from "react";
-import { BsArrowRight, BsPlusLg } from "react-icons/bs";
-import TournamentHistoryLi from "@/components/list items/tournament-history-li";
-import GradientButton from "@/components/buttons/gradient-button";
-import Link from "next/link";
-import UserLi from "@/components/list items/user-li";
 import { UserContext } from "@/context/user-context";
-import { User } from "@/utils/types";
-import { toast } from "react-toastify";
-import Form from "@/components/forms/form";
-import LabelInput from "@/components/forms/label-input";
-import SquareInput from "@/components/forms/square-input";
+import PrimaryLayout from "@/layouts/primary-layout";
 import { useConnections, useConnectionsModify, useIncomingRequests, useRequestsResponse } from "@/services/connections-service";
-import Modal from "@/components/misc/modal";
-import LoadingSpinner from "@/components/misc/loading-spinner";
+import { User } from "@/utils/types";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { ReactNode, useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { InferType, object, string } from "yup";
+
+
+const schema = object({
+  email: string().email('Please enter a valid email address.').required('Please enter a valid email address.'),
+}).required();
+type FormData = InferType<typeof schema>
 
 const Page = () => {
   const { user } = useContext(UserContext);
 
   const { connections, mutate: mutateConnections, isLoading: connectionsLoading } = useConnections(user.id);
-  const { incomingRequests, mutate: mutateIncoming, isLoading: requestsLoading } = useIncomingRequests(user.id);
+  const { incomingRequests, mutate: mutateIncoming } = useIncomingRequests(user.id);
   const { addConnection, deleteConnection } = useConnectionsModify(user.id);
 
   const [addConnectionsVisible, setAddConnectionsVisible] = useState(false);
-  const [email, setEmail] = useState('');
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({resolver: yupResolver(schema) });
   const { acceptRequest, declineRequest } = useRequestsResponse(user.id);
 
   const accept = async (connection: User) => {
     const result = await acceptRequest(connection.id);
     console.log(result);
-    mutateIncoming(incomingRequests?.filter(r => r.id !== connection.id));
-    mutateConnections(connections?.concat(connection));
+    mutateIncoming(incomingRequests.filter(r => r.id !== connection.id));
+    mutateConnections(connections.concat(connection));
   }
 
   const decline = async (id: number) => {
     const result = await declineRequest(id);
     console.log(result);
-    mutateIncoming(incomingRequests?.filter(r => r.id !== id));
+    mutateIncoming(incomingRequests.filter(r => r.id !== id));
   }
 
   const closeAddConnections = () => {
     setAddConnectionsVisible(false);
-    setEmail('');
+    reset();
   }
 
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
-    console.log(email);
+  const deleteConnectionHandler = async (connection: User) => {
+    const result = await deleteConnection(connection.id);
+    console.log(result);
+    
+    mutateConnections(connections.filter(c => c.id !== connection.id));
+    toast.success(`Deleted connection: ${connection.firstName} ${connection.lastName}`)
+  }
+  
+  const onSubmit = async (data: FormData) => {
+    console.log(data);
 
-    const result = await addConnection(email);
+    const result = await addConnection(data.email);
     console.log(result);
 
     if (result.status === true) {
@@ -62,20 +73,6 @@ const Page = () => {
     }
   }
 
-  const handleChange = (event: ChangeEvent) => {
-    const { value } = event.target as HTMLInputElement;
-    setEmail(value);
-    console.log(email);
-  }
-
-  const deleteConnectionHandler = async (connection: User) => {
-    const result = await deleteConnection(connection.id);
-    console.log(result);
-    
-    mutateConnections(connections?.filter(c => c.id !== connection.id));
-    toast.success(`Deleted connection: ${connection.firstName} ${connection.lastName}`)
-  }
-
   return (
     <>
       <div className='flex justify-between items-center'>
@@ -84,9 +81,9 @@ const Page = () => {
       </div>
       <section>
         <Subtitle>Connection Requests</Subtitle>
-        {requestsLoading ? <LoadingSpinner /> :
+      {!incomingRequests.length ? <p>You don&apos;t have any requests.</p> :
         <ul className='flex flex-col gap-1'>
-          {incomingRequests?.map((connection, i) => (
+          {incomingRequests.map((connection, i) => (
             <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
               <div className='flex gap-1'>
                 <GradientButton attributes={{onClick: () => accept(connection)}} type='light'>Accept</GradientButton>
@@ -98,8 +95,9 @@ const Page = () => {
       <section>
         <Subtitle>Connections List</Subtitle>
         {connectionsLoading ? <LoadingSpinner /> :
+        !connections.length ? <><p>You don&apos;t have any connections. 😔</p><blockquote className='p-4'><q>Solitude is fine but you need someone to tell that solitude is fine.</q><p>― Honoré de Balzac</p></blockquote></> :
         <ul className='flex flex-col gap-1'>
-          {connections?.map((connection, i) => (
+          {connections.map((connection, i) => (
             <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
               <GradientButton attributes={{onClick: () => deleteConnectionHandler(connection)}} type='red'>Delete</GradientButton>
             </UserLi>
@@ -107,8 +105,8 @@ const Page = () => {
         </ul>}
       </section>
       <Modal title='Add Connections' isOpen={addConnectionsVisible} close={closeAddConnections}>
-        <Form attributes={{onSubmit: handleSubmit}}>
-          <SquareInput label='Enter below the email address of the connection' attributes={{name: 'email', placeholder: 'Email address', value: email, onChange: handleChange}} />
+        <Form attributes={{onSubmit: handleSubmit(onSubmit)}}>
+          <SquareInput error={errors.email} label='Enter below the email address of the connection' attributes={{...register('email'), placeholder: 'Email address'}} />
           <div className='flex gap-1'>
             <GradientButton type='light'>Connect</GradientButton>
           </div>

@@ -33,7 +33,7 @@ const Page = () => {
     const result = await login(data);
     console.log(result);
 
-    if (!result || result.status || !result.verified) {
+    if (!result || result.status) {
       toast.error('Login failed: Wrong email or password.');
     } else {
       localStorage.setItem('user', JSON.stringify(result));
@@ -50,7 +50,7 @@ const Page = () => {
         <Form attributes={{onSubmit: handleSubmit(onSubmit)}}>
           <RoundedInput error={errors.email} attributes={{...register('email'), placeholder: 'Email address'}}/>
           <RoundedInput error={errors.password} attributes={{...register('password'), type: 'password', placeholder: 'Password'}}/>
-          {isLoading ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{}}>Login</GradientButton>}
+          {isLoading ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{type: 'submit'}}>Login</GradientButton>}
         </Form>
         <p>Forgot password? <Link className='hover:underline font-semibold' href='/reset-password'>Reset password</Link>.</p>
       </div>

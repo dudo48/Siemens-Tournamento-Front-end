@@ -8,8 +8,6 @@ const NotificationsContextProvider = ({ children }: PropsWithChildren) => {
   const { user } = useContext(UserContext);
   const { notifications, mutate } = useNotifications(user.id);
 
-  console.log(notifications);
-
   return (
     <NotificationsContext.Provider value={{notifications, mutate}}>
       {children}

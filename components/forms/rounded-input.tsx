@@ -13,7 +13,7 @@ const RoundedInput = ({attributes, error}: Props) => {
         className={`px-4 py-1.5 rounded-full w-full ${error && 'border-2 border-red-600'}`}
         {...attributes}
       />
-      <p className='px-4 flex items-center gap-4 text-red-600'>{error?.message}</p>
+      {error && <p className='px-4 text-red-600'>{error.message}</p>}
     </div>
   );
 }

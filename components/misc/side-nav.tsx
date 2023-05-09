@@ -79,7 +79,7 @@ const SideNav = ({ hideSideNav }: Props) => {
       <nav>
         <SideNavElement href='/home' icon={BsHouseDoor}>Home</SideNavElement>
         <ElementSeparator/>
-        <SideNavElement href='/notifications' alertCount={notifications?.filter((n: Notification) => !n.read).length} icon={BsBell}>Notifications</SideNavElement>
+        <SideNavElement href='/notifications' alertCount={notifications.filter((n: Notification) => !n.read).length} icon={BsBell}>Notifications</SideNavElement>
         <ElementSeparator/>
         <SideNavElement href='/profile' icon={BsPerson}>Profile</SideNavElement>
         <ElementSeparator/>

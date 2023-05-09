@@ -27,7 +27,7 @@ const PrimaryLayout = ({children} : PropsWithChildren) => {
     setSideBarVisible(false);
   }, [router.asPath])
 
-  return !user ? <LoadingFullscreen /> : (
+  return (!user || authLoading) ? <LoadingFullscreen /> : (
     <>
       <Head>
         <title>Tournamento: Your favourite tournament manager!</title>

@@ -12,7 +12,7 @@ const LabelInput = ({label, children}: PropsWithChildren<Props>) => {
   const labelBeforeStyle = 'before:absolute before:top-2 before:-left-2 before:w-1 before:h-3 before:bg-gradient-to-t before:from-tournamento-400 before:to-tournamento-700';
 
   return (
-    <label className='flex flex-col gap-1 self-stretch'>
+    <label>
       <div className={`font-semibold relative ${labelBeforeStyle}`}>{label}</div>
       {children}
     </label>

@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { PropsWithChildren, createContext, useEffect, useState } from "react";
 
 export const UserContext = createContext({} as {[key: string]: any});
