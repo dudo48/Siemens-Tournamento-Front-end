@@ -1,5 +1,7 @@
+import { Sport } from "./types";
+
 // get the ordinal suffix of a number
-const getOrdinalSuffix = (x: number) => {
+export const getOrdinalSuffix = (x: number) => {
   const moduloTen = x % 10;
   const moduloHundred = x % 100;
 
@@ -15,5 +17,3 @@ const getOrdinalSuffix = (x: number) => {
 
   return 'th';
 }
- 
-export default getOrdinalSuffix;

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PropsWithChildren, useContext } from "react";
 import { IconType } from "react-icons";
-import { BsBell, BsBoxArrowLeft, BsClockHistory, BsGraphUpArrow, BsHouseDoor, BsInfoSquare, BsPeople, BsPerson, BsX } from "react-icons/bs"
+import { BsBell, BsBoxArrowLeft, BsClockHistory, BsGraphUpArrow, BsHouseDoor, BsInfoSquare, BsPeople, BsPerson, BsTrophy, BsX } from "react-icons/bs"
 import ProfilePhoto from "../images/profile-photo";
 import { UserContext } from "@/context/user-context";
 import { toast } from "react-toastify";
@@ -29,10 +29,10 @@ const SideNavUser = () => {
           <ProfilePhoto />
         </div>
         <div>
-          <Link href='/profile' className='hover:underline text-xl font-semibold'>
-            {user.firstName} {user.lastName}
+          <Link href={`/profile/${user?.id}`} className='hover:underline text-xl font-semibold'>
+            {user?.firstName} {user?.lastName}
           </Link>
-          <p className='text-sm'>{user.email}</p>
+          <p className='text-sm'>{user?.email}</p>
         </div>
       </div>
   );
@@ -81,13 +81,15 @@ const SideNav = ({ hideSideNav }: Props) => {
         <ElementSeparator/>
         <SideNavElement href='/notifications' alertCount={notifications.filter((n: Notification) => !n.read).length} icon={BsBell}>Notifications</SideNavElement>
         <ElementSeparator/>
-        <SideNavElement href='/profile' icon={BsPerson}>Profile</SideNavElement>
+        <SideNavElement href='/profile/edit' icon={BsPerson}>Profile</SideNavElement>
+        <ElementSeparator/>
+        <SideNavElement href='/tournaments' icon={BsTrophy}>Tournaments</SideNavElement>
+        <ElementSeparator/>
+        <SideNavElement href='/connections' icon={BsPeople}>Connections</SideNavElement>
         <ElementSeparator/>
         <SideNavElement href='/history' icon={BsClockHistory}>History</SideNavElement>
         <ElementSeparator/>
         <SideNavElement href='/statistics' icon={BsGraphUpArrow}>Statistics</SideNavElement>
-        <ElementSeparator/>
-        <SideNavElement href='/connections' icon={BsPeople}>Connections</SideNavElement>
         <ElementSeparator/>
         <SideNavElement href='/about' icon={BsInfoSquare}>About</SideNavElement>
       </nav>

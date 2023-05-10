@@ -20,18 +20,24 @@ import UserLi from "@/components/list items/user-li";
 import RadioGroup from "@/components/forms/radio-group";
 import MatchLi from "@/components/list items/match-li";
 import Standings from "@/components/misc/standings";
+import { InferType, object, string } from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import LoadingSpinner from "@/components/misc/loading-spinner";
+
+const schema = object({
+  assignment: string().min(1, 'Please select one of the options.').required('Please select one of the options.'),
+}).required();
+type FormData = InferType<typeof schema>
 
 const Page = () => {
-  const [assignment, setAssignment] = useState('');
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
+    resolver: yupResolver(schema),
+    defaultValues: { assignment: '' }
+  });
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    console.log(assignment);
-  }
-
-  const handleChange = (event: ChangeEvent) => {
-    setAssignment((event.target as HTMLInputElement).value);
-    console.log(assignment);
+  const onSubmit = (data: FormData) => {
+    console.log(data);
   }
 
   return (
@@ -39,15 +45,15 @@ const Page = () => {
       <Title>Tournament Information</Title>
       <section>
         <ListItem title='FIFA World Cup' icon={sportsIcons.get(Sport.Football)} subtitle={Sport.Football}>
-          <StateLabel type='orange'>Pending</StateLabel>
+          <GradientButton attributes={{disabled: true}} type='orange'>Pending</GradientButton>
         </ListItem>
       </section>
-      <section className='flex justify-between'>
-        <div className='w-1/2'>
+      <section className='flex justify-between max-w-md'>
+        <div>
           <Subtitle>Code</Subtitle>
           <p>5qw4r5ewe12fd</p>
         </div>
-        <div className='w-1/2'>
+        <div>
           <Subtitle>Manager</Subtitle>
           <p>Fady Emad</p>
         </div>
@@ -69,18 +75,20 @@ const Page = () => {
         </div>
         <ul className='flex flex-col gap-1'>
           <UserLi name='Ahmed Sabry'>
-            <GradientButton type='light'>Accept</GradientButton>
+            { isSubmitting ? <LoadingSpinner /> : <GradientButton type='light'>Accept</GradientButton>}
           </UserLi>
         </ul>
       </section>
       <section>
         <Subtitle>Options</Subtitle>
-        <Form attributes={{onSubmit: handleSubmit}}>
-          <RadioGroup attributes={{name: 'assignment', onChange: handleChange}} label='Manual Assignment' choices={['Yes', 'No']} />
-          <GradientButton type='light'>Start</GradientButton>
+        <Form attributes={{onSubmit: handleSubmit(onSubmit)}}>
+          <RadioGroup error={errors.assignment} attributes={{...register('assignment')}} label='Manual Assignment' choices={['Yes', 'No']} />
+          <div className='self-center'>
+            <GradientButton type='light'>Start</GradientButton>
+          </div>
         </Form>
       </section>
-      <section>
+      {/* <section>
         <Subtitle>Matches</Subtitle>
         <ul className='flex flex-col gap-1'>
           <MatchLi homeTeam='Zamalek' awayTeam='Al Ahly'>VS</MatchLi>
@@ -99,7 +107,7 @@ const Page = () => {
         <ListItem key={3} icon={BsStar} title='Al Ahly' subtitle='Consecutive Defeats'>
           <p className='text-tournamento-400 text-3xl'>10</p>
         </ListItem>
-      </section>
+      </section> */}
     </>
   );
 }

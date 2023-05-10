@@ -1,37 +1,39 @@
-import { useState } from "react";
-import { BsCheck, BsCheckCircle } from "react-icons/bs";
+import { BsCheckCircle } from "react-icons/bs";
 import LabelInput from "./label-input";
+import { FieldError } from "react-hook-form";
 
 interface Props {
   attributes: {name: string, [key: string]: any},
   label: string,
-  choices: string[]
+  choices: any[],
+  error?: FieldError
 }
 
 interface ButtonProps {
-  attributes: {name: string, [key: string]: any},
-  label: string,
+  attributes: {[key: string]: any},
+  choice: string
 }
 
-const RadioButton = ({attributes, label}: ButtonProps) => {
+const RadioButton = ({attributes, choice}: ButtonProps) => {
   return (
     <label className='flex items-center gap-1' >
-      <input className='hidden peer' type='radio' {...attributes} value={label} />
+      <input className='hidden peer' type='radio' {...attributes} value={choice} />
       <BsCheckCircle className='opacity-5 peer-checked:opacity-100' />
-      <div>{label}</div>
+      <div>{choice}</div>
     </label>
   );
 }
 
-const RadioGroup = ({attributes, label, choices}: Props) => {
+const RadioGroup = ({attributes, label, choices, error}: Props) => {
   return (
-    <LabelInput label={label}>
-      <div className='flex justify-around'>
-        {
-          choices.map((label: string, i: number) => <RadioButton key={`${attributes.name}-${i}`} attributes={attributes} label={label} />)
-        }
-      </div>
-    </LabelInput>
+    <div>
+      <LabelInput label={label}>
+        <div className='flex justify-between px-1 max-w-md'>
+          {choices.map((choice, i: number) => <RadioButton key={`${attributes.name}-${i}`} attributes={attributes} choice={choice} />)}
+        </div>
+      </LabelInput>
+      {error && <p className='text-red-600'>{error.message}</p>}
+    </div>
   );
 }
  

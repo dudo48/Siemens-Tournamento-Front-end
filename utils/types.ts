@@ -5,6 +5,12 @@ export enum Sport {
   TableTennis = 'Table Tennis'
 }
 
+export enum TournamentStatus {
+  Pending = 'PENDING',
+  Started = 'STARTED',
+  Ended = 'ENDED'
+}
+
 export interface User {
   id: number,
   firstName: string,
@@ -19,4 +25,20 @@ export interface Notification
   body: string,
   read: boolean,
   createdAt: string
+}
+
+export interface Tournament
+{
+  id: number,
+  title: string,
+  managerId: number,
+  details: {
+    code: string,
+    availability: string,
+    sport:  string,
+    state: string,
+    createdAt: string,
+    matchDuration: number,
+    grounds: number
+  }
 }

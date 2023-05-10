@@ -20,13 +20,11 @@ const schema = object({
 type FormData = InferType<typeof schema>
 
 const Page = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({resolver: yupResolver(schema) });
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({resolver: yupResolver(schema) });
   const { setUser } = useContext(UserContext);
   const { login } = useAuthentication();
-  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: FormData) => {
-    setIsLoading(true);
     console.log(data);
     console.log(errors);
 
@@ -40,8 +38,6 @@ const Page = () => {
       setUser(result);
       toast.success('Logged in successfully!');
     }
-
-    setIsLoading(false);
   }
 
   return (
@@ -50,7 +46,9 @@ const Page = () => {
         <Form attributes={{onSubmit: handleSubmit(onSubmit)}}>
           <RoundedInput error={errors.email} attributes={{...register('email'), placeholder: 'Email address'}}/>
           <RoundedInput error={errors.password} attributes={{...register('password'), type: 'password', placeholder: 'Password'}}/>
-          {isLoading ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{type: 'submit'}}>Login</GradientButton>}
+          <div className='self-center'>
+            {isSubmitting ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{type: 'submit'}}>Login</GradientButton>}
+          </div>
         </Form>
         <p>Forgot password? <Link className='hover:underline font-semibold' href='/reset-password'>Reset password</Link>.</p>
       </div>

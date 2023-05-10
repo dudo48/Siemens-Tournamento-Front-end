@@ -41,8 +41,8 @@ const Page = () => {
       <section>
         <Subtitle>LAST TOURNAMENTS</Subtitle>
         <ul className='flex flex-col gap-1'>
-          <TournamentHistoryLi key={1} name='Champions League' sport={Sport.Football} position={1} />
-          <TournamentHistoryLi key={2} name='Champions League' sport={Sport.TableTennis} position={5} />
+          <TournamentHistoryLi id={1} key={1} name='Champions League' sport={Sport.Football} position={1} />
+          <TournamentHistoryLi id={2} key={2} name='Champions League' sport={Sport.TableTennis} position={5} />
         </ul>
       </section>
     </>

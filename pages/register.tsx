@@ -25,11 +25,9 @@ type FormData = InferType<typeof schema>
 const Page = () => {
   const router = useRouter();
   const { signup } = useAuthentication();
-  const [isLoading, setIsLoading] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({resolver: yupResolver(schema) });
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({resolver: yupResolver(schema) });
 
   const onSubmit = async (data: FormData) => {
-    setIsLoading(true);
     console.log(data);
 
     const result = await signup(data);
@@ -40,7 +38,6 @@ const Page = () => {
     } else {
       router.push(`/verify-account?id=${result.id}`);
     }
-    setIsLoading(false);
   }
 
   return (
@@ -52,7 +49,9 @@ const Page = () => {
           <RoundedInput error={errors.email} attributes={{...register('email'), placeholder: 'Email address'}}/>
           <RoundedInput error={errors.password} attributes={{...register('password'), type:'password', placeholder: 'Password'}}/>
           <RoundedInput error={errors.confirmPassword} attributes={{...register('confirmPassword'), type:'password', placeholder: 'Confirm password'}}/>
-          {isLoading ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{type: 'submit'}}>Register</GradientButton>}
+          <div className='self-center'>
+            {isSubmitting ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{type: 'submit'}}>Register</GradientButton>}
+          </div>
         </Form>
       </div>
       <div>

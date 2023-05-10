@@ -6,14 +6,14 @@ import LabelInput from "./label-input";
 import { FieldError } from "react-hook-form/dist/types";
 
 interface Props {
-  attributes: {name: string, [key: string]: any},
+  attributes: {[key: string]: any},
   label: string,
   error?: FieldError
 }
 
 const SquareInput = ({attributes, error, label}: Props) => {
   return (
-    <div className='self-stretch'>
+    <div>
       <LabelInput label={label}>
         <input className={`p-1 border-b-2 w-full ${error ? 'border-b-red-600' : 'border-b-tournamento-400'}`}
           {...attributes}

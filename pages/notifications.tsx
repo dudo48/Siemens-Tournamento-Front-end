@@ -43,10 +43,10 @@ const Page = () => {
     <>
       <div className='flex justify-between items-center'>
         <Title>Notifications</Title>
-        <div className='flex items-center gap-1'>
+        {notifications.length > 0 && <div className='flex items-center gap-1'>
           <GradientButton type='light' attributes={{onClick: markAllAsReadHandler}}>Mark all as read</GradientButton>
           <GradientButton type='red' attributes={{onClick: deleteAllNotificationsHandler}}>Delete all</GradientButton>
-        </div>
+        </div>}
       </div>
       <section>
         {!notifications.length ? <p>You don&apos;t have any notifications.</p> :

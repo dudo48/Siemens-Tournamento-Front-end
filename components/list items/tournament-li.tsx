@@ -1,18 +1,17 @@
-import { Sport } from "@/utils/types";
-import ListItem from "./list-item";
 import { sportsIcons } from "@/utils/mappings";
-import getOrdinalSuffix from "@/utils/functions";
-import GradientButton from "../buttons/gradient-button";
+import { Sport } from "@/utils/types";
 import { PropsWithChildren } from "react";
+import ListItem from "./list-item";
 
 interface Props {
   name: string,
-  sport: Sport
+  sport: Sport,
+  id: number
 }
 
-const TournamentLi = ({name, sport, children}: PropsWithChildren<Props>) => {
+const TournamentLi = ({id, name, sport, children}: PropsWithChildren<Props>) => {
   return (
-    <ListItem icon={sportsIcons.get(sport)} title={name} subtitle={sport}>
+    <ListItem icon={sportsIcons.get(sport)} title={name} subtitle={sport} href={`/tournaments/${id}`}>
       {children}
     </ListItem>
   );

@@ -1,7 +1,7 @@
 import { IconType } from "react-icons";
 import { IoBasketball, IoFootball, IoTennisball } from "react-icons/io5";
 import { RiPingPongLine } from "react-icons/ri";
-import { Sport } from "./types";
+import { Sport, TournamentStatus } from "./types";
 
 export const sportsIcons = new Map<Sport, IconType> ([
   [Sport.Football, IoFootball],
@@ -9,13 +9,6 @@ export const sportsIcons = new Map<Sport, IconType> ([
   [Sport.Basketball, IoBasketball],
   [Sport.TableTennis, RiPingPongLine],
 ])
-
-// export const sportsNames = new Map<Sport, string> ([
-//   [Sport.Football, 'Football'],
-//   [Sport.Tennis, 'Tennis'],
-//   [Sport.Basketball, 'Basketball'],
-//   [Sport.TableTennis, 'Table Tennis'],
-// ])
 
 // allowed choices for each sport
 export const sportsTeamMembers = new Map<Sport, number[]> ([
@@ -30,4 +23,11 @@ export const sportsMatchDurations = new Map<Sport, number[]> ([
   [Sport.Tennis, Array.from(Array(10).keys()).map(n => (n + 9) * 5)],
   [Sport.Basketball, Array.from(Array(10).keys()).map(n => (n + 9) * 5)],
   [Sport.TableTennis, Array.from(Array(5).keys()).map(n => (n + 2) * 5)],
+])
+
+export const alternativeSportsNames = new Map<string, Sport> ([
+  ['football', Sport.Football],
+  ['tennis', Sport.Tennis],
+  ['basketball', Sport.Basketball],
+  ['pingpong', Sport.TableTennis],
 ])

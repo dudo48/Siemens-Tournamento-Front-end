@@ -23,11 +23,9 @@ const Page = () => {
   const { id } = router.query;
   const { setUser } = useContext(UserContext);
   const { verifyUser } = useAuthentication();
-  const [isLoading, setIsLoading] = useState(false);
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({resolver: yupResolver(schema) });
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({resolver: yupResolver(schema) });
 
   const onSubmit = async (data: FormData) => {
-    setIsLoading(true);
     console.log(data);
 
     const result = await verifyUser(id as string, data.code);
@@ -41,7 +39,6 @@ const Page = () => {
       toast.success('Logged in successfully!');
     }
     reset();
-    setIsLoading(false);
   }
 
   const resendCode = () => {
@@ -54,7 +51,9 @@ const Page = () => {
         <p className='text-center'>We have sent a verification code to your email. Enter the code below. Did not receive the code? <button onClick={resendCode} className='font-semibold hover:underline'>Resend code</button>.</p>
         <Form attributes={{onSubmit: handleSubmit(onSubmit)}}>
           <RoundedInput error={errors.code} attributes={{...register('code'), placeholder: 'Verification code'}}/>
-          {isLoading ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{type: 'submit'}}>Verify</GradientButton>}
+          <div className='self-center'>
+            {isSubmitting ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{type: 'submit'}}>Verify</GradientButton>}
+          </div>
         </Form>
       </div>
       <div></div>

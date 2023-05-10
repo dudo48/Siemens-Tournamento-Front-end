@@ -6,16 +6,16 @@ const baseUrl = 'http://localhost:5000/connections';
 
 export const useConnectionsModify = (fromId: number) => ({
   addConnection: (email: string) => postRequest(`${baseUrl}/postRequest/${fromId}/${email}`),
-  deleteConnection: (id: number) => deleteRequest(`${baseUrl}/deleteConnection/${fromId}/${id}`)
+  deleteConnection: (toId: number) => deleteRequest(`${baseUrl}/deleteConnection/${fromId}/${toId}`)
 });
 
 export const useRequestsResponse = (toId: number) => ({
-    acceptRequest: (id: number) => postRequest(`${baseUrl}/acceptRequest/${id}/${toId}`),
-    declineRequest: (id: number) => deleteRequest(`${baseUrl}/deleteRequest/${id}/${toId}`)
+    acceptRequest: (fromId: number) => postRequest(`${baseUrl}/acceptRequest/${fromId}/${toId}`),
+    declineRequest: (fromId: number) => deleteRequest(`${baseUrl}/deleteRequest/${fromId}/${toId}`)
 });
 
-export const useSentRequests = (id: number) => {
-  const url = `${baseUrl}/getAllSent/${id}`;
+export const useSentRequests = (userId: number) => {
+  const url = `${baseUrl}/getAllSent/${userId}`;
   const { data, mutate, isLoading, error } = useSWR<User[]>(url, getRequest);
   return {
     sentRequests: data || [],
@@ -25,9 +25,9 @@ export const useSentRequests = (id: number) => {
   };
 }
 
-export const useIncomingRequests = (id: number) => {
-  const url = `${baseUrl}/getAllIncoming/${id}`;
-  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getRequest, {fallbackData: []});
+export const useIncomingRequests = (userId: number) => {
+  const url = `${baseUrl}/getAllIncoming/${userId}`;
+  const { data, mutate, isLoading, error } = useSWR<User[]>(url, getRequest);
   return {
     incomingRequests: data || [],
     mutate,
@@ -36,8 +36,8 @@ export const useIncomingRequests = (id: number) => {
   };
 }
 
-export const useConnections = (id: number) => {
-  const url = `${baseUrl}/getAllConnections/${id}`;
+export const useConnections = (userId: number) => {
+  const url = `${baseUrl}/getAllConnections/${userId}`;
   const { data, mutate, isLoading, error } = useSWR<User[]>(url, getRequest);
   return {
     connections: data || [],

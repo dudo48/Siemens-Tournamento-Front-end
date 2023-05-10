@@ -30,7 +30,7 @@ const Page = () => {
   const { addConnection, deleteConnection } = useConnectionsModify(user.id);
 
   const [addConnectionsVisible, setAddConnectionsVisible] = useState(false);
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({resolver: yupResolver(schema) });
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({resolver: yupResolver(schema) });
   const { acceptRequest, declineRequest } = useRequestsResponse(user.id);
 
   const accept = async (connection: User) => {
@@ -106,9 +106,9 @@ const Page = () => {
       </section>
       <Modal title='Add Connections' isOpen={addConnectionsVisible} close={closeAddConnections}>
         <Form attributes={{onSubmit: handleSubmit(onSubmit)}}>
-          <SquareInput error={errors.email} label='Enter below the email address of the connection' attributes={{...register('email'), placeholder: 'Email address'}} />
-          <div className='flex gap-1'>
-            <GradientButton type='light'>Connect</GradientButton>
+          <SquareInput error={errors.email} label='Enter below the email address of the connection' attributes={{...register('email')}} />
+          <div className='self-center'>
+            {isSubmitting ? <LoadingSpinner /> : <GradientButton type='light' attributes={{type: 'submit'}}>Connect</GradientButton>}
           </div>
         </Form>
       </Modal>
