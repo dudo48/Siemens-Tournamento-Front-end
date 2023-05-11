@@ -10,10 +10,10 @@ import Link from "next/link";
 import Form from "@/components/forms/form";
 import SquareInput from "@/components/forms/square-input";
 import TournamentLi from "@/components/list items/tournament-li";
-import { Sport } from "@/utils/types";
+import { Sport, TournamentStatus } from "@/utils/types";
 import ListItem from "@/components/list items/list-item";
 import { sportsIcons } from "@/utils/mappings";
-import StateLabel from "@/components/misc/state-label";
+import TournamentStatusLabel from "@/components/misc/state-label";
 import { IoShirtOutline } from "react-icons/io5";
 import TeamLi from "@/components/list items/team-li";
 import UserLi from "@/components/list items/user-li";
@@ -45,7 +45,9 @@ const Page = () => {
       <Title>Tournament Information</Title>
       <section>
         <ListItem title='FIFA World Cup' icon={sportsIcons.get(Sport.Football)} subtitle={Sport.Football}>
-          <GradientButton attributes={{disabled: true}} type='orange'>Pending</GradientButton>
+          <TournamentStatusLabel status={TournamentStatus.Ended} >
+            {TournamentStatus.Ended}
+          </TournamentStatusLabel>
         </ListItem>
       </section>
       <section className='flex justify-between max-w-md'>

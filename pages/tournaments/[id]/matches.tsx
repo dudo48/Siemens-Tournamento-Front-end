@@ -9,7 +9,7 @@ import GradientButton from "@/components/buttons/gradient-button";
 import Link from "next/link";
 import UserLi from "@/components/list items/user-li";
 import TeamLi from "@/components/list items/team-li";
-import StateLabel from "@/components/misc/state-label";
+import TournamentStatusLabel from "@/components/misc/state-label";
 import MatchLi from "@/components/list items/match-li";
 
 const Page = () => {

@@ -9,7 +9,7 @@ import GradientButton from "@/components/buttons/gradient-button";
 import Link from "next/link";
 import UserLi from "@/components/list items/user-li";
 import TeamLi from "@/components/list items/team-li";
-import StateLabel from "@/components/misc/state-label";
+import TournamentStatusLabel from "@/components/misc/state-label";
 import { Sport } from "@/utils/types";
 
 const Page = () => {
@@ -22,10 +22,10 @@ const Page = () => {
       <section>
         <ul className='flex flex-col gap-1'>
           <TeamLi name='Zamalek' sport={Sport.Football}>
-            <StateLabel type='light'>Active</StateLabel>
+            <TournamentStatusLabel type='light'>Active</TournamentStatusLabel>
           </TeamLi>
           <TeamLi name='Al Ahly' sport={Sport.Football}>
-            <StateLabel type='red'>Out</StateLabel>
+            <TournamentStatusLabel type='red'>Out</TournamentStatusLabel>
           </TeamLi>
         </ul>
       </section>

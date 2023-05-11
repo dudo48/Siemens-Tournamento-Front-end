@@ -5,6 +5,7 @@ import SquareInput from "@/components/forms/square-input";
 import TournamentLi from "@/components/list items/tournament-li";
 import LoadingSpinner from "@/components/misc/loading-spinner";
 import Modal from "@/components/misc/modal";
+import TournamentStatusLabel from "@/components/misc/state-label";
 import Subtitle from "@/components/misc/subtitle";
 import Title from "@/components/misc/title";
 import { UserContext } from "@/context/user-context";
@@ -80,9 +81,9 @@ const Page = () => {
             const status = tournament.details.state;
             return (
               <TournamentLi key={tournament.id} id={tournament.id} name={tournament.title} sport={sport as Sport}>
-                <GradientButton type={status === TournamentStatus.Pending ? 'orange' : 'light'} grayscale={status === TournamentStatus.Ended} attributes={{disabled: true}}>
+                <TournamentStatusLabel status={status as TournamentStatus} >
                   {status}
-                </GradientButton>
+                </TournamentStatusLabel>
               </TournamentLi>
             )})}
         </ul>}

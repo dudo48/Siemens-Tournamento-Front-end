@@ -56,9 +56,6 @@ const Page = () => {
     const transformedData = { ...data } as {[key: string]: any}
     transformedData.details.availability = data.details.availability.toUpperCase();
     transformedData.details.sport = data.details.sport === 'Table Tennis' ? 'PINGPONG' : data.details.sport.toUpperCase();
-    transformedData.details.playgrounds = parseInt(data.details.playgrounds, 10);
-    transformedData.details.membersCount = parseInt(data.details.membersCount, 10);
-    transformedData.details.matchDuration = parseInt(data.details.matchDuration, 10);
     console.log(transformedData)
 
     const result = await createTournament(transformedData);
@@ -81,9 +78,9 @@ const Page = () => {
           <SquareInput error={errors.title} attributes={{...register('title')}} label='Tournament name'  />
           <RadioGroup error={errors.details?.availability} attributes={{...register('details.availability')}} choices={['Public', 'Private']} label='Availability' />
           <Select error={errors.details?.sport} attributes={{...register('details.sport', { onChange: () => {resetField('details.membersCount'); resetField('details.matchDuration')} })}} choices={Object.values(Sport)} label='Sport' />
-          <Select error={errors.details?.playgrounds} attributes={{...register('details.playgrounds', {valueAsNumber: true})}} choices={Array.from(Array(8).keys()).map(n => n + 1)} label='Number of fields' />
-          <Select error={errors.details?.membersCount} attributes={{...register('details.membersCount', {valueAsNumber: true})}} choices={sportsTeamMembers.get(chosenSport) || []} label='Team members' />
-          <Select error={errors.details?.matchDuration} attributes={{...register('details.matchDuration', {valueAsNumber: true})}} choices={sportsMatchDurations.get(chosenSport) || []} label='Match duration (in minutes)' />
+          <Select error={errors.details?.playgrounds} attributes={{...register('details.playgrounds')}} choices={Array.from(Array(8).keys()).map(n => n + 1)} label='Number of playgrounds' />
+          <Select error={errors.details?.membersCount} attributes={{...register('details.membersCount')}} choices={sportsTeamMembers.get(chosenSport) || []} label='Team members' />
+          <Select error={errors.details?.matchDuration} attributes={{...register('details.matchDuration')}} choices={sportsMatchDurations.get(chosenSport) || []} label='Match duration (in minutes)' />
           <div className='self-center'>
             {isSubmitting ? <LoadingSpinner /> : <GradientButton type='light' attributes={{type: 'submit'}}>Create tournament</GradientButton>}
           </div>

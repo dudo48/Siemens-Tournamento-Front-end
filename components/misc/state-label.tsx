@@ -1,21 +1,17 @@
+import GradientButton from "@/components/buttons/gradient-button";
+import { TournamentStatus } from "@/utils/types";
 import { PropsWithChildren } from "react";
 
 interface Props {
-  type: string
+  status: TournamentStatus
 }
 
-const StateLabel = ({ type, children }: PropsWithChildren<Props>) => {
-  const typeStyle: { [key: string]: string } = {
-    light: 'bg-gradient-to-b from-tournamento-600 to-tournamento-400',
-    red: 'bg-gradient-to-b from-red-600 to-red-400',
-    orange: 'bg-gradient-to-b from-orange-600 to-orange-400',
-  }
-
+const TournamentStatusLabel = ({ status, children }: PropsWithChildren<Props>) => {
   return (
-    <div className={`font-semibold py-0.5 px-4 rounded text-white ${typeStyle[type]}`}>
+    <GradientButton type={status === TournamentStatus.Pending ? 'orange' : status === TournamentStatus.Started ? 'light' : 'gray'} attributes={{disabled: true}}>
       {children}
-    </div>
+    </GradientButton>
   );
 }
  
-export default StateLabel;
+export default TournamentStatusLabel;
