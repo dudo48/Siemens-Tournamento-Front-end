@@ -1,29 +1,29 @@
+import GradientButton from "@/components/buttons/gradient-button";
 import OutlinedButton from "@/components/buttons/outlined-button";
+import Form from "@/components/forms/form";
+import RadioGroup from "@/components/forms/radio-group";
+import TeamLi from "@/components/list items/team-li";
+import TournamentLi from "@/components/list items/tournament-li";
+import UserLi from "@/components/list items/user-li";
+import LoadingFullscreen from "@/components/misc/loading-full-screen";
+import LoadingSpinner from "@/components/misc/loading-spinner";
+import TournamentStatusLabel from "@/components/misc/state-label";
 import Subtitle from "@/components/misc/subtitle";
 import Title from "@/components/misc/title";
+import { UserContext } from "@/context/user-context";
 import PrimaryLayout from "@/layouts/primary-layout";
-import { ChangeEvent, FormEvent, ReactNode, useState } from "react";
-import { BsArrowRight, BsPlus, BsPlusLg, BsStar } from "react-icons/bs";
-import TournamentHistoryLi from "@/components/list items/tournament-history-li";
-import GradientButton from "@/components/buttons/gradient-button";
-import Link from "next/link";
-import Form from "@/components/forms/form";
-import SquareInput from "@/components/forms/square-input";
-import TournamentLi from "@/components/list items/tournament-li";
-import { Sport, TournamentStatus } from "@/utils/types";
-import ListItem from "@/components/list items/list-item";
-import { sportsIcons } from "@/utils/mappings";
-import TournamentStatusLabel from "@/components/misc/state-label";
-import { IoShirtOutline } from "react-icons/io5";
-import TeamLi from "@/components/list items/team-li";
-import UserLi from "@/components/list items/user-li";
-import RadioGroup from "@/components/forms/radio-group";
-import MatchLi from "@/components/list items/match-li";
-import Standings from "@/components/misc/standings";
-import { InferType, object, string } from "yup";
-import { useForm } from "react-hook-form";
+import { useTeams } from "@/services/team-service";
+import { useTournament, useTournamentPendingUsers, useTournamentPlayers, useTournamentPlayersManagement } from "@/services/tournament-service";
+import { useProfile } from "@/services/user-service";
+import { alternativeSportsNames } from "@/utils/mappings";
+import { Sport, TournamentStatus, User } from "@/utils/types";
 import { yupResolver } from "@hookform/resolvers/yup";
-import LoadingSpinner from "@/components/misc/loading-spinner";
+import { useRouter } from "next/router";
+import { ReactNode, useContext } from "react";
+import { useForm } from "react-hook-form";
+import { BsBoxArrowUpLeft, BsCheckCircle, BsClipboard, BsClock, BsPerson, BsPersonGear, BsPersonPlus, BsPinMap, BsPlusLg } from "react-icons/bs";
+import { toast } from "react-toastify";
+import { InferType, object, string } from "yup";
 
 const schema = object({
   assignment: string().min(1, 'Please select one of the options.').required('Please select one of the options.'),
@@ -36,60 +36,152 @@ const Page = () => {
     defaultValues: { assignment: '' }
   });
 
+  const { user } = useContext(UserContext);
+
+  const router = useRouter();
+  const tournamentId = parseInt(router.query.id as string, 10)
+
+  const { tournament, isLoading: isTournamentLoading } = useTournament(tournamentId);
+  const { tournamentPlayers, isLoading: isPlayersLoading, mutate: mutateTournamentPlayers } = useTournamentPlayers(tournamentId);
+  const { pendingUsers, isLoading: isPendingUsersLoading, mutate: mutateTournamentPendingUsers } = useTournamentPendingUsers(tournamentId);
+  const { teams, isLoading: isTeamsLoading } = useTeams(tournamentId);
+  const { acceptUser } = useTournamentPlayersManagement(tournamentId);
+  
+  const { profile: manager } = useProfile(tournament?.managerId as number);
+
+  console.log(teams);
+
   const onSubmit = (data: FormData) => {
     console.log(data);
   }
 
-  return (
+  const userIsManager = () => {
+    return user.id !== manager?.id;
+  }
+
+  const acceptUserHandler = async (user: User) => {
+    const result = await acceptUser(user.id);
+    console.log(result);
+
+    if (result.status) {
+      toast.success('User was added successfully!');
+    } else {
+      toast.error(`Request failed to accept user.`);
+    }
+
+    mutateTournamentPendingUsers(pendingUsers.filter(u => u.id !== user.id));
+    mutateTournamentPlayers(tournamentPlayers.concat(user));
+  }
+
+  const copyCodeToClipboard = () => {
+    navigator.clipboard.writeText(tournament?.details.code as string);
+    toast.success('Invitation code copied to clipboard')
+  }
+
+  return isTournamentLoading ? <LoadingFullscreen /> : !tournament?.details ? null : (
     <>
       <Title>Tournament Information</Title>
       <section>
-        <ListItem title='FIFA World Cup' icon={sportsIcons.get(Sport.Football)} subtitle={Sport.Football}>
-          <TournamentStatusLabel status={TournamentStatus.Ended} >
-            {TournamentStatus.Ended}
+        <TournamentLi name={tournament.title} sport={alternativeSportsNames.get(tournament.details.sport) as Sport}>
+          <TournamentStatusLabel status={tournament.details.state as TournamentStatus} >
+            {tournament.details.state}
           </TournamentStatusLabel>
-        </ListItem>
+        </TournamentLi>
       </section>
-      <section className='flex justify-between max-w-md'>
-        <div>
-          <Subtitle>Code</Subtitle>
-          <p>5qw4r5ewe12fd</p>
-        </div>
-        <div>
-          <Subtitle>Manager</Subtitle>
-          <p>Fady Emad</p>
+      <section>
+        
+      </section>
+      <section>
+        <Subtitle>Tournament Details</Subtitle>
+        <div className='flex justify-between flex-wrap'>
+          <div className='text-center'>
+            <div className='flex items-center gap-2'>
+              <BsCheckCircle />
+              <p className='font-semibold'>Availability</p>
+            </div>
+            {tournament.details.availability === 'PUBLIC' ? 'Public' : 'Private'}
+          </div>
+          <div className='text-center'>
+            <div className='flex items-center gap-2'>
+              <BsClock />
+              <p className='font-semibold'>Match duration</p>
+            </div>
+            {tournament.details.matchDuration} minutes
+          </div>
+          <div className='text-center'>
+            <div className='flex items-center gap-2'>
+              <BsPinMap />
+              <p className='font-semibold'>Number of playgrounds</p>
+            </div>
+            {tournament.details.grounds}
+          </div>
+          <div className='text-center'>
+            <div className='flex items-center gap-2'>
+              <BsPersonGear className='text-xl' />
+              <p className='font-semibold'>Manager</p>
+            </div>
+            {`${manager?.firstName} ${manager?.lastName}`}
+          </div>
+          {userIsManager() &&
+          <div className='text-center'>
+            <div className='flex items-center gap-2'>
+              <BsPersonPlus className='text-xl' />
+              <p className='font-semibold'>Invitation code</p>
+            </div>
+            {tournament.details.code} <span><button onClick={copyCodeToClipboard}><BsClipboard /></button></span>
+          </div>}
         </div>
       </section>
       <section>
         <div className='flex items-center justify-between'>
           <Subtitle>Teams</Subtitle>
-          <OutlinedButton icon={BsPlusLg}>Create Team</OutlinedButton>
+          {userIsManager() && <OutlinedButton icon={BsPlusLg}>Create team</OutlinedButton>}
         </div>
+        { isTeamsLoading ? <LoadingSpinner /> :
+        !teams.length ? <p>There aren&apos;t any teams yet.</p> :
         <ul className='flex flex-col gap-1'>
-          <TeamLi sport={Sport.Football} name='Zamalek' />
-          <TeamLi sport={Sport.Football} name='Al Ahly' />
-        </ul>
+          {teams.map(team => {
+            const sport = alternativeSportsNames.get(tournament.details.sport);
+            return (
+              <TeamLi key={team.id} name={team.name} sport={sport as Sport} />
+            )})}
+        </ul>}
       </section>
-      <section>
-        <div className='flex items-center justify-between'>
-          <Subtitle>Pending Requests</Subtitle>
-          <OutlinedButton icon={BsPlusLg}>Invite</OutlinedButton>
-        </div>
-        <ul className='flex flex-col gap-1'>
-          <UserLi name='Ahmed Sabry'>
-            { isSubmitting ? <LoadingSpinner /> : <GradientButton type='light'>Accept</GradientButton>}
-          </UserLi>
-        </ul>
-      </section>
-      <section>
-        <Subtitle>Options</Subtitle>
-        <Form attributes={{onSubmit: handleSubmit(onSubmit)}}>
-          <RadioGroup error={errors.assignment} attributes={{...register('assignment')}} label='Manual Assignment' choices={['Yes', 'No']} />
-          <div className='self-center'>
-            <GradientButton type='light'>Start</GradientButton>
+      {userIsManager() && <>
+        <section>
+          <div className='flex items-center justify-between'>
+            <Subtitle>Pending Requests</Subtitle>
+            <OutlinedButton icon={BsPlusLg}>Invite</OutlinedButton>
           </div>
-        </Form>
-      </section>
+          { isPendingUsersLoading ? <LoadingSpinner /> :
+          !pendingUsers.length ? <p>There aren&apos;t any pending requests.</p> :
+          <ul className='flex flex-col gap-1'>
+            {pendingUsers.map(pendingUser => (
+              <UserLi key={pendingUser.id} name={`${pendingUser.firstName} ${pendingUser.lastName}`}>
+                <GradientButton type='light' attributes={{onClick: () => acceptUserHandler(pendingUser)}}>Accept</GradientButton>
+              </UserLi>))}
+          </ul>}
+        </section>
+        <section>
+          <Subtitle>Players</Subtitle>
+          { isPlayersLoading ? <LoadingSpinner /> :
+          !tournamentPlayers.length ? <p>There aren&apos;t any players yet.</p> :
+          <ul className='flex flex-col gap-1'>
+            {tournamentPlayers.map(player => (
+              <UserLi key={player.id} name={`${player.firstName} ${player.lastName}`}>
+              </UserLi>))}
+          </ul>}
+        </section>
+        <section>
+          <Subtitle>Options</Subtitle>
+          <Form attributes={{onSubmit: handleSubmit(onSubmit)}}>
+            <RadioGroup error={errors.assignment} attributes={{...register('assignment')}} label='Manual Assignment' choices={['Yes', 'No']} />
+            <div className='self-center'>
+              { isSubmitting ? <LoadingSpinner /> : <GradientButton type='light'>Start</GradientButton> }
+            </div>
+          </Form>
+        </section>
+      </>}
       {/* <section>
         <Subtitle>Matches</Subtitle>
         <ul className='flex flex-col gap-1'>

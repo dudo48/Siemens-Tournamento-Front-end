@@ -31,12 +31,12 @@ const Page = () => {
     const result = await login(data);
     console.log(result);
 
-    if (!result || result.status) {
-      toast.error('Login failed: Wrong email or password.');
-    } else {
-      localStorage.setItem('user', JSON.stringify(result));
-      setUser(result);
+    if (result.status) {
+      localStorage.setItem('user', JSON.stringify(result.data));
+      setUser(result.data);
       toast.success('Logged in successfully!');
+    } else {
+      toast.error('Login failed: Wrong email or password.');
     }
   }
 

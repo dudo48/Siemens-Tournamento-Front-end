@@ -31,12 +31,12 @@ const Page = () => {
     const result = await verifyUser(id as string, data.code);
     console.log(result);
     
-    if (!result || result.status) {
-      toast.error('The code you entered is not the code we sent you!');
-    } else {
-      localStorage.setItem('user', JSON.stringify(result));
-      setUser(result);
+    if (result.status && result.data) {
+      localStorage.setItem('user', JSON.stringify(result.data));
+      setUser(result.data);
       toast.success('Logged in successfully!');
+    } else {
+      toast.error('The code you entered is not the code we sent you!');
     }
     reset();
   }

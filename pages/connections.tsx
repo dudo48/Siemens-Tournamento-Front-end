@@ -65,11 +65,11 @@ const Page = () => {
     const result = await addConnection(data.email);
     console.log(result);
 
-    if (result.status === true) {
+    if (result.status) {
       toast.success('Request sent successfully!');
       closeAddConnections();
-    } else if (result.status === false) {
-      toast.error(`Request failed: ${result.info}`);
+    } else {
+      toast.error(`Request failed: ${result.data.info}`);
     }
   }
 
@@ -83,7 +83,7 @@ const Page = () => {
         <Subtitle>Connection Requests</Subtitle>
       {!incomingRequests.length ? <p>You don&apos;t have any requests.</p> :
         <ul className='flex flex-col gap-1'>
-          {incomingRequests.map((connection, i) => (
+          {[...incomingRequests].reverse().map((connection, i) => (
             <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
               <div className='flex gap-1'>
                 <GradientButton attributes={{onClick: () => accept(connection)}} type='light'>Accept</GradientButton>
@@ -97,7 +97,7 @@ const Page = () => {
         {connectionsLoading ? <LoadingSpinner /> :
         !connections.length ? <><p>You don&apos;t have any connections. 😔</p><blockquote className='p-4'><q>Solitude is fine but you need someone to tell that solitude is fine.</q><p>― Honoré de Balzac</p></blockquote></> :
         <ul className='flex flex-col gap-1'>
-          {connections.map((connection, i) => (
+          {[...connections].reverse().map((connection, i) => (
             <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
               <GradientButton attributes={{onClick: () => deleteConnectionHandler(connection)}} type='red'>Delete</GradientButton>
             </UserLi>

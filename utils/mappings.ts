@@ -26,8 +26,8 @@ export const sportsMatchDurations = new Map<Sport, number[]> ([
 ])
 
 export const alternativeSportsNames = new Map<string, Sport> ([
-  ['football', Sport.Football],
-  ['tennis', Sport.Tennis],
-  ['basketball', Sport.Basketball],
-  ['pingpong', Sport.TableTennis],
+  ['FOOTBALL', Sport.Football],
+  ['TENNIS', Sport.Tennis],
+  ['BASKETBALL', Sport.Basketball],
+  ['PINGPONG', Sport.TableTennis],
 ])

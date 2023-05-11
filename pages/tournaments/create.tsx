@@ -61,11 +61,11 @@ const Page = () => {
     const result = await createTournament(transformedData);
     console.log(result);
 
-    if (result.status === true) {
+    if (result.status) {
       toast.success('Tournament was created successfully!');
       router.push('/tournaments');
-    } else if (result.status === false) {
-      toast.error(`Tournament creation failed: ${result.info}`);
+    } else {
+      toast.error(`Tournament creation failed: ${result.data.info}`);
     }
   }
 

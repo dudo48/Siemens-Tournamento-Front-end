@@ -1,6 +1,6 @@
 import Title from "@/components/misc/title";
 import PrimaryLayout from "@/layouts/primary-layout";
-import { useProfile } from "@/services/profile-service";
+import { useProfile } from "@/services/user-service";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
 

@@ -33,10 +33,10 @@ const Page = () => {
     const result = await signup(data);
     console.log(result);
     
-    if (result.id === -1) {
-      toast.error('Email is already registered!');
+    if (result.status && result.data.id != -1) {
+      router.push(`/verify-account?id=${result.data.id}`);
     } else {
-      router.push(`/verify-account?id=${result.id}`);
+      toast.error('Email is already registered!');
     }
   }
 

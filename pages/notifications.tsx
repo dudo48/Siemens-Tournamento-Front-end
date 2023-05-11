@@ -51,7 +51,7 @@ const Page = () => {
       <section>
         {!notifications.length ? <p>You don&apos;t have any notifications.</p> :
         <ul className='flex flex-col gap-1'>
-          {notifications.map((notification: Notification) => (
+          {[...notifications].reverse().map((notification: Notification) => (
             <NotificationLi key={notification.id} isRead={notification.read} body={notification.body}>
               <div className='flex gap-1'>
                 {!notification.read && <GradientButton icon={BsEnvelopeOpen} attributes={{onClick: () => markAsReadHandler(notification.id)}} type='light' />}

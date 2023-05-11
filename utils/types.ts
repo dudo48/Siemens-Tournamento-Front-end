@@ -18,8 +18,7 @@ export interface User {
   email: string,
 }
 
-export interface Notification
-{
+export interface Notification {
   id: number,
   playerId: number,
   body: string,
@@ -27,8 +26,7 @@ export interface Notification
   createdAt: string
 }
 
-export interface Tournament
-{
+export interface Tournament {
   id: number,
   title: string,
   managerId: number,
@@ -41,4 +39,10 @@ export interface Tournament
     matchDuration: number,
     grounds: number
   }
+}
+
+export type UserProfile = User & {
+  password: string,
+  verified: boolean,
+  playerDetails: null
 }
