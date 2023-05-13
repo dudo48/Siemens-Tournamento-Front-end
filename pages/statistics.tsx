@@ -1,29 +1,37 @@
-import Title from "@/components/misc/title";
-import PrimaryLayout from "@/layouts/primary-layout";
-import { ReactNode } from "react";
 import ListItem from "@/components/list items/list-item";
-import { Bs1CircleFill, Bs2Circle, Bs2CircleFill, Bs3Circle, Bs3CircleFill, BsFillStarFill, BsHandThumbsDown, BsHeartbreak, BsStar, BsTrophy } from "react-icons/bs";
+import LoadingSpinner from "@/components/misc/loading-spinner";
+import Title from "@/components/misc/title";
+import { UserContext } from "@/context/user-context";
+import PrimaryLayout from "@/layouts/primary-layout";
+import { useStatistics } from "@/services/user-service";
+import { ReactNode, useContext } from "react";
+import { Bs2Circle, Bs3Circle, BsHandThumbsDown, BsHandThumbsUp, BsStar, BsTrophy } from "react-icons/bs";
 
 const Page = () => {
-  return (
+  const { user } = useContext(UserContext);
+  const { statistics } = useStatistics(user.id);
+  console.log(statistics)
+
+  return !statistics ? <LoadingSpinner /> : (
     <>
       <Title>Statistics</Title>
+      <p className='italic'>Across all tournaments</p>
       <section>
         <ul className='flex flex-col gap-1'>
-          <ListItem key={1} icon={BsTrophy} title='First Place'>
-            <p className='text-tournamento-400 text-3xl'>3</p>
+          <ListItem icon={BsTrophy} title='First Place'>
+            <p className='text-tournamento-400 text-3xl'>{statistics['All Winning Tournaments']}</p>
           </ListItem>
-          <ListItem key={2} icon={Bs2Circle} title='Second Place'>
-            <p className='text-tournamento-400 text-3xl'>6</p>
+          <ListItem icon={Bs2Circle} title='Second Place'>
+            <p className='text-tournamento-400 text-3xl'>{statistics['All Runner Up Tournaments']}</p>
           </ListItem>
-          <ListItem key={3} icon={Bs3Circle} title='Third Place'>
-            <p className='text-tournamento-400 text-3xl'>2</p>
+          <ListItem icon={BsHandThumbsUp} title='Matches Won'>
+            <p className='text-tournamento-400 text-3xl'>{statistics['All Winning Matches']}</p>
           </ListItem>
-          <ListItem key={4} icon={BsStar} title='Win Streak'>
-            <p className='text-tournamento-400 text-3xl'>1</p>
+          <ListItem icon={BsHandThumbsDown} title='Matches Lost'>
+            <p className='text-tournamento-400 text-3xl'>{statistics['All Losing Matches']}</p>
           </ListItem>
-          <ListItem key={5} icon={BsHandThumbsDown} title='Consecutive Defeats'>
-            <p className='text-tournamento-400 text-3xl'>7</p>
+          <ListItem icon={BsStar} title='Points Scored'>
+            <p className='text-tournamento-400 text-3xl'>{statistics['All Points']}</p>
           </ListItem>
         </ul>
       </section>

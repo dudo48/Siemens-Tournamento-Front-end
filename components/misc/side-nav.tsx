@@ -16,13 +16,15 @@ interface ElementProps {
   alertCount?: number
 }
 
+interface UserProps {
+  user: {[key: string]: any}
+}
+
 interface Props {
   hideSideNav: () => void
 }
 
-const SideNavUser = () => {
-  const { user } = useContext(UserContext);
-
+const SideNavUser = ({ user }: UserProps) => {
   return (
     <div className='flex items-center gap-2'>
         <div className='w-16'>
@@ -59,7 +61,7 @@ const SideNavElement = ({href, onClick, icon: Icon, alertCount, children}: Props
 const ElementSeparator = () => <div className='my-1 ml-2 border-b border-tournamento-100 w-3/4'></div>
 
 const SideNav = ({ hideSideNav }: Props) => {
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { notifications } = useContext(NotificationsContext);
 
   const logout = () => {
@@ -71,7 +73,7 @@ const SideNav = ({ hideSideNav }: Props) => {
   return (
     <>
       <div className='flex justify-between items-center pt-4 px-4'>
-        <SideNavUser />
+        <SideNavUser user={user} />
         <button className='md:hidden' onClick={hideSideNav}>
           <BsX className='text-4xl' />
         </button>
@@ -81,7 +83,7 @@ const SideNav = ({ hideSideNav }: Props) => {
         <ElementSeparator/>
         <SideNavElement href='/notifications' alertCount={notifications.filter((n: Notification) => !n.read).length} icon={BsBell}>Notifications</SideNavElement>
         <ElementSeparator/>
-        <SideNavElement href='/profile/edit' icon={BsPerson}>Profile</SideNavElement>
+        <SideNavElement href={`/profile/${user.id}`} icon={BsPerson}>Profile</SideNavElement>
         <ElementSeparator/>
         <SideNavElement href='/tournaments' icon={BsTrophy}>Tournaments</SideNavElement>
         <ElementSeparator/>

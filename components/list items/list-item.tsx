@@ -12,7 +12,7 @@ interface Props {
 
 const ListItem = ({ icon, title, subtitle, href, children }: PropsWithChildren<Props>) => {
   return (
-    <li className={`flex justify-between items-center group relative`}>
+    <li className='flex justify-between items-center relative'>
       <div className='flex items-center'>
         {icon && <CircledIcon icon={icon} />}
         <div className='pl-2'>

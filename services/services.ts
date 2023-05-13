@@ -1,4 +1,4 @@
-export const getRequest = (url: string) => fetch(url).then((res) => res.json());
+export const getRequest = (url: string) => fetch(url).then(async (res) => res.json());
 export const postRequest = (url: string, payload?: {[key: string]: any}) => (
   fetch(url, {
     method: 'POST',

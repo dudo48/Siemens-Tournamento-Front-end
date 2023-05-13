@@ -2,39 +2,45 @@ import GradientButton from "@/components/buttons/gradient-button";
 import OutlinedButton from "@/components/buttons/outlined-button";
 import Form from "@/components/forms/form";
 import RadioGroup from "@/components/forms/radio-group";
+import SquareInput from "@/components/forms/square-input";
+import ListItem from "@/components/list items/list-item";
 import TeamLi from "@/components/list items/team-li";
 import TournamentLi from "@/components/list items/tournament-li";
 import UserLi from "@/components/list items/user-li";
-import LoadingFullscreen from "@/components/misc/loading-full-screen";
 import LoadingSpinner from "@/components/misc/loading-spinner";
-import TournamentStatusLabel from "@/components/misc/state-label";
+import Modal from "@/components/misc/modal";
+import StatusLabel from "@/components/misc/state-label";
 import Subtitle from "@/components/misc/subtitle";
 import Title from "@/components/misc/title";
 import { UserContext } from "@/context/user-context";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { useTeams } from "@/services/team-service";
-import { useTournament, useTournamentPendingUsers, useTournamentPlayers, useTournamentPlayersManagement } from "@/services/tournament-service";
+import { useMostScoringPlayer, useMostScoringTeam, useTournament, useTournamentManagement, useTournamentPendingUsers, useTournamentPlayers, useTournamentPlayersManagement } from "@/services/tournament-service";
 import { useProfile } from "@/services/user-service";
+import { hasStarted, isPending, userIsManager } from "@/utils/functions";
 import { alternativeSportsNames } from "@/utils/mappings";
-import { Sport, TournamentStatus, User } from "@/utils/types";
+import { Sport, Status, User } from "@/utils/types";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { ReactNode, useContext } from "react";
+import { ReactNode, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { BsBoxArrowUpLeft, BsCheckCircle, BsClipboard, BsClock, BsPerson, BsPersonGear, BsPersonPlus, BsPinMap, BsPlusLg } from "react-icons/bs";
+import { BsArrowRight, BsCheckCircle, BsClipboard, BsClock, BsPerson, BsPersonGear, BsPersonPlus, BsPinMap, BsPlusLg, BsStar } from "react-icons/bs";
 import { toast } from "react-toastify";
 import { InferType, object, string } from "yup";
 
-const schema = object({
-  assignment: string().min(1, 'Please select one of the options.').required('Please select one of the options.'),
+
+const schemaInviteForm = object({
+  email: string().email('Please enter a valid email address.').required('Please enter a valid email address.'),
 }).required();
-type FormData = InferType<typeof schema>
+type InviteFormData = InferType<typeof schemaInviteForm>
 
 const Page = () => {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
-    resolver: yupResolver(schema),
-    defaultValues: { assignment: '' }
-  });
+  const { 
+    register: registerInviteForm,
+    handleSubmit: handleSubmitInviteForm,
+    formState: { errors: errorsInviteForm, isSubmitting: isInviteFormSubmitting },
+    reset: resetInviteForm } = useForm<InviteFormData>({resolver: yupResolver(schemaInviteForm), defaultValues: { email: '' } });
 
   const { user } = useContext(UserContext);
 
@@ -46,18 +52,11 @@ const Page = () => {
   const { pendingUsers, isLoading: isPendingUsersLoading, mutate: mutateTournamentPendingUsers } = useTournamentPendingUsers(tournamentId);
   const { teams, isLoading: isTeamsLoading } = useTeams(tournamentId);
   const { acceptUser } = useTournamentPlayersManagement(tournamentId);
-  
+  const [inviteUserVisible, setInviteUserVisible] = useState(false);
+  const { inviteUser, startTournament } = useTournamentManagement();
   const { profile: manager } = useProfile(tournament?.managerId as number);
-
-  console.log(teams);
-
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-  }
-
-  const userIsManager = () => {
-    return user.id !== manager?.id;
-  }
+  const { mostScoringPlayer } = useMostScoringPlayer(tournamentId);
+  const { mostScoringTeam } = useMostScoringTeam(tournamentId);
 
   const acceptUserHandler = async (user: User) => {
     const result = await acceptUser(user.id);
@@ -73,58 +72,100 @@ const Page = () => {
     mutateTournamentPlayers(tournamentPlayers.concat(user));
   }
 
+  const closeInviteUser = () => {
+    setInviteUserVisible(false);
+    resetInviteForm();
+  }
+
+  const onSubmitInviteUser = async (data: InviteFormData) => {
+    console.log(data);
+
+    const result = await inviteUser(tournament?.details?.code as string, data.email);
+    console.log(result);
+
+    if (result.status) {
+      toast.success('Request sent successfully!');
+      closeInviteUser();
+    } else {
+      toast.error(`Request failed.`);
+    }
+  }
+
+  const startTournamentHandler = async () => {
+    const result = await startTournament(tournamentId);
+    console.log(result);
+
+    if (result.status) {
+      toast.success('Tournament started: let\'s go!!');
+      router.push(`${router.asPath}/rounds`)
+    } else {
+      toast.error(`Tournament failed to start`);
+    }
+  }
+
   const copyCodeToClipboard = () => {
     navigator.clipboard.writeText(tournament?.details.code as string);
     toast.success('Invitation code copied to clipboard')
   }
 
-  return isTournamentLoading ? <LoadingFullscreen /> : !tournament?.details ? null : (
+  console.log(mostScoringPlayer)
+
+  return isTournamentLoading ? <LoadingSpinner /> : !tournament?.details ? null : (
     <>
       <Title>Tournament Information</Title>
       <section>
         <TournamentLi name={tournament.title} sport={alternativeSportsNames.get(tournament.details.sport) as Sport}>
-          <TournamentStatusLabel status={tournament.details.state as TournamentStatus} >
-            {tournament.details.state}
-          </TournamentStatusLabel>
+          <div className='flex items-center gap-1'>
+            <StatusLabel status={tournament.details.state as Status} >
+              {tournament.details.state}
+            </StatusLabel>
+            <Link className='rounded-full' href={`${router.asPath}/matches`}>
+              {!isPending(tournament.details.state) && <OutlinedButton icon={BsArrowRight}>Go to matches</OutlinedButton>}
+            </Link>
+          </div>
         </TournamentLi>
       </section>
       <section>
-        
-      </section>
-      <section>
         <Subtitle>Tournament Details</Subtitle>
-        <div className='flex justify-between flex-wrap'>
-          <div className='text-center'>
-            <div className='flex items-center gap-2'>
+        <div className='grid grid-cols-2 md:grid-cols-3 gap-4 text-center'>
+          <div>
+            <div className='flex justify-center items-center gap-2'>
               <BsCheckCircle />
               <p className='font-semibold'>Availability</p>
             </div>
             {tournament.details.availability === 'PUBLIC' ? 'Public' : 'Private'}
           </div>
-          <div className='text-center'>
-            <div className='flex items-center gap-2'>
+          <div>
+            <div className='flex justify-center items-center gap-2'>
               <BsClock />
               <p className='font-semibold'>Match duration</p>
             </div>
             {tournament.details.matchDuration} minutes
           </div>
-          <div className='text-center'>
-            <div className='flex items-center gap-2'>
+          <div>
+            <div className='flex justify-center items-center gap-2'>
               <BsPinMap />
               <p className='font-semibold'>Number of playgrounds</p>
             </div>
-            {tournament.details.grounds}
+            {tournament.details.playgrounds}
           </div>
-          <div className='text-center'>
-            <div className='flex items-center gap-2'>
+          <div>
+            <div className='flex justify-center items-center gap-2'>
+              <BsPerson className='text-xl' />
+              <p className='font-semibold'>Team size</p>
+            </div>
+            {tournament.details.teamSize}
+          </div>
+          <div>
+            <div className='flex justify-center items-center gap-2'>
               <BsPersonGear className='text-xl' />
               <p className='font-semibold'>Manager</p>
             </div>
             {`${manager?.firstName} ${manager?.lastName}`}
           </div>
-          {userIsManager() &&
-          <div className='text-center'>
-            <div className='flex items-center gap-2'>
+          {userIsManager(user.id, tournament) && tournament.details.state === Status.Pending &&
+          <div>
+            <div className='flex justify-center items-center gap-2'>
               <BsPersonPlus className='text-xl' />
               <p className='font-semibold'>Invitation code</p>
             </div>
@@ -135,7 +176,7 @@ const Page = () => {
       <section>
         <div className='flex items-center justify-between'>
           <Subtitle>Teams</Subtitle>
-          {userIsManager() && <OutlinedButton icon={BsPlusLg}>Create team</OutlinedButton>}
+          {userIsManager(user.id, tournament) && isPending(tournament.details.state) && <Link className='rounded-full' href={`${router.asPath}/teams/create`}><OutlinedButton icon={BsPlusLg}>Create team</OutlinedButton></Link>}
         </div>
         { isTeamsLoading ? <LoadingSpinner /> :
         !teams.length ? <p>There aren&apos;t any teams yet.</p> :
@@ -143,16 +184,13 @@ const Page = () => {
           {teams.map(team => {
             const sport = alternativeSportsNames.get(tournament.details.sport);
             return (
-              <TeamLi key={team.id} name={team.name} sport={sport as Sport} />
+              <TeamLi key={team.id} name={team.title} sport={sport as Sport} />
             )})}
         </ul>}
       </section>
-      {userIsManager() && <>
+      {userIsManager(user.id, tournament) && isPending(tournament.details.state) &&
         <section>
-          <div className='flex items-center justify-between'>
-            <Subtitle>Pending Requests</Subtitle>
-            <OutlinedButton icon={BsPlusLg}>Invite</OutlinedButton>
-          </div>
+          <Subtitle>Pending Requests</Subtitle>
           { isPendingUsersLoading ? <LoadingSpinner /> :
           !pendingUsers.length ? <p>There aren&apos;t any pending requests.</p> :
           <ul className='flex flex-col gap-1'>
@@ -161,9 +199,12 @@ const Page = () => {
                 <GradientButton type='light' attributes={{onClick: () => acceptUserHandler(pendingUser)}}>Accept</GradientButton>
               </UserLi>))}
           </ul>}
-        </section>
+        </section>}
         <section>
-          <Subtitle>Players</Subtitle>
+          <div className='flex justify-between items-center'>
+            <Subtitle>Players</Subtitle>
+            {userIsManager(user.id, tournament) && isPending(tournament.details.state) && <OutlinedButton icon={BsPlusLg} attributes={{onClick: () => setInviteUserVisible(true)}}>Invite</OutlinedButton>}
+          </div>
           { isPlayersLoading ? <LoadingSpinner /> :
           !tournamentPlayers.length ? <p>There aren&apos;t any players yet.</p> :
           <ul className='flex flex-col gap-1'>
@@ -172,36 +213,30 @@ const Page = () => {
               </UserLi>))}
           </ul>}
         </section>
-        <section>
-          <Subtitle>Options</Subtitle>
-          <Form attributes={{onSubmit: handleSubmit(onSubmit)}}>
-            <RadioGroup error={errors.assignment} attributes={{...register('assignment')}} label='Manual Assignment' choices={['Yes', 'No']} />
-            <div className='self-center'>
-              { isSubmitting ? <LoadingSpinner /> : <GradientButton type='light'>Start</GradientButton> }
-            </div>
-          </Form>
-        </section>
-      </>}
-      {/* <section>
-        <Subtitle>Matches</Subtitle>
-        <ul className='flex flex-col gap-1'>
-          <MatchLi homeTeam='Zamalek' awayTeam='Al Ahly'>VS</MatchLi>
-          <MatchLi homeTeam='Zamalek' awayTeam='Al Ahly'>3 - 1</MatchLi>
-        </ul>
-      </section>
-      <section>
-        <Subtitle>Standings</Subtitle>
-        <Standings headers={['Team', 'Points']} teams={[['Zamalek', 86], ['Al Ahly', 54]]} />
-      </section>
-      <section>
-        <Subtitle>Statistics</Subtitle>
-        <ListItem key={3} icon={BsStar} title='Zamalek' subtitle='Most Goals'>
-          <p className='text-tournamento-400 text-3xl'>65</p>
-        </ListItem>
-        <ListItem key={3} icon={BsStar} title='Al Ahly' subtitle='Consecutive Defeats'>
-          <p className='text-tournamento-400 text-3xl'>10</p>
-        </ListItem>
-      </section> */}
+        {userIsManager(user.id, tournament) && isPending(tournament.details.state) &&
+        <div className='self-center'>
+          <GradientButton type='light' attributes={{onClick: startTournamentHandler}}>
+            Start
+          </GradientButton>
+        </div>}
+        {!isPending(tournament.details.state) && mostScoringPlayer && mostScoringTeam &&
+         <section>
+          <Subtitle>Statistics</Subtitle>
+          <ListItem icon={BsStar} title={mostScoringTeam.title} subtitle='Most Scoring Team'>
+            <p className='text-tournamento-400 text-3xl'>65</p>
+          </ListItem>
+          <ListItem icon={BsStar} title={`${mostScoringPlayer.firstName} ${mostScoringPlayer.lastName}`} subtitle='Most Scoring Player'>
+            <p className='text-tournamento-400 text-3xl'>10</p>
+          </ListItem>
+        </section>}
+      <Modal title='Invite User' isOpen={inviteUserVisible} close={closeInviteUser}>
+        <Form attributes={{onSubmit: handleSubmitInviteForm(onSubmitInviteUser)}}>
+          <SquareInput error={errorsInviteForm.email} label='Enter below the email address of the user' attributes={{...registerInviteForm('email')}} />
+          <div className='self-center'>
+            {isInviteFormSubmitting ? <LoadingSpinner /> : <GradientButton type='light' attributes={{type: 'submit'}}>Invite</GradientButton>}
+          </div>
+        </Form>
+      </Modal>
     </>
   );
 }

@@ -1,18 +1,9 @@
-import OutlinedButton from "@/components/buttons/outlined-button";
+import MatchLi from "@/components/list items/match-li";
+import MatchUnassignedLi from "@/components/list items/match-unassigned-li";
 import Subtitle from "@/components/misc/subtitle";
 import Title from "@/components/misc/title";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { ReactNode } from "react";
-import { BsArrowRight, BsPlusLg } from "react-icons/bs";
-import TournamentHistoryLi from "@/components/list items/tournament-history-li";
-import GradientButton from "@/components/buttons/gradient-button";
-import Link from "next/link";
-import UserLi from "@/components/list items/user-li";
-import TeamLi from "@/components/list items/team-li";
-import TournamentStatusLabel from "@/components/misc/state-label";
-import { Sport } from "@/utils/types";
-import MatchLi from "@/components/list items/match-li";
-import MatchUnassignedLi from "@/components/list items/match-unassigned-li";
 
 const Page = () => {
   return (

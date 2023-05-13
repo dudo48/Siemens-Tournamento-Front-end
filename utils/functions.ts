@@ -1,4 +1,4 @@
-import { Sport } from "./types";
+import { Match, Sport, Status, Tournament } from "./types";
 
 // get the ordinal suffix of a number
 export const getOrdinalSuffix = (x: number) => {
@@ -17,3 +17,8 @@ export const getOrdinalSuffix = (x: number) => {
 
   return 'th';
 }
+
+export const userIsManager = (userId: number, tournament: Tournament) => userId === tournament.managerId
+export const isPending = (status: Status|string) => status === Status.Pending
+export const hasStarted = (status: Status|string) => status === Status.Started
+export const hasEnded = (status: Status|string) => status === Status.Ended

@@ -5,7 +5,7 @@ import SquareInput from "@/components/forms/square-input";
 import TournamentLi from "@/components/list items/tournament-li";
 import LoadingSpinner from "@/components/misc/loading-spinner";
 import Modal from "@/components/misc/modal";
-import TournamentStatusLabel from "@/components/misc/state-label";
+import StatusLabel from "@/components/misc/state-label";
 import Subtitle from "@/components/misc/subtitle";
 import Title from "@/components/misc/title";
 import { UserContext } from "@/context/user-context";
@@ -13,7 +13,7 @@ import PrimaryLayout from "@/layouts/primary-layout";
 import { useUserRequestedTournaments, useUserTournaments } from "@/services/user-service";
 import { usePublicTournaments, useTournamentRequests } from "@/services/tournament-service";
 import { alternativeSportsNames } from "@/utils/mappings";
-import { Sport, Tournament, TournamentStatus } from "@/utils/types";
+import { Sport, Tournament, Status } from "@/utils/types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { ReactNode, useContext, useState } from "react";
@@ -32,13 +32,12 @@ const Page = () => {
   const [joinTournamentVisible, setJoinTournamentVisible] = useState(false);
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({resolver: yupResolver(schema) });
   const { joinTournamentById, joinTournamentByCode, exitTournament } = useTournamentRequests(user.id);
-  const { publicTournaments: data, isLoading: publicTournamentsLoading } = usePublicTournaments();
+  const { publicTournaments, isLoading: publicTournamentsLoading } = usePublicTournaments();
   const { userTournaments, isLoading: userTournamentsLoading, mutate: mutateUserTournaments } = useUserTournaments(user.id);
   const { userRequestedTournaments, mutate: mutateUserRequestedTournaments } = useUserRequestedTournaments(user.id);
   
-  // filter out the user's own tournaments
-  const availableTournaments = data.filter(t => t.managerId !== user.id);
-  console.log(userRequestedTournaments);
+  // filter out the tournaments the user is already in
+  const availableTournaments = publicTournaments.filter(t => !userTournaments.some(ut => ut.id === t.id));
   
   const closeJoinTournament = () => {
     setJoinTournamentVisible(false);
@@ -54,8 +53,10 @@ const Page = () => {
     if (result.status) {
       toast.success('Join request was sent successfully!');
     } else {
-      toast.error(`Join request failed.`);
+      toast.error(`Join request failed: Wrong code.`);
     }
+
+    closeJoinTournament()
   }
 
   const joinById = async (tournament: Tournament) => {
@@ -98,6 +99,29 @@ const Page = () => {
         </Link>
       </section>
       <section>
+        <Subtitle>Tournament Invitations</Subtitle>
+        { userTournamentsLoading ? <LoadingSpinner /> :
+        !userTournaments.length ? <p>You don&apos;t have any invitations at the moment.</p> :
+        <ul>
+          {[...userTournaments].reverse().map(tournament => {
+            const sport = alternativeSportsNames.get(tournament.details.sport);
+            const status = tournament.details.state;
+            return (
+              <TournamentLi key={tournament.id} id={tournament.id} name={tournament.title} sport={sport as Sport}>
+                <div className='flex items-center gap-1'>
+                  <StatusLabel status={status as Status} >
+                    {status}
+                  </StatusLabel>
+                  {tournament.managerId !== user.id && 
+                    <GradientButton type='red' attributes={{onClick: () => exitTournamentHandler(tournament)}}>
+                      Leave
+                    </GradientButton>}
+                </div>
+              </TournamentLi>
+            )})}
+        </ul>}
+      </section>
+      <section>
         <Subtitle>My Tournaments</Subtitle>
         { userTournamentsLoading ? <LoadingSpinner /> :
         !userTournaments.length ? <p>You aren&apos;t in any tournaments at the moment.</p> :
@@ -107,26 +131,31 @@ const Page = () => {
             const status = tournament.details.state;
             return (
               <TournamentLi key={tournament.id} id={tournament.id} name={tournament.title} sport={sport as Sport}>
-                <TournamentStatusLabel status={status as TournamentStatus} >
-                  {status}
-                </TournamentStatusLabel>
+                <div className='flex items-center gap-1'>
+                  <StatusLabel status={status as Status} >
+                    {status}
+                  </StatusLabel>
+                  {tournament.managerId !== user.id && 
+                    <GradientButton type='red' attributes={{onClick: () => exitTournamentHandler(tournament)}}>
+                      Leave
+                    </GradientButton>}
+                </div>
               </TournamentLi>
             )})}
         </ul>}
       </section>
       <section>
-        <Subtitle>Public Tournaments: ({publicTournamentsLoading ? '?' : availableTournaments.length})</Subtitle>
+        <Subtitle>Available Public Tournaments ({publicTournamentsLoading ? '?' : availableTournaments.length}):</Subtitle>
         { publicTournamentsLoading ? <LoadingSpinner /> :
         !availableTournaments.length ? <p>There aren&apos;t any tournaments available at the moment.</p> :
         <ul>
           {[...availableTournaments].reverse().map(tournament => {
             const sport = alternativeSportsNames.get(tournament.details.sport);
-            const joinedTournament = !!userTournaments.find(t => t.id === tournament.id);
-            const joinRequestSent = !!userRequestedTournaments.find(t => t.id === tournament.id);
+            const joinRequestSent = userRequestedTournaments.some(t => t.id === tournament.id);
             return (
               <TournamentLi key={tournament.id} id={tournament.id} name={tournament.title} sport={sport as Sport}>
-                <GradientButton type={joinedTournament ? 'red' : joinRequestSent ? 'orange' : 'light'} attributes={{onClick: joinedTournament ? () => exitTournamentHandler(tournament) : () => joinById(tournament), disabled: joinRequestSent}}>
-                  {joinedTournament ? 'Leave' : joinRequestSent ? 'Request sent' : 'Join'}
+                <GradientButton type={joinRequestSent ? 'orange' : 'light'} attributes={{onClick: () => joinById(tournament), disabled: joinRequestSent}}>
+                  {joinRequestSent ? 'Request sent' : 'Join'}
                 </GradientButton>
               </TournamentLi>
             )})}
@@ -136,7 +165,7 @@ const Page = () => {
         <Form attributes={{onSubmit: handleSubmit(joinByCode)}}>
           <SquareInput error={errors.code} label='Enter below the join code for the tournament' attributes={{...register('code')}} />
           <div className='self-center'>
-            {isSubmitting ? <LoadingSpinner /> : <GradientButton type='light' attributes={{type: 'submit'}}>Connect</GradientButton>}
+            {isSubmitting ? <LoadingSpinner /> : <GradientButton type='light' attributes={{type: 'submit'}}>Join</GradientButton>}
           </div>
         </Form>
       </Modal>

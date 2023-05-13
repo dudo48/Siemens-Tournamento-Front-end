@@ -50,15 +50,10 @@ const Page = () => {
         <Form attributes={{onSubmit: handleSubmit(onSubmit)}}>
           <SquareInput error={errors.firstName} label='First name' attributes={{...register('firstName'), placeholder: 'First name'}}/>
           <SquareInput error={errors.lastName} label='Last name' attributes={{...register('lastName'), placeholder: 'Last name'}}/>
-          <SquareInput error={errors.password} label='New password' attributes={{...register('password'), type:'password', placeholder: 'Password'}}/>
-          <SquareInput error={errors.confirmPassword} label='Confirm new password' attributes={{...register('confirmPassword'), type:'password', placeholder: 'Confirm new password'}}/>
           <div className='self-center'>
             <GradientButton type='light' grayscale={!isDirty} attributes={{type: 'submit', disabled: !isDirty}}>Confirm</GradientButton>
           </div>
         </Form>
-        <div>
-          <GradientButton type='red'>DELETE ACCOUNT</GradientButton>
-        </div>
       </section>
     </>
   );
