@@ -50,7 +50,7 @@ const Page = () => {
             {isSubmitting ? <LoadingSpinner /> : <GradientButton type='dark' attributes={{type: 'submit'}}>Login</GradientButton>}
           </div>
         </Form>
-        <p>Forgot password? <Link className='hover:underline font-semibold' href='/reset-password'>Reset password</Link>.</p>
+        <p>Forgot password? <Link className='hover:underline font-semibold' href='/forgot-password'>Reset password</Link>.</p>
       </div>
       <div>
         <p>Do not have an account? <Link className='hover:underline font-semibold' href='/register'>Sign up</Link>.</p>

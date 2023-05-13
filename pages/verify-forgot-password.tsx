@@ -1,17 +1,15 @@
 import GradientButton from "@/components/buttons/gradient-button";
 import Form from "@/components/forms/form";
 import RoundedInput from "@/components/forms/rounded-input";
-import SecondaryLayout from "@/layouts/secondary-layout";
-import { redirect } from "next/navigation";
-import { ChangeEvent, FormEvent, ReactNode, useContext, useState } from "react";
-import { useRouter } from "next/router";
-import { UserContext } from "@/context/user-context";
-import { toast } from "react-toastify";
-import { useAuthentication } from "@/services/authentication-service";
 import LoadingSpinner from "@/components/misc/loading-spinner";
-import { InferType, object, string } from "yup";
+import SecondaryLayout from "@/layouts/secondary-layout";
+import { useAuthentication } from "@/services/authentication-service";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/router";
+import { ReactNode } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { InferType, object, string } from "yup";
 
 const schema = object({
   code: string().required('Please enter the code we sent you.')
@@ -20,21 +18,18 @@ type FormData = InferType<typeof schema>
 
 const Page = () => {
   const router = useRouter();
-  const { id } = router.query;
-  const { setUser } = useContext(UserContext);
-  const { verifyUser } = useAuthentication();
+  const { email } = router.query;
+  const { resetPassword } = useAuthentication();
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({resolver: yupResolver(schema) });
 
   const onSubmit = async (data: FormData) => {
     console.log(data);
 
-    const result = await verifyUser(id as string, data.code);
+    const result = await resetPassword(email as string, data.code);
     console.log(result);
     
-    if (result.status && result.data) {
-      localStorage.setItem('user', JSON.stringify(result.data));
-      setUser(result.data);
-      toast.success('Logged in successfully!');
+    if (result.status) {
+      router.push(`/create-new-password?email=${email}`);
     } else {
       toast.error('The code you entered is not the code we sent you!');
     }

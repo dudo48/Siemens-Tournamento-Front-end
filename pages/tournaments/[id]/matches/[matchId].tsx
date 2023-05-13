@@ -9,7 +9,7 @@ import PrimaryLayout from "@/layouts/primary-layout";
 import { useMatch, useMatchManagement } from "@/services/match-service";
 import { useTournament } from "@/services/tournament-service";
 import { hasEnded, hasStarted, userIsManager } from "@/utils/functions";
-import { Match } from "@/utils/types";
+import { Match, Team } from "@/utils/types";
 import { useRouter } from "next/router";
 import { ReactNode, useContext, useEffect, useState } from "react";
 import { BsDashLg, BsPlusLg } from "react-icons/bs";
@@ -30,10 +30,19 @@ const Page = () => {
 
   useEffect(() => {
     if (match && hasEnded(match?.state)) {
-      const score: {[key: number]: number} = {}
+      // initialize players scores
+      let score: {[key: number]: number} = {}
       match.score.scoreSheet.forEach(s => score[s.scorer as number] = s.points);
       setPlayersScore(score);
-      console.log(match.score.scoreSheet[0].points)
+
+      // initialize teams scores
+      score = {}
+      score[match.teamOne.id] = match.teamOne.id === (match.score.winner as Team).id ? match.score.winnerScore : match.score.loserScore;
+      score[match.teamTwo.id] = match.teamTwo.id === (match.score.winner as Team).id ? match.score.winnerScore : match.score.loserScore;
+      match.score.scoreSheet.forEach(s => score[s.scorer as number] = s.points);
+      setTeamScores(score);
+
+      console.log(match)
     }
   }, [match])
 

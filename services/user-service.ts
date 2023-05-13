@@ -1,6 +1,6 @@
-import { Tournament, User, UserProfile } from "@/utils/types";
+import { Tournament, User } from "@/utils/types";
 import useSWR from "swr";
-import { getRequest } from "./services";
+import { getRequest, patchRequest } from "./services";
 
 const baseUrl = 'http://localhost:5000/player';
 
@@ -14,6 +14,10 @@ export const useProfile = (userId: number) => {
     error
   };
 }
+
+export const useProfileManagement = () => ({
+  updateProfile: (userId: number, data: {[key: string]: string}) => patchRequest(`${baseUrl}/updateProfile/${userId}`, data),
+})
 
 export const useStatistics = (userId: number) => {
   const url = `${baseUrl}/getStatistics/${userId}`;

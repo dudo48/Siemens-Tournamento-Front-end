@@ -31,6 +31,22 @@ export const putRequest = (url: string, payload?: {[key: string]: any}) => (
     return {data: json, status: res.ok};
   })
 );
+export const patchRequest = (url: string, payload?: {[key: string]: any}) => (
+  fetch(url, {
+    method: 'PATCH',
+    headers: {'Content-Type': 'application/json'},
+    ...(payload && { body: JSON.stringify(payload) })
+  }).then(async (res) => {
+    let json;
+    try {
+      json = await res.json();
+    } catch (e) {
+      json = null;
+    }
+
+    return {data: json, status: res.ok};
+  })
+);
 export const deleteRequest = (url: string) => fetch(url, {
   method: 'DELETE'
 }).then(async (res) => {

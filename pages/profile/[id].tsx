@@ -24,14 +24,12 @@ const Page = () => {
         {user.id === profileId && <Link href='/profile/edit'><GradientButton type='light'>Edit your profile</GradientButton></Link>}
       </div>
       <section className='flex flex-col'>
-        <div className='flex items-center gap-4'>
-          <div className='w-64'>
-            <ProfilePhoto />
-          </div>
-          <div>
-            <h1 className='text-3xl'>{`${profile?.firstName} ${profile?.lastName}`}</h1>
-            <h2 className='text-lg'>{`${profile?.email}`}</h2>
-          </div>
+        <div className='w-32 md:w-64 mx-auto'>
+          <ProfilePhoto />
+        </div>
+        <div className='w-full text-center'>
+          <h1 className='text-3xl'>{profile?.firstName} {profile?.lastName}</h1>
+          <h2 className='text-lg'>{profile?.email}</h2>
         </div>
       </section>
     </>

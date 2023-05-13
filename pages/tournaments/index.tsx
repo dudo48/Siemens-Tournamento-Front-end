@@ -21,6 +21,7 @@ import { useForm } from "react-hook-form";
 import { BsPlusLg } from "react-icons/bs";
 import { toast } from "react-toastify";
 import { InferType, object, string } from "yup";
+import { isPending, userIsManager } from "@/utils/functions";
 
 const schema = object({
   code: string().required('Please enter the join code.'),
@@ -36,8 +37,8 @@ const Page = () => {
   const { userTournaments, isLoading: userTournamentsLoading, mutate: mutateUserTournaments } = useUserTournaments(user.id);
   const { userRequestedTournaments, mutate: mutateUserRequestedTournaments } = useUserRequestedTournaments(user.id);
   
-  // filter out the tournaments the user is already in
-  const availableTournaments = publicTournaments.filter(t => !userTournaments.some(ut => ut.id === t.id));
+  // filter out the tournaments the user is already in and non pending tournaments
+  const availableTournaments = publicTournaments.filter(t => !userTournaments.some(ut => ut.id === t.id)).filter(t => isPending(t.details.state));
   
   const closeJoinTournament = () => {
     setJoinTournamentVisible(false);
@@ -99,29 +100,6 @@ const Page = () => {
         </Link>
       </section>
       <section>
-        <Subtitle>Tournament Invitations</Subtitle>
-        { userTournamentsLoading ? <LoadingSpinner /> :
-        !userTournaments.length ? <p>You don&apos;t have any invitations at the moment.</p> :
-        <ul>
-          {[...userTournaments].reverse().map(tournament => {
-            const sport = alternativeSportsNames.get(tournament.details.sport);
-            const status = tournament.details.state;
-            return (
-              <TournamentLi key={tournament.id} id={tournament.id} name={tournament.title} sport={sport as Sport}>
-                <div className='flex items-center gap-1'>
-                  <StatusLabel status={status as Status} >
-                    {status}
-                  </StatusLabel>
-                  {tournament.managerId !== user.id && 
-                    <GradientButton type='red' attributes={{onClick: () => exitTournamentHandler(tournament)}}>
-                      Leave
-                    </GradientButton>}
-                </div>
-              </TournamentLi>
-            )})}
-        </ul>}
-      </section>
-      <section>
         <Subtitle>My Tournaments</Subtitle>
         { userTournamentsLoading ? <LoadingSpinner /> :
         !userTournaments.length ? <p>You aren&apos;t in any tournaments at the moment.</p> :
@@ -135,7 +113,7 @@ const Page = () => {
                   <StatusLabel status={status as Status} >
                     {status}
                   </StatusLabel>
-                  {tournament.managerId !== user.id && 
+                  {!userIsManager(user.id, tournament) && isPending(tournament.details.state) &&
                     <GradientButton type='red' attributes={{onClick: () => exitTournamentHandler(tournament)}}>
                       Leave
                     </GradientButton>}

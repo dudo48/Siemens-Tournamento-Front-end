@@ -1,7 +1,6 @@
 import GradientButton from "@/components/buttons/gradient-button";
 import OutlinedButton from "@/components/buttons/outlined-button";
 import Form from "@/components/forms/form";
-import RadioGroup from "@/components/forms/radio-group";
 import SquareInput from "@/components/forms/square-input";
 import ListItem from "@/components/list items/list-item";
 import TeamLi from "@/components/list items/team-li";
@@ -17,7 +16,7 @@ import PrimaryLayout from "@/layouts/primary-layout";
 import { useTeams } from "@/services/team-service";
 import { useMostScoringPlayer, useMostScoringTeam, useTournament, useTournamentManagement, useTournamentPendingUsers, useTournamentPlayers, useTournamentPlayersManagement } from "@/services/tournament-service";
 import { useProfile } from "@/services/user-service";
-import { hasStarted, isPending, userIsManager } from "@/utils/functions";
+import { isPending, userIsManager } from "@/utils/functions";
 import { alternativeSportsNames } from "@/utils/mappings";
 import { Sport, Status, User } from "@/utils/types";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -57,6 +56,7 @@ const Page = () => {
   const { profile: manager } = useProfile(tournament?.managerId as number);
   const { mostScoringPlayer } = useMostScoringPlayer(tournamentId);
   const { mostScoringTeam } = useMostScoringTeam(tournamentId);
+  const [isStartLoading, setIsStartLoading] = useState(false);
 
   const acceptUserHandler = async (user: User) => {
     const result = await acceptUser(user.id);
@@ -92,12 +92,19 @@ const Page = () => {
   }
 
   const startTournamentHandler = async () => {
+    console.log(teams);
+    if (!(teams.length >= 2 && teams.length % 2 === 0)) {
+      toast.error('You can only start a tournament with a minimum of two teams and an even numbers of teams.');
+      return;
+    }
+    setIsStartLoading(true);
+    
     const result = await startTournament(tournamentId);
     console.log(result);
 
     if (result.status) {
-      toast.success('Tournament started: let\'s go!!');
-      router.push(`${router.asPath}/rounds`)
+      toast.success('Tournament started: let\'s go!');
+      router.push(`${router.asPath}/matches`)
     } else {
       toast.error(`Tournament failed to start`);
     }
@@ -180,7 +187,7 @@ const Page = () => {
         </div>
         { isTeamsLoading ? <LoadingSpinner /> :
         !teams.length ? <p>There aren&apos;t any teams yet.</p> :
-        <ul className='flex flex-col gap-1'>
+        <ul className='grid grid-cols-2 md:grids-cols-3 gap-4'>
           {teams.map(team => {
             const sport = alternativeSportsNames.get(tournament.details.sport);
             return (
@@ -203,11 +210,11 @@ const Page = () => {
         <section>
           <div className='flex justify-between items-center'>
             <Subtitle>Players</Subtitle>
-            {userIsManager(user.id, tournament) && isPending(tournament.details.state) && <OutlinedButton icon={BsPlusLg} attributes={{onClick: () => setInviteUserVisible(true)}}>Invite</OutlinedButton>}
+            {/* {userIsManager(user.id, tournament) && isPending(tournament.details.state) && <OutlinedButton icon={BsPlusLg} attributes={{onClick: () => setInviteUserVisible(true)}}>Invite</OutlinedButton>} */}
           </div>
           { isPlayersLoading ? <LoadingSpinner /> :
           !tournamentPlayers.length ? <p>There aren&apos;t any players yet.</p> :
-          <ul className='flex flex-col gap-1'>
+          <ul className='grid grid-cols-2 md:grids-cols-3 gap-4'>
             {tournamentPlayers.map(player => (
               <UserLi key={player.id} name={`${player.firstName} ${player.lastName}`}>
               </UserLi>))}
@@ -215,9 +222,10 @@ const Page = () => {
         </section>
         {userIsManager(user.id, tournament) && isPending(tournament.details.state) &&
         <div className='self-center'>
+          {isStartLoading ? <LoadingSpinner /> :
           <GradientButton type='light' attributes={{onClick: startTournamentHandler}}>
             Start
-          </GradientButton>
+          </GradientButton>}
         </div>}
         {!isPending(tournament.details.state) && mostScoringPlayer && mostScoringTeam &&
          <section>
