@@ -22,6 +22,7 @@ import { BsPlusLg } from "react-icons/bs";
 import { toast } from "react-toastify";
 import { InferType, object, string } from "yup";
 import { isPending, userIsManager } from "@/utils/functions";
+import { useTeam, useTeams } from "@/services/team-service";
 
 const schema = object({
   code: string().required('Please enter the join code.'),
@@ -80,7 +81,7 @@ const Page = () => {
     if (result.status) {
       toast.success('Tournament exited successfully!');
     } else {
-      toast.error(`Exit request failed.`);
+      toast.error(`Exit request failed: You aren't in this tournament, or you're in a team in it.`);
     }
 
     mutateUserTournaments(userTournaments.filter(t => t.id !== tournament.id));
@@ -125,7 +126,7 @@ const Page = () => {
         </ul>}
       </section>
       <section>
-        <Subtitle>Available Public Tournaments ({publicTournamentsLoading ? '?' : availableTournaments.length}):</Subtitle>
+        <Subtitle>Available Public Tournaments ({publicTournamentsLoading ? '?' : availableTournaments.length})</Subtitle>
         { publicTournamentsLoading ? <LoadingSpinner /> :
         !availableTournaments.length ? <p>There aren&apos;t any tournaments available at the moment.</p> :
         <ul>

@@ -95,8 +95,8 @@ const Page = () => {
 
   const startTournamentHandler = async () => {
     console.log(teams);
-    if (!(teams.length >= 2 && teams.length % 2 === 0)) {
-      toast.error('You can only start a tournament with a minimum of two teams and an even numbers of teams.');
+    if (!(teams.length > 1 && Math.log2(teams.length) % 1 === 0)) {
+      toast.error('You can only start a tournament with a minimum of two teams, and a number of teams which is a power of two.');
       return;
     }
     setIsStartLoading(true);
@@ -205,7 +205,7 @@ const Page = () => {
       </section>
       <section>
         <div className='flex items-center justify-between'>
-          <Subtitle>Teams</Subtitle>
+          <Subtitle>{`Teams (${teams.length})`}</Subtitle>
           {userIsManager(user.id, tournament) && isPending(tournament.details.state) && <Link className='rounded-full' href={`${router.asPath}/teams/create`}><OutlinedButton icon={BsPlusLg}>Create team</OutlinedButton></Link>}
         </div>
         { isTeamsLoading ? <LoadingSpinner /> :
@@ -238,7 +238,7 @@ const Page = () => {
         </section>}
         <section>
           <div className='flex justify-between items-center'>
-            <Subtitle>Players</Subtitle>
+            <Subtitle>{`Player (${tournamentPlayers.length})`}</Subtitle>
             {/* {userIsManager(user.id, tournament) && isPending(tournament.details.state) && <OutlinedButton icon={BsPlusLg} attributes={{onClick: () => setInviteUserVisible(true)}}>Invite</OutlinedButton>} */}
           </div>
           { isPlayersLoading ? <LoadingSpinner /> :
