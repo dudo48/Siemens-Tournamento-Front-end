@@ -238,7 +238,7 @@ const Page = () => {
         </section>}
         <section>
           <div className='flex justify-between items-center'>
-            <Subtitle>{`Player (${tournamentPlayers.length})`}</Subtitle>
+            <Subtitle>{`Players (${tournamentPlayers.length})`}</Subtitle>
             {/* {userIsManager(user.id, tournament) && isPending(tournament.details.state) && <OutlinedButton icon={BsPlusLg} attributes={{onClick: () => setInviteUserVisible(true)}}>Invite</OutlinedButton>} */}
           </div>
           { isPlayersLoading ? <LoadingSpinner /> :
