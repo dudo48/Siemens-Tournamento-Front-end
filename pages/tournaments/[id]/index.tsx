@@ -13,10 +13,10 @@ import Subtitle from "@/components/misc/subtitle";
 import Title from "@/components/misc/title";
 import { UserContext } from "@/context/user-context";
 import PrimaryLayout from "@/layouts/primary-layout";
-import { useTeams } from "@/services/team-service";
-import { useMostScoringPlayer, useMostScoringTeam, useTournament, useTournamentManagement, useTournamentPendingUsers, useTournamentPlayers, useTournamentPlayersManagement } from "@/services/tournament-service";
+import { useTeamManagement, useTeams } from "@/services/team-service";
+import { useMostScoringPlayer, useMostScoringTeam, useTournament, useTournamentManagement, useTournamentPendingUsers, useTournamentPlayers, useTournamentPlayersManagement, useTournamentRequests } from "@/services/tournament-service";
 import { useProfile } from "@/services/user-service";
-import { isPending, userIsManager } from "@/utils/functions";
+import { hasEnded, isPending, userIsManager } from "@/utils/functions";
 import { alternativeSportsNames } from "@/utils/mappings";
 import { Sport, Status, User } from "@/utils/types";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -49,14 +49,16 @@ const Page = () => {
   const { tournament, isLoading: isTournamentLoading } = useTournament(tournamentId);
   const { tournamentPlayers, isLoading: isPlayersLoading, mutate: mutateTournamentPlayers } = useTournamentPlayers(tournamentId);
   const { pendingUsers, isLoading: isPendingUsersLoading, mutate: mutateTournamentPendingUsers } = useTournamentPendingUsers(tournamentId);
-  const { teams, isLoading: isTeamsLoading } = useTeams(tournamentId);
+  const { teams, isLoading: isTeamsLoading, mutate: mutateTeams } = useTeams(tournamentId);
   const { acceptUser } = useTournamentPlayersManagement(tournamentId);
   const [inviteUserVisible, setInviteUserVisible] = useState(false);
   const { inviteUser, startTournament } = useTournamentManagement();
   const { profile: manager } = useProfile(tournament?.managerId as number);
-  const { mostScoringPlayer } = useMostScoringPlayer(tournamentId);
-  const { mostScoringTeam } = useMostScoringTeam(tournamentId);
+  const { mostScoringPlayer } = useMostScoringPlayer(tournamentId, tournament ? hasEnded(tournament?.details.state): false);
+  const { mostScoringTeam } = useMostScoringTeam(tournamentId, tournament ? hasEnded(tournament?.details.state): false);
   const [isStartLoading, setIsStartLoading] = useState(false);
+  const { deleteTeam } = useTeamManagement();
+  const { exitTournament } = useTournamentRequests();
 
   const acceptUserHandler = async (user: User) => {
     const result = await acceptUser(user.id);
@@ -99,6 +101,14 @@ const Page = () => {
     }
     setIsStartLoading(true);
     
+    // delete players unassociated with any team
+    tournamentPlayers.forEach(async p => {
+      if (!teams.some(t => t.players.some(pp => pp.id === p.id))) {
+        const exitResult = await exitTournament(p.id, tournamentId);
+        console.log(exitResult);
+      }
+    })
+    
     const result = await startTournament(tournamentId);
     console.log(result);
 
@@ -108,6 +118,19 @@ const Page = () => {
     } else {
       toast.error(`Tournament failed to start`);
     }
+  }
+
+  const deleteTeamHandler = async (teamId: number) => {
+    const result = await deleteTeam(teamId);
+    console.log(result);
+
+    if (result.status) {
+      toast.success('Team was deleted successfully!');
+    } else {
+      toast.error(`Request failed to delete team.`);
+    }
+
+    mutateTeams(teams.filter(t => t.id !== teamId));
   }
 
   const copyCodeToClipboard = () => {
@@ -187,11 +210,17 @@ const Page = () => {
         </div>
         { isTeamsLoading ? <LoadingSpinner /> :
         !teams.length ? <p>There aren&apos;t any teams yet.</p> :
-        <ul className='grid grid-cols-2 md:grids-cols-3 gap-4'>
+        <ul>
           {teams.map(team => {
             const sport = alternativeSportsNames.get(tournament.details.sport);
             return (
-              <TeamLi key={team.id} name={team.title} sport={sport as Sport} />
+              <TeamLi teamId={team.id} tournamentId={tournamentId} key={team.id} name={team.title} sport={sport as Sport}>
+                {isPending(tournament.details.state) ?
+                  userIsManager(user.id, tournament) && <GradientButton attributes={{onClick: () => deleteTeamHandler(team.id)}} type='red'>Delete</GradientButton> :
+                  <GradientButton attributes={{disabled: true}} type='light' grayscale={team.suspended}>
+                    {team.suspended ? 'Out' : hasEnded(tournament.details.state) ? 'Winner' : 'Standing'}
+                  </GradientButton>}
+              </TeamLi>
             )})}
         </ul>}
       </section>
@@ -202,7 +231,7 @@ const Page = () => {
           !pendingUsers.length ? <p>There aren&apos;t any pending requests.</p> :
           <ul className='flex flex-col gap-1'>
             {pendingUsers.map(pendingUser => (
-              <UserLi key={pendingUser.id} name={`${pendingUser.firstName} ${pendingUser.lastName}`}>
+              <UserLi id={pendingUser.id} key={pendingUser.id} name={`${pendingUser.firstName} ${pendingUser.lastName}`}>
                 <GradientButton type='light' attributes={{onClick: () => acceptUserHandler(pendingUser)}}>Accept</GradientButton>
               </UserLi>))}
           </ul>}
@@ -214,9 +243,9 @@ const Page = () => {
           </div>
           { isPlayersLoading ? <LoadingSpinner /> :
           !tournamentPlayers.length ? <p>There aren&apos;t any players yet.</p> :
-          <ul className='grid grid-cols-2 md:grids-cols-3 gap-4'>
+          <ul className='grid grid-cols-2 gap-4'>
             {tournamentPlayers.map(player => (
-              <UserLi key={player.id} name={`${player.firstName} ${player.lastName}`}>
+              <UserLi id={player.id} key={player.id} name={`${player.firstName} ${player.lastName}`}>
               </UserLi>))}
           </ul>}
         </section>
@@ -227,14 +256,14 @@ const Page = () => {
             Start
           </GradientButton>}
         </div>}
-        {!isPending(tournament.details.state) && mostScoringPlayer && mostScoringTeam &&
+        {hasEnded(tournament.details.state) && mostScoringPlayer && mostScoringTeam &&
          <section>
           <Subtitle>Statistics</Subtitle>
-          <ListItem icon={BsStar} title={mostScoringTeam.title} subtitle='Most Scoring Team'>
-            <p className='text-tournamento-400 text-3xl'>65</p>
+          <ListItem icon={BsStar} title={mostScoringTeam.object.title} subtitle='Most Scoring Team'>
+            <p className='text-tournamento-400 text-3xl'>{mostScoringTeam.score}</p>
           </ListItem>
-          <ListItem icon={BsStar} title={`${mostScoringPlayer.firstName} ${mostScoringPlayer.lastName}`} subtitle='Most Scoring Player'>
-            <p className='text-tournamento-400 text-3xl'>10</p>
+          <ListItem icon={BsStar} title={`${mostScoringPlayer.object.firstName} ${mostScoringPlayer.object.lastName}`} subtitle='Most Scoring Player'>
+            <p className='text-tournamento-400 text-3xl'>{mostScoringPlayer.score}</p>
           </ListItem>
         </section>}
       <Modal title='Invite User' isOpen={inviteUserVisible} close={closeInviteUser}>

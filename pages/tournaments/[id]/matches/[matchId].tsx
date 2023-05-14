@@ -39,7 +39,6 @@ const Page = () => {
       score = {}
       score[match.teamOne.id] = match.teamOne.id === (match.score.winner as Team).id ? match.score.winnerScore : match.score.loserScore;
       score[match.teamTwo.id] = match.teamTwo.id === (match.score.winner as Team).id ? match.score.winnerScore : match.score.loserScore;
-      match.score.scoreSheet.forEach(s => score[s.scorer as number] = s.points);
       setTeamScores(score);
 
       console.log(match)
@@ -87,6 +86,12 @@ const Page = () => {
 
   const endMatchHandler = async () => {
     if (!match) return null;
+
+    if(teamScores[match.teamOne.id] === teamScores[match.teamTwo.id]) {
+      toast.error('A knockout match can not end in a draw!');
+      return;
+    }
+
     setIsEndLoading(true)
 
     const scores = createScoresData(match)

@@ -9,7 +9,7 @@ import { UserContext } from "@/context/user-context";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { useMatchManagement, useMatches } from "@/services/match-service";
 import { useTournament, useTournamentManagement } from "@/services/tournament-service";
-import { hasEnded, userIsManager } from "@/utils/functions";
+import { hasEnded, hasStarted, userIsManager } from "@/utils/functions";
 import { Match, Status, Team } from "@/utils/types";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -26,8 +26,11 @@ const Page = () => {
 
   const { matches, isLoading: isMatchLoading, mutate: mutateMatches } = useMatches(tournamentId);
   const { startMatch } = useMatchManagement();
-  const rounds = matches.map(m => m.round).sort((a, b) => a - b);
   const { endTournament } = useTournamentManagement();
+
+  // get unique array of rounds
+  let rounds = matches.map(m => m.round)
+  rounds = rounds.filter((r, i) => rounds.indexOf(r) === i).sort((a, b) => a - b);
 
   console.log(matches);
 
@@ -89,7 +92,7 @@ const Page = () => {
     <>
       <div className='flex justify-between items-center'>
         <Title>Matches</Title>
-        {userIsManager(user.id, tournament) && allMatchesHaveEnded() &&
+        {userIsManager(user.id, tournament) && allMatchesHaveEnded() && hasStarted(tournament.details.state) &&
         (isEndLoading ? <LoadingSpinner /> :
          <OutlinedButton attributes={{onClick: nextRoundHandler}} icon={BsArrowRight}>
             End Tournament

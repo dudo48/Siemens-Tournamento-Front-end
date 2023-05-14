@@ -84,7 +84,7 @@ const Page = () => {
       {!incomingRequests.length ? <p>You don&apos;t have any requests.</p> :
         <ul className='flex flex-col gap-1'>
           {[...incomingRequests].reverse().map((connection, i) => (
-            <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
+            <UserLi id={connection.id} key={i} name={`${connection.firstName} ${connection.lastName}`}>
               <div className='flex gap-1'>
                 <GradientButton attributes={{onClick: () => accept(connection)}} type='light'>Accept</GradientButton>
                 <GradientButton attributes={{onClick: () => decline(connection.id)}} type='red'>Decline</GradientButton>
@@ -98,7 +98,7 @@ const Page = () => {
         !connections.length ? <><p>You don&apos;t have any connections. 😔</p><blockquote className='p-4'><q>Solitude is fine but you need someone to tell that solitude is fine.</q><p>― Honoré de Balzac</p></blockquote></> :
         <ul className='flex flex-col gap-1'>
           {[...connections].reverse().map((connection, i) => (
-            <UserLi key={i} name={`${connection.firstName} ${connection.lastName}`}>
+            <UserLi id={connection.id} key={i} name={`${connection.firstName} ${connection.lastName}`}>
               <GradientButton attributes={{onClick: () => deleteConnectionHandler(connection)}} type='red'>Delete</GradientButton>
             </UserLi>
           ))}

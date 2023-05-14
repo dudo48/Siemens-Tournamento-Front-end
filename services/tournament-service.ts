@@ -49,10 +49,10 @@ export const useTournamentPendingUsers = (tournamentId: number) => {
   };
 }
 
-export const useTournamentRequests = (userId: number) => ({
-  joinTournamentById: (tournamentId: number) => postRequest(`${baseUrl}/player/joinTournament/${userId}/${tournamentId}`),
-  joinTournamentByCode: (tournamentCode: string) => postRequest(`${baseUrl}/player/joinByCode/${userId}/${tournamentCode}`),
-  exitTournament: (tournamentId: number) => deleteRequest(`${baseUrl}/player/exitTournament/${userId}/${tournamentId}`)
+export const useTournamentRequests = () => ({
+  joinTournamentById: (userId: number, tournamentId: number) => postRequest(`${baseUrl}/player/joinTournament/${userId}/${tournamentId}`),
+  joinTournamentByCode: (userId: number, tournamentCode: string) => postRequest(`${baseUrl}/player/joinByCode/${userId}/${tournamentCode}`),
+  exitTournament: (userId: number, tournamentId: number) => deleteRequest(`${baseUrl}/player/exitTournament/${userId}/${tournamentId}`)
 })
 
 export const useTournamentManagement = () => ({
@@ -66,9 +66,9 @@ export const useTournamentPlayersManagement = (tournamentId: number) => ({
   acceptUser: (userId: number) => putRequest(`${baseUrl}/manage/accept/${tournamentId}/${userId}`),
 })
 
-export const useMostScoringTeam = (tournamentId: number) => {
+export const useMostScoringTeam = (tournamentId: number, shouldFetch: boolean) => {
   const url = `${baseUrl}/tourStats/mostScoringTeam/${tournamentId}`;
-  const { data, mutate, isLoading, error } = useSWR<Team>(tournamentId ? url : null, getRequest);
+  const { data, mutate, isLoading, error } = useSWR<{object: Team, score: number}>(tournamentId && shouldFetch ? url : null, getRequest);
   return {
     mostScoringTeam: data,
     mutate,
@@ -77,9 +77,9 @@ export const useMostScoringTeam = (tournamentId: number) => {
   };
 }
 
-export const useMostScoringPlayer = (tournamentId: number) => {
+export const useMostScoringPlayer = (tournamentId: number, shouldFetch: boolean) => {
   const url = `${baseUrl}/tourStats/mostScoringPlayer/${tournamentId}`;
-  const { data, mutate, isLoading, error } = useSWR<User>(tournamentId ? url : null, getRequest);
+  const { data, mutate, isLoading, error } = useSWR<{object: User, score: number}>(tournamentId && shouldFetch ? url : null, getRequest);
   return {
     mostScoringPlayer: data,
     mutate,

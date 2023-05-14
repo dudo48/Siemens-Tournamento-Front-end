@@ -15,10 +15,10 @@ const ListItem = ({ icon, title, subtitle, href, children }: PropsWithChildren<P
     <li className='flex justify-between items-center relative'>
       <div className='flex items-center'>
         {icon && <CircledIcon icon={icon} />}
-        <div className='pl-2'>
+        <div className='pl-2 flex flex-col items-start'>
           {href ? 
           <Link href={href}>
-            <p className={subtitle && 'text-lg hover:underline'}>
+            <p className={`${subtitle && 'text-lg'} hover:underline`}>
               {title}
             </p>
           </Link> : <p className={subtitle && 'text-lg'}>{title}</p>}

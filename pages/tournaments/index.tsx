@@ -32,7 +32,7 @@ const Page = () => {
   const { user } = useContext(UserContext);
   const [joinTournamentVisible, setJoinTournamentVisible] = useState(false);
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({resolver: yupResolver(schema) });
-  const { joinTournamentById, joinTournamentByCode, exitTournament } = useTournamentRequests(user.id);
+  const { joinTournamentById, joinTournamentByCode, exitTournament } = useTournamentRequests();
   const { publicTournaments, isLoading: publicTournamentsLoading } = usePublicTournaments();
   const { userTournaments, isLoading: userTournamentsLoading, mutate: mutateUserTournaments } = useUserTournaments(user.id);
   const { userRequestedTournaments, mutate: mutateUserRequestedTournaments } = useUserRequestedTournaments(user.id);
@@ -48,7 +48,7 @@ const Page = () => {
   const joinByCode = async (data: FormData) => {
     console.log(data);
 
-    const result = await joinTournamentByCode(data.code);
+    const result = await joinTournamentByCode(user.id, data.code);
     console.log(result, 'yes');
 
     if (result.status) {
@@ -61,7 +61,7 @@ const Page = () => {
   }
 
   const joinById = async (tournament: Tournament) => {
-    const result = await joinTournamentById(tournament.id);
+    const result = await joinTournamentById(user.id, tournament.id);
     console.log(result);
 
     if (result.status) {
@@ -74,7 +74,7 @@ const Page = () => {
   }
 
   const exitTournamentHandler = async (tournament: Tournament) => {
-    const result = await exitTournament(tournament.id);
+    const result = await exitTournament(user.id, tournament.id);
     console.log(result);
 
     if (result.status) {
@@ -83,7 +83,8 @@ const Page = () => {
       toast.error(`Exit request failed.`);
     }
 
-    mutateUserTournaments(userTournaments.filter(t => t.id !== tournament.id))
+    mutateUserTournaments(userTournaments.filter(t => t.id !== tournament.id));
+    mutateUserRequestedTournaments(userRequestedTournaments.filter(t => t.id !== tournament.id));
   }
 
   return (
@@ -108,8 +109,9 @@ const Page = () => {
             const sport = alternativeSportsNames.get(tournament.details.sport);
             const status = tournament.details.state;
             return (
-              <TournamentLi key={tournament.id} id={tournament.id} name={tournament.title} sport={sport as Sport}>
+              <TournamentLi key={tournament.id} id={tournament.id} name={tournament.title} sport={sport as Sport}>                
                 <div className='flex items-center gap-1'>
+                {userIsManager(user.id, tournament) && <GradientButton type='light' attributes={{disabled: true}}>MANAGER</GradientButton>}
                   <StatusLabel status={status as Status} >
                     {status}
                   </StatusLabel>

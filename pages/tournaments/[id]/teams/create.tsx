@@ -83,7 +83,7 @@ const Page = () => {
     if (result.status) {
       data.players.forEach(async p => await addPlayerToTeam(result.data.id, p.id));
       toast.success('Team was created successfully!');
-      router.back();
+      router.push(`/tournaments/${tournamentId}`);
     } else {
       toast.error(`Team creation failed.`);
     }

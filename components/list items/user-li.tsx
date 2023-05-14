@@ -4,12 +4,13 @@ import GradientButton from "../buttons/gradient-button";
 import { PropsWithChildren } from "react";
 
 interface Props {
-  name: string
+  name: string,
+  id?: number
 }
 
-const UserLi = ({name, children}: PropsWithChildren<Props>) => {
+const UserLi = ({id, name, children}: PropsWithChildren<Props>) => {
   return (
-    <ListItem icon={BsPerson} title={name}>
+    <ListItem icon={BsPerson} title={name} href={id === undefined ? id : `/profile/${id}`}>
       {children}
     </ListItem>
   );
