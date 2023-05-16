@@ -15,22 +15,26 @@ const Page = () => {
       <Title>Home</Title>
       <section>
         <div className='flex justify-between items-center'>
-          <Subtitle>YOU ARE IN!</Subtitle>
-          <GradientButton type='light'>Go now</GradientButton>
+          <Subtitle>Your are logged in!</Subtitle>
+          <Link className='rounded-full' href={'/tournaments'}>
+            <GradientButton type='light'>Go now</GradientButton>
+          </Link>
         </div>
         <div className='flex flex-col gap-1 items-start'>
-          <Link className='rounded-full' href={'/tournament/join'}>
+          <Link className='rounded-full' href={'/tournaments'}>
             <OutlinedButton icon={BsArrowRight}>Join Tournament</OutlinedButton>
           </Link>
-          <Link className='rounded-full' href={'/tournament/create'}>
+          <Link className='rounded-full' href={'/tournaments'}>
             <OutlinedButton icon={BsPlusLg}>Create Tournament</OutlinedButton>
           </Link>
         </div>
       </section>
       <section>
         <div className='flex justify-between items-center'>
-          <Subtitle>MAKE CONNECTIONS</Subtitle>
-          <GradientButton type='light'>Connect</GradientButton>
+          <Subtitle>Connections</Subtitle>
+          <Link className='rounded-full' href='/connections'>
+            <GradientButton type='light'>Connect</GradientButton>
+          </Link>
         </div>
         <div className='flex flex-col gap-1 items-start'>
           <Link className='rounded-full' href={'/connections'}>
@@ -39,12 +43,22 @@ const Page = () => {
         </div>
       </section>
       <section>
+        <div className='flex justify-between items-center'>
+          <Subtitle>Statistics</Subtitle>
+        </div>
+        <div className='flex flex-col gap-1 items-start'>
+          <Link className='rounded-full' href={'/statistics'}>
+            <OutlinedButton icon={BsArrowRight}>View Statistics</OutlinedButton>
+          </Link>
+        </div>
+      </section>
+      {/* <section>
         <Subtitle>LAST TOURNAMENTS</Subtitle>
         <ul className='flex flex-col gap-1'>
           <TournamentHistoryLi id={1} key={1} name='Champions League' sport={Sport.Football} position={1} />
           <TournamentHistoryLi id={2} key={2} name='Champions League' sport={Sport.TableTennis} position={5} />
         </ul>
-      </section>
+      </section> */}
     </>
   );
 }

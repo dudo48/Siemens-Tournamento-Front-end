@@ -34,7 +34,7 @@ const PrimaryLayout = ({children} : PropsWithChildren) => {
       </Head>
       <NotificationsContextProvider>
         <main className='min-h-screen'>
-          <section className={`${sideBarVisible ? 'w-full' : 'w-0'} md:w-80 flex fixed z-40 h-full gap-8 flex-col bg-gradient-to-br from-tournamento-400 to-tournamento-600 overflow-hidden duration-500`}>
+          <section className={`${sideBarVisible ? 'w-full' : 'w-0'} overflow-y-auto md:w-80 flex fixed z-40 h-full gap-8 flex-col bg-gradient-to-br from-tournamento-400 to-tournamento-600 overflow-hidden duration-500`}>
             <SideNav hideSideNav={() => setSideBarVisible(false)} />
           </section>
           <section className='md:ml-80 flex-1 relative z-0'>

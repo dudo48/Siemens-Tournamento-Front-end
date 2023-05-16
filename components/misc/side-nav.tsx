@@ -89,8 +89,8 @@ const SideNav = ({ hideSideNav }: Props) => {
         <ElementSeparator/>
         <SideNavElement href='/connections' icon={BsPeople}>Connections</SideNavElement>
         <ElementSeparator/>
-        {/* <SideNavElement href='/history' icon={BsClockHistory}>History</SideNavElement>
-        <ElementSeparator/> */}
+        <SideNavElement href='/history' icon={BsClockHistory}>History</SideNavElement>
+        <ElementSeparator/>
         <SideNavElement href='/statistics' icon={BsGraphUpArrow}>Statistics</SideNavElement>
         <ElementSeparator/>
         <SideNavElement href='/about' icon={BsInfoSquare}>About</SideNavElement>

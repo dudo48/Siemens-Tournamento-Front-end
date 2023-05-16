@@ -1,20 +1,29 @@
-import OutlinedButton from "@/components/buttons/outlined-button";
 import Subtitle from "@/components/misc/subtitle";
 import Title from "@/components/misc/title";
 import PrimaryLayout from "@/layouts/primary-layout";
 import { ReactNode } from "react";
-import { BsArrowRight, BsPlusLg } from "react-icons/bs";
-import TournamentHistoryLi from "@/components/list items/tournament-history-li";
-import GradientButton from "@/components/buttons/gradient-button";
-import Link from "next/link";
-import UserLi from "@/components/list items/user-li";
 
 const Page = () => {
   return (
     <>
       <Title>About</Title>
       <section>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed dolorum voluptates dolore hic molestias consequuntur est cum maxime doloremque facilis, aut inventore, neque distinctio quos voluptas. Est ipsum veritatis iusto fugit sit, ad accusantium reiciendis dolorem provident laudantium temporibus voluptatibus corrupti, repellat officia nobis? A quam saepe quia commodi magnam.</p>
+        <p>Created as a final project for Siemens Software Diploma course (JAN 2023 - MAY 2023).</p>
+      </section>
+      <section>
+        <Subtitle>Credits</Subtitle>
+        <p>Created by:</p>
+        <ul className='underline italic list-disc pl-8'>
+          <li><a href='mailto:fadyemad14705@gmail.com'>Fady Emad</a></li>
+          <li><a href='mailto:turbo.pixelzz@gmail.com'>Muhammad Salah</a></li>
+          <li><a href='mailto:ahmedelgarf94@gmail.com'>Ahmed Elgarf</a></li>
+          <li><a href='mailto:abdalla.fadle2001@gmail.com'>Abdalla Fadl</a></li>
+          <li><a href='mailto:abdalahamer1@gmail.com'>Abdalla Amer</a></li>
+        </ul>
+        <p>Under the supervision of:</p>
+        <ul className='underline italic list-disc pl-8'>
+          <li><a href='mailto:ahmed.younes@siemens.com'>Eng. Ahmed Younes</a></li>
+        </ul>
       </section>
     </>
   );
