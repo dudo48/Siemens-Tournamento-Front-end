@@ -12,18 +12,18 @@ A responsive sports tournament management website where users can:
 
 ## Screenshots
 <div>
-  <img width="400px" src="/Screenshots/1.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/2.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/3.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/4.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/5.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/6.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/7.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/8.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/9.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/10.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/11.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/12.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/13.png" alt="website screenshot" />
-  <img width="400px" src="/Screenshots/14.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/1.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/2.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/3.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/4.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/5.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/6.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/7.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/8.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/9.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/10.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/11.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/12.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/13.png" alt="website screenshot" />
+  <img width="200px" src="/Screenshots/14.png" alt="website screenshot" />
 </div>
