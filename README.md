@@ -1,7 +1,7 @@
 # Tournamento
 
 ## Description
-A mobile-responsive sports tournament management website where users can:
+A responsive sports tournament management website where users can:
 1. Create accounts.
 2. Create tournaments of sports that they choose.
 3. Allow any user to join them or invite specific users.
